@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">pro-event</string>
+    <string name="app_name">ProEvent</string>
+    <string name="default_font">Inter-Regular.ttf</string>
+    <string name="default_font_bold_path">fonts/Inter-Bold.ttf</string>
+    <string name="authorization_title">Вход</string>
+    <string name="authorization_confirm">Войти</string>
+    <string name="remember_password">Не помню пароль</string>
+    <string name="registration">Регистрация</string>
+    <string name="e_mail_input_title">E-mail</string>
+    <string name="password_input_title">Пароль</string>
+    <string name="authorization_data_invalid">Неправильный e-mail или пароль</string>
+    <string name="home_title">Главная</string>
+    <string name="settings_title">Настройки</string>
 </resources>

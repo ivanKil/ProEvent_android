@@ -1,0 +1,13 @@
+TODO:
+    - Вынести зависимости в Dagger
+    - Заменить содержимое splash_screen.xml
+    - Заменить значение colorPrimaryVariant в themes.xml
+    - Заменить содержимое fragment_authorization.xml
+
+Рефакторинг:
+    - Отрефакторить AuthorizationFragment - вынести логику отображения сообщения о неправильном e-mail или пароле в отдельный view CustomErrorTextInputLayout
+    - Отрефакторить di - отредактировать анотации, создать scope-ы
+    - Исправить баг KeyboardAwareTextInputEditText: при переворчаивании экрана клавиатура скрывается, но фокус и соответственно курсор остаются
+    - Удалить из ресурсов неиспользуемые шрифты(те, что не упомянабтся в res/strings)
+
+
