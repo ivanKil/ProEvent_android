@@ -1,40 +1,30 @@
 package ru.myproevent
 
-import com.github.terrakok.cicerone.Cicerone
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
+import android.app.Application
 import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
 import io.github.inflationx.viewpump.ViewPump
-import ru.myproevent.domain.di.DaggerProEventApplicationComponent
-import ru.myproevent.domain.di.ProEventApplicationComponent
+import ru.myproevent.domain.di.AppComponent
+import ru.myproevent.domain.di.AppModule
+import ru.myproevent.domain.di.DaggerAppComponent
 
-class ProEventApp : DaggerApplication() {
+class ProEventApp : Application() {
     companion object {
-        private var INSTANCE: DaggerApplication? = null
-        val instance: DaggerApplication
+        private var INSTANCE: ProEventApp? = null
+        val instance: ProEventApp
             get() = INSTANCE!!
     }
 
-    override fun applicationInjector(): AndroidInjector<ProEventApp> =
-        proEventApplicationComponent
-
-    val proEventApplicationComponent: ProEventApplicationComponent by lazy {
-        DaggerProEventApplicationComponent
-            .builder()
-            .withContext(applicationContext)
-            .apply {
-                val cicerone = Cicerone.create()
-
-                withNavigatorHolder(cicerone.getNavigatorHolder())
-                withRouter(cicerone.router)
-            }
-            .build()
-    }
+    lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
+
+        appComponent = DaggerAppComponent.builder()
+            .appModule(AppModule(this))
+            .build()
+
         // TODO: Вынести в Dagger
         ViewPump.init(
             ViewPump.builder()

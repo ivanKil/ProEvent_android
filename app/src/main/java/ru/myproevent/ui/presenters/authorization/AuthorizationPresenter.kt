@@ -6,9 +6,10 @@ import ru.myproevent.ui.screens.IScreens
 import ru.myproevent.ui.screens.Screens
 import javax.inject.Inject
 
-class AuthorizationPresenter @Inject constructor(
-    private var router: Router,
-) : MvpPresenter<AuthorizationView>() {
+class AuthorizationPresenter: MvpPresenter<AuthorizationView>() {
+    @Inject
+    lateinit var router: Router
+
     // TODO: вынести в Dagger
     private var screens: IScreens = Screens()
 
@@ -24,8 +25,16 @@ class AuthorizationPresenter @Inject constructor(
             }
         }
         repositoryGetKey(login, password)?.let {
-            router.replaceScreen(screens.home())
+            router.newRootScreen(screens.home())
         } ?: run { viewState.authorizationDataInvalid() }
+    }
+
+    fun openRegistration() {
+        router.navigateTo(screens.registration())
+    }
+
+    fun recoverPassword() {
+        router.navigateTo(screens.recovery())
     }
 
     fun backPressed(): Boolean {

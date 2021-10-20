@@ -7,33 +7,32 @@ import android.view.ViewGroup
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
-import ru.myproevent.databinding.FragmentSettingsBinding
+import ru.myproevent.databinding.FragmentLoginBinding
 import ru.myproevent.ui.BackButtonListener
-import ru.myproevent.ui.presenters.main.MainView
-import ru.myproevent.ui.presenters.main.Menu
-import ru.myproevent.ui.presenters.settings.SettingsPresenter
-import ru.myproevent.ui.presenters.settings.SettingsView
+import ru.myproevent.ui.presenters.login.LoginPresenter
+import ru.myproevent.ui.presenters.login.LoginView
 
-class SettingsFragment : MvpAppCompatFragment(), SettingsView, BackButtonListener {
-    private var _view: FragmentSettingsBinding? = null
+class LoginFragment : MvpAppCompatFragment(), LoginView, BackButtonListener {
+    private var _view: FragmentLoginBinding? = null
     private val view get() = _view!!
 
     private val presenter by moxyPresenter {
-        SettingsPresenter().apply {
+        LoginPresenter().apply {
             ProEventApp.instance.appComponent.inject(this)
         }
     }
 
     companion object {
-        fun newInstance() = SettingsFragment()
+        fun newInstance() = LoginFragment()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (requireActivity() as MainView).selectItem(Menu.SETTINGS)
-        _view = FragmentSettingsBinding.inflate(inflater, container, false)
+        _view = FragmentLoginBinding.inflate(inflater, container, false).apply {
+            confirmLogin.setOnClickListener { presenter.confirmLogin() }
+        }
         return view.root
     }
 

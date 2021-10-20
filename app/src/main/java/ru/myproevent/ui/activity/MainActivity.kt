@@ -8,8 +8,9 @@ import android.view.View.VISIBLE
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
+import ru.myproevent.ProEventApp
 import ru.myproevent.R
 import ru.myproevent.databinding.ActivityMainBinding
 import ru.myproevent.ui.BackButtonListener
@@ -18,20 +19,18 @@ import ru.myproevent.ui.presenters.main.MainView
 import ru.myproevent.ui.presenters.main.Menu
 import javax.inject.Inject
 
-
-class MainActivity : AbsActivity(), MainView {
+class MainActivity : MvpAppCompatActivity(), MainView {
 
     private val navigator = AppNavigator(this, R.id.container)
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
 
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: MainPresenter
-
-    @ProvidePresenter
-    fun provide() = presenter
+    private val presenter by moxyPresenter {
+        MainPresenter().apply {
+            ProEventApp.instance.appComponent.inject(this)
+        }
+    }
 
     private lateinit var view: ActivityMainBinding
 
@@ -56,6 +55,7 @@ class MainActivity : AbsActivity(), MainView {
             settingsHitArea.setOnClickListener { settings.performClick() }
         }
         setContentView(view.root)
+        ProEventApp.instance.appComponent.inject(this)
     }
 
     override fun onResumeFragments() {

@@ -11,4 +11,26 @@
     <string name="authorization_data_invalid">Неправильный e-mail или пароль</string>
     <string name="home_title">Главная</string>
     <string name="settings_title">Настройки</string>
+    <string name="has_account">Уже есть аккаунт?</string>
+    <string name="authorize">Войти</string>
+    <string name="password_confirm_tite">Подтверждение пароля</string>
+    <string name="registration_title">Регистрация</string>
+    <string name="license_i_agree_with">Я согласен (а) с\u0020</string>
+    <string name="license_condition_1">Условиями использования</string>
+    <string name="license_condition_separator">\nи\u0020</string>
+    <string name="license_condition_2">Политикой конфиденциальности</string>
+    <string name="code_explanation_text">На адрес электронной почты\nexample@email.com отправлен\n4-значный код. Введите его ниже.</string>
+    <string name="registration_continue">Продолжить</string>
+    <string name="if_data_invalid_text">Если e-mail указан неверно,\nвернитесь на шаг назад</string>
+    <string name="back">Назад</string>
+    <string name="license_1_title">Условия использования</string>
+    <string name="license_2_title">Политика конфиденциальности</string>
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="e_mail_input_hint">Введите ваш e-mail</string>
+    <string name="password_input_hint">Введите пароль</string>
+    <string name="password_confirm_hint">Подтвердите ваш пароль</string>
+    <string name="login_input_title">Логин</string>
+    <string name="login_input_hint">Придумайте логин</string>
+    <string name="continue_text">Продолжить</string>
+    <string name="password_recovery_explanation_text">Введите адрес электронной почты,\nуказанный при регистрации аккаунта.\nНа данный адрес будет выслано\nписьмо с дальнейшими инструкциями.</string>
 </resources>

@@ -1,49 +1,31 @@
 package ru.myproevent.ui.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import moxy.MvpAppCompatFragment
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
+import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.databinding.FragmentHomeBinding
-import ru.myproevent.domain.di.ProEventScreensComponent
 import ru.myproevent.ui.BackButtonListener
 import ru.myproevent.ui.presenters.home.HomePresenter
 import ru.myproevent.ui.presenters.home.HomeView
 import ru.myproevent.ui.presenters.main.MainView
 import ru.myproevent.ui.presenters.main.Menu
-import javax.inject.Inject
 
 class HomeFragment : MvpAppCompatFragment(), HomeView, BackButtonListener {
     private var _view: FragmentHomeBinding? = null
     private val view get() = _view!!
 
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: HomePresenter
-
-    @ProvidePresenter
-    fun provide() = presenter
+    private val presenter by moxyPresenter {
+        HomePresenter().apply {
+            ProEventApp.instance.appComponent.inject(this)
+        }
+    }
 
     companion object {
         fun newInstance() = HomeFragment()
-    }
-
-    private var proEventScreensComponent: ProEventScreensComponent? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        proEventScreensComponent =
-            (requireActivity().application as? ProEventApp)
-                ?.proEventApplicationComponent
-                ?.proEventScreensComponent()
-                ?.build()
-                ?.also { it.inject(this) }
     }
 
     override fun onCreateView(

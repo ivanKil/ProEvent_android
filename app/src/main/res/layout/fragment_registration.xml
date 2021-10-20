@@ -52,8 +52,8 @@
             fontPath="@string/default_font_bold_path"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
-            android:text="@string/authorization_title"
+            android:layout_marginTop="16dp"
+            android:text="@string/registration_title"
             android:textColor="@color/PE_blue_gray_01"
             android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="@id/logo_background"
@@ -66,7 +66,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:maxWidth="320dp"
             android:orientation="vertical"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -91,7 +91,7 @@
                     android:id="@+id/email_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/e_mail_input_hint"
+                    android:hint="Введите ваш e-mail"
                     android:inputType="textEmailAddress"
                     android:textColorHint="@color/PE_blue_gray_03" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -102,7 +102,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:maxWidth="320dp"
             android:orientation="vertical"
             app:endIconMode="password_toggle"
@@ -133,80 +133,135 @@
                     android:inputType="textPassword"
                     android:textColorHint="@color/PE_blue_gray_03" />
             </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/password_confirm_input_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="16dp"
+            android:maxWidth="320dp"
+            android:orientation="vertical"
+            app:endIconMode="password_toggle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_input_container">
 
             <TextView
-                android:id="@+id/error_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/authorization_data_invalid"
-                android:textColor="#ff0000"
-                android:textSize="12sp"
-                android:visibility="gone" />
+                android:layout_marginBottom="4dp"
+                android:text="@string/password_confirm_tite"
+                android:textColor="@color/PE_bright_red"
+                android:textSize="16sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_confirm_input"
+                style="@style/TextInputLayoutStyle"
+                app:endIconMode="password_toggle"
+                app:endIconTint="@color/PE_blue_gray_04">
+
+                <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                    android:id="@+id/password_confirm_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/password_confirm_hint"
+                    android:inputType="textPassword"
+                    android:textColorHint="@color/PE_blue_gray_03" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/authorization_confirm"
-            fontPath="@string/default_font_bold_path"
-            android:layout_width="0dp"
-            android:letterSpacing="0"
-            android:layout_height="56dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="168dp"
-            android:backgroundTint="@color/PE_peach_04"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="@string/authorization_confirm"
-            android:textAllCaps="false"
-            android:textSize="20dp"
-            app:cornerRadius="10dp"
+        <ru.myproevent.ui.views.ProEventCheckbox
+            android:id="@+id/license_checkbox"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_confirm_input_container" />
+
+        <View
+            android:id="@+id/license_checkbox_hit_area"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="@id/license_checkbox"
+            app:layout_constraintLeft_toLeftOf="@id/license_checkbox"
+            app:layout_constraintRight_toRightOf="@id/license_checkbox"
+            app:layout_constraintTop_toTopOf="@id/license_checkbox" />
+
+        <TextView
+            android:id="@+id/license_text"
+            android:layout_width="0dp"
+            android:maxWidth="254dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginRight="20dp"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toRightOf="@id/license_checkbox"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/email_input_container"
-            app:rippleColor="@color/PE_bright_red" />
+            app:layout_constraintTop_toBottomOf="@+id/password_confirm_input_container"
+            tools:text="Я согласен (а) с Условиями использования\nи Политикой конфиденциальности" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/password_recovery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="40dp"
-        android:text="@string/remember_password"
-        android:textColor="@color/PE_blue_gray_03"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <View
-        android:id="@+id/password_recovery_hit_area"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/continue_registration"
+        fontPath="@string/default_font_bold_path"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="@id/password_recovery"
-        app:layout_constraintLeft_toLeftOf="@id/password_recovery"
-        app:layout_constraintRight_toRightOf="@id/password_recovery"
-        app:layout_constraintTop_toTopOf="@id/password_recovery" />
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/PE_peach_04"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:letterSpacing="0"
+        android:text="@string/registration_continue"
+        android:textAllCaps="false"
+        android:textSize="20dp"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@id/oh_now_i_remember"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:rippleColor="@color/PE_bright_red" />
 
     <TextView
-        android:id="@+id/registration"
+        android:id="@+id/oh_now_i_remember"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginTop="12dp"
         android:layout_marginBottom="40dp"
-        android:text="@string/registration"
-        android:textColor="@color/PE_bright_red"
-        android:textSize="20dp"
+        android:text="@string/has_account"
+        android:textColor="@color/PE_blue_gray_03"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/authorize" />
+
+    <TextView
+        android:id="@+id/authorize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="40dp"
+        android:text="@string/authorize"
+        android:textColor="@color/PE_bright_red"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/oh_now_i_remember"
         app:layout_constraintRight_toRightOf="parent" />
 
     <View
-        android:id="@+id/registration_hit_area"
+        android:id="@+id/oh_now_i_remember_hit_area"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="@id/registration"
-        app:layout_constraintLeft_toLeftOf="@id/registration"
-        app:layout_constraintRight_toRightOf="@id/registration"
-        app:layout_constraintTop_toTopOf="@id/registration" />
+        app:layout_constraintBottom_toBottomOf="@id/oh_now_i_remember"
+        app:layout_constraintLeft_toLeftOf="@id/oh_now_i_remember"
+        app:layout_constraintRight_toRightOf="@id/authorize"
+        app:layout_constraintTop_toTopOf="@id/oh_now_i_remember" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

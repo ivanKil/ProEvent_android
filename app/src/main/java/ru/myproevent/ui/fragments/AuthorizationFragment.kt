@@ -1,6 +1,5 @@
 package ru.myproevent.ui.fragments
 
-import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,17 +8,13 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import moxy.MvpAppCompatFragment
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
+import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.R
 import ru.myproevent.databinding.FragmentAuthorizationBinding
-import ru.myproevent.domain.di.ProEventScreensComponent
 import ru.myproevent.ui.BackButtonListener
 import ru.myproevent.ui.presenters.authorization.AuthorizationPresenter
 import ru.myproevent.ui.presenters.authorization.AuthorizationView
-import javax.inject.Inject
-
 
 class AuthorizationFragment : MvpAppCompatFragment(), AuthorizationView, BackButtonListener {
     private var _view: FragmentAuthorizationBinding? = null
@@ -28,28 +23,14 @@ class AuthorizationFragment : MvpAppCompatFragment(), AuthorizationView, BackBut
     private var emailInvalidError = false
     private var passwordInvalidError = false
 
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: AuthorizationPresenter
-
-    @ProvidePresenter
-    fun provide() = presenter
+    private val presenter by moxyPresenter {
+        AuthorizationPresenter().apply {
+            ProEventApp.instance.appComponent.inject(this)
+        }
+    }
 
     companion object {
         fun newInstance() = AuthorizationFragment()
-    }
-
-    private var proEventScreensComponent: ProEventScreensComponent? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        proEventScreensComponent =
-            (requireActivity().application as? ProEventApp)
-                ?.proEventApplicationComponent
-                ?.proEventScreensComponent()
-                ?.build()
-                ?.also { it.inject(this) }
     }
 
     override fun onCreateView(
@@ -60,6 +41,15 @@ class AuthorizationFragment : MvpAppCompatFragment(), AuthorizationView, BackBut
             authorizationConfirm.setOnClickListener {
                 presenter.authorize(emailEdit.text.toString(), passwordEdit.text.toString())
             }
+            registration.setOnClickListener {
+                presenter.openRegistration()
+            }
+            registrationHitArea.setOnClickListener {
+                registration.performClick()
+            }
+            passwordRecovery.setOnClickListener { presenter.recoverPassword() }
+            passwordRecoveryHitArea.setOnClickListener { passwordRecovery.performClick() }
+
             val colorState = ColorStateList(
                 arrayOf(
                     intArrayOf(android.R.attr.state_active),

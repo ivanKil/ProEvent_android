@@ -7,33 +7,30 @@ import android.view.ViewGroup
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
-import ru.myproevent.databinding.FragmentSettingsBinding
+import ru.myproevent.databinding.FragmentRecoveryBinding
 import ru.myproevent.ui.BackButtonListener
-import ru.myproevent.ui.presenters.main.MainView
-import ru.myproevent.ui.presenters.main.Menu
-import ru.myproevent.ui.presenters.settings.SettingsPresenter
-import ru.myproevent.ui.presenters.settings.SettingsView
+import ru.myproevent.ui.presenters.recovery.RecoveryPresenter
+import ru.myproevent.ui.presenters.recovery.RecoveryView
 
-class SettingsFragment : MvpAppCompatFragment(), SettingsView, BackButtonListener {
-    private var _view: FragmentSettingsBinding? = null
+class RecoveryFragment : MvpAppCompatFragment(), RecoveryView, BackButtonListener {
+    private var _view: FragmentRecoveryBinding? = null
     private val view get() = _view!!
 
     private val presenter by moxyPresenter {
-        SettingsPresenter().apply {
+        RecoveryPresenter().apply {
             ProEventApp.instance.appComponent.inject(this)
         }
     }
 
     companion object {
-        fun newInstance() = SettingsFragment()
+        fun newInstance() = RecoveryFragment()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (requireActivity() as MainView).selectItem(Menu.SETTINGS)
-        _view = FragmentSettingsBinding.inflate(inflater, container, false)
+        _view = FragmentRecoveryBinding.inflate(inflater, container, false)
         return view.root
     }
 

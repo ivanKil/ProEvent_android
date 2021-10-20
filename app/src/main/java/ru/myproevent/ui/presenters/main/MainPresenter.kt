@@ -4,13 +4,19 @@ import android.widget.Toast
 import com.github.terrakok.cicerone.Router
 import moxy.MvpPresenter
 import ru.myproevent.ProEventApp
+import ru.myproevent.domain.model.IProEventRepository
+import ru.myproevent.domain.model.LoginBody
 import ru.myproevent.ui.screens.IScreens
 import ru.myproevent.ui.screens.Screens
 import javax.inject.Inject
 
-class MainPresenter @Inject constructor(
-    private var router: Router,
-) : MvpPresenter<MainView>() {
+class MainPresenter : MvpPresenter<MainView>() {
+    @Inject
+    lateinit var router: Router
+
+    @Inject
+    lateinit var repository: IProEventRepository
+
     // TODO: Вынести в Dagger
     private var screens: IScreens = Screens()
 
@@ -19,6 +25,9 @@ class MainPresenter @Inject constructor(
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         router.replaceScreen(screens.authorization())
+        Thread{
+            repository.getToken(LoginBody(email = "grishanin.slava@yandex.ru", password = "password"))
+        }.start()
     }
 
     fun itemSelected(menu: Menu) {
