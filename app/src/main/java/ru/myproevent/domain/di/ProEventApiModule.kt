@@ -19,10 +19,10 @@ class ProEventApiModule {
 
     @Named("baseUrl")
     @Provides
-    fun baseUrl(): String = "http://178.249.69.107:8762/"
+    fun baseUrl(): String = "http://178.249.69.107:8762/api/v1/auth/"
 
     @Provides
-    fun provideTickerDataApi(@Named("baseUrl") baseUrl: String, gson: Gson): IProEventDataSource {
+    fun provideProEventApi(@Named("baseUrl") baseUrl: String, gson: Gson): IProEventDataSource {
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
@@ -40,8 +40,6 @@ class ProEventApiModule {
     @Singleton
     @Provides
     fun provideGson() = GsonBuilder()
-        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        //       .excludeFieldsWithoutExposeAnnotation()
-        .create()
+        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 }
 

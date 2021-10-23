@@ -18,7 +18,7 @@ import javax.inject.Singleton
         AppModule::class,
         CiceroneModule::class,
         ProEventApiModule::class,
-        ProEventRepositoryModule::class
+        ProEventRepositoriesModule::class
     ]
 )
 interface AppComponent {
