@@ -41,6 +41,7 @@ class ProEventApiModule {
     @Provides
     fun provideGson() = GsonBuilder()
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        .excludeFieldsWithoutExposeAnnotation()
+        //       .excludeFieldsWithoutExposeAnnotation()
         .create()
 }
+

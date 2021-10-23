@@ -14,27 +14,29 @@ class ProEventRepository @Inject constructor(private val api: IProEventDataSourc
     IProEventRepository {
     override fun getToken(loginBody: LoginBody): String? {
 
-        val jsonObj = JSONObject()
-
-        try {
-            jsonObj.put("email", "grishanin.slava@yandex.ru")
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-        try {
-            jsonObj.put("password", "password")
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-
-        Log.d("[MYLOG]", "jsonObj: $jsonObj")
+//        val jsonObj = JSONObject()
+//
+//        try {
+//            jsonObj.put("email", "grishanin.slava@yandex.ru")
+//        } catch (e: JSONException) {
+//            e.printStackTrace()
+//        }
+//        try {
+//            jsonObj.put("password", "password")
+//        } catch (e: JSONException) {
+//            e.printStackTrace()
+//        }
+//
+//        Log.d("[MYLOG]", "jsonObj: $jsonObj")
 
 //        val json = "{\"email\":\"grishanin.slava@yandex.ru\",\"password\":\"password\"}"
 //        val `in`: RequestBody =
 //            TypedByteArray("application/json", json.toByteArray(charset("UTF-8")))
 //        val response: FooResponse = foo.postRawJson(`in`)
 
-        val response = api.getToken(jsonObj)?.enqueue(object : Callback<LoginResponse?> {
+        Log.d("[MYLOG]", "loginBody: ${loginBody}")
+
+        val response = api.getToken(loginBody)?.enqueue(object : Callback<LoginResponse?> {
             override fun onResponse(
                 call: Call<LoginResponse?>,
                 response: Response<LoginResponse?>

@@ -2,14 +2,13 @@ package ru.myproevent.domain.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface IProEventDataSource {
     @POST("api/v1/auth/login")
-    fun getToken(@Body loginBody: JSONObject): Call<LoginResponse?>?
+    fun getToken(@Body loginBody: LoginBody): Call<LoginResponse?>?
 }
 
 @Parcelize
