@@ -1,8 +1,9 @@
 package ru.myproevent.domain.model
 
-import io.reactivex.Single
+import io.reactivex.Completable
 
 interface IProEventLoginRepository {
-    fun login(email: String, password: String): Single<String?>
+    fun getToken(): String?
+    fun login(email: String, password: String): Completable
     fun refreshCheckCode()
 }

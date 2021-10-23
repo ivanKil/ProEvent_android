@@ -1,10 +1,9 @@
 package ru.myproevent.ui.presenters.authorization
 
-import android.util.Log
 import com.github.terrakok.cicerone.Router
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.observers.DisposableCompletableObserver
 import moxy.MvpPresenter
 import ru.myproevent.domain.model.IProEventLoginRepository
 import ru.myproevent.ui.screens.IScreens
@@ -12,8 +11,8 @@ import ru.myproevent.ui.screens.Screens
 import javax.inject.Inject
 
 class AuthorizationPresenter: MvpPresenter<AuthorizationView>() {
-    private inner class LoginObserver : DisposableSingleObserver<String?>() {
-        override fun onSuccess(token: String) {
+    private inner class LoginObserver : DisposableCompletableObserver() {
+        override fun onComplete() {
             router.newRootScreen(screens.home())
         }
 
@@ -39,6 +38,7 @@ class AuthorizationPresenter: MvpPresenter<AuthorizationView>() {
     private var screens: IScreens = Screens()
 
     fun authorize(email: String, password: String) {
+        // TODO: спросить у дизайнера нужено ли здесь отображать progress bar
         disposables.add(
             loginRepository
                 .login(email, password)
