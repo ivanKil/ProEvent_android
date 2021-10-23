@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -18,25 +19,23 @@ class ProEventApiModule {
 
     @Named("baseUrl")
     @Provides
-    fun baseUrl(): String = "http://178.249.69.107:8762/ms-auth/"
-
-//    @Named("baseUrl")
-//    @Provides
-//    fun baseUrl(): String = "http://178.249.69.107:8762/"
+    fun baseUrl(): String = "http://178.249.69.107:8762/"
 
     @Provides
-    fun provideTickerDataApi(@Named("baseUrl") baseUrl: String, gson: Gson): IProEventDataSource =
-        Retrofit.Builder()
+    fun provideTickerDataApi(@Named("baseUrl") baseUrl: String, gson: Gson): IProEventDataSource {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
+        return Retrofit.Builder()
             .baseUrl(baseUrl)
-            .client(
-                OkHttpClient.Builder()
-                    //.addInterceptor(AlphaVantageApiInterceptor)
-                    .build()
-            )
+            .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(IProEventDataSource::class.java)
+    }
+
 
     @Singleton
     @Provides
