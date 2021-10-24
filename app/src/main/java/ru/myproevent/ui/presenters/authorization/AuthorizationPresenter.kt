@@ -42,6 +42,7 @@ class AuthorizationPresenter: MvpPresenter<AuthorizationView>() {
         disposables.add(
             loginRepository
                 .login(email, password)
+                    // TODO: вынести AndroidSchedulers.mainThread() в Dagger
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(LoginObserver())
         )

@@ -13,6 +13,10 @@ class RecoveryPresenter : MvpPresenter<RecoveryView>() {
     // TODO: вынести в Dagger
     private var screens: IScreens = Screens()
 
+    fun authorize(){
+        router.navigateTo(screens.authorization())
+    }
+
     fun backPressed(): Boolean {
         router.exit()
         return true
