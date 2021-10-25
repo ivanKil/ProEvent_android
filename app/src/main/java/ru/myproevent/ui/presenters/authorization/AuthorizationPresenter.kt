@@ -1,7 +1,9 @@
 package ru.myproevent.ui.presenters.authorization
 
+import android.widget.Toast
 import io.reactivex.Scheduler
 import io.reactivex.observers.DisposableCompletableObserver
+import ru.myproevent.ProEventApp
 import ru.myproevent.domain.model.IProEventLoginRepository
 import ru.myproevent.ui.presenters.BaseMvpPresenter
 import javax.inject.Inject
@@ -25,7 +27,9 @@ class AuthorizationPresenter : BaseMvpPresenter<AuthorizationView>() {
                 when (error.code()) {
                     401, 404 -> viewState.authorizationDataInvalid()
                 }
+                return
             }
+            Toast.makeText(ProEventApp.instance, "${error.message}", Toast.LENGTH_LONG).show()
         }
     }
 

@@ -1,21 +1,17 @@
 package ru.myproevent.domain.model
 
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import ru.myproevent.ProEventApp
 import javax.inject.Inject
-
 
 class ProEventLoginRepository @Inject constructor(private val api: IProEventDataSource) :
     IProEventLoginRepository {
     private var localToken: String? = null
         set(value) {
             if (value == null) {
-                removeTokenFromLocalStorage()
+                tokenLocalRepository.removeTokenFromLocalStorage()
             } else {
-                saveTokenInLocalStorage(value)
+                tokenLocalRepository.saveTokenInLocalStorage(value)
             }
             field = value
         }
@@ -24,37 +20,14 @@ class ProEventLoginRepository @Inject constructor(private val api: IProEventData
 
     private var localPassword: String? = null
 
-    private val localTokenAlias = "PROEVENT_USER_TOKEN"
-    private val tokenPreferencesName = "TOKEN_ENCRYPTED_SHARED_PREFERENCES"
-
-    val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-
-    val sharedPreferences = EncryptedSharedPreferences.create(
-        tokenPreferencesName,
-        masterKeyAlias,
-        ProEventApp.instance.applicationContext,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
-
-    val editor = sharedPreferences.edit()
-
-    private fun saveTokenInLocalStorage(token: String) {
-        editor.putString(localTokenAlias, token);
-        editor.apply();
-    }
-
-    private fun removeTokenFromLocalStorage() {
-        editor.remove(localTokenAlias)
-    }
+    // TODO: вынести в Dagger
+    private val tokenLocalRepository: ITokenLocalRepository = TokenLocalRepository()
 
     override fun getLocalToken(): String? {
         if (localToken != null) {
             return localToken
         }
-        if(sharedPreferences.contains(localTokenAlias)) {
-            localToken = sharedPreferences.getString(localTokenAlias, null)
-        }
+        localToken = tokenLocalRepository.getTokenOrNull()
         return localToken
     }
 
@@ -73,6 +46,10 @@ class ProEventLoginRepository @Inject constructor(private val api: IProEventData
             }
             // TODO: вынести Schedulers.io() в Dagger
             .subscribeOn(Schedulers.io())
+
+    override fun logoutFromThisDevice() {
+        localToken = null
+    }
 
     // TODO: убрать toLowerCase() для email, когда на сервере пофиксят баг с email чувствительным к регистру
     override fun signup(agreement: Boolean, email: String, password: String) =

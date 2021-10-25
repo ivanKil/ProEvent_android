@@ -6,21 +6,21 @@
 
     <TextView
         android:id="@+id/license_1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginHorizontal="20dp"
+        android:paddingHorizontal="20dp"
         android:gravity="center_vertical"
         android:text="@string/license_1_title"
         android:textColor="@color/PE_blue_gray_01"
-        android:textSize="20dp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/license_2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginHorizontal="20dp"
+        android:paddingHorizontal="20dp"
         android:gravity="center_vertical"
         android:text="@string/license_2_title"
         android:textColor="@color/PE_blue_gray_01"
-        android:textSize="20dp" />
+        android:textSize="16sp" />
 </LinearLayout>

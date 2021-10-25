@@ -19,7 +19,7 @@
     <string name="license_condition_1">Условиями использования</string>
     <string name="license_condition_separator">\nи\u0020</string>
     <string name="license_condition_2">Политикой конфиденциальности</string>
-    <string name="code_explanation_text">На адрес электронной почты\nexample@email.com отправлен\n4-значный код. Введите его ниже.</string>
+    <string name="code_explanation_text">На адрес электронной почты\n%1$s отправлен\n4-значный код. Введите его ниже.</string>
     <string name="registration_continue">Продолжить</string>
     <string name="if_data_invalid_text">Если e-mail указан неверно,\nвернитесь на шаг назад</string>
     <string name="back">Назад</string>

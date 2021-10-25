@@ -20,9 +20,12 @@ class CodePresenter : MvpPresenter<CodeView>() {
 
         override fun onError(error: Throwable) {
             error.printStackTrace()
-            if(error is retrofit2.adapter.rxjava2.HttpException){
-                Toast.makeText(ProEventApp.instance, "Ошибка ${error.code()}", Toast.LENGTH_LONG).show()
+            if (error is retrofit2.adapter.rxjava2.HttpException) {
+                Toast.makeText(ProEventApp.instance, "Ошибка ${error.code()}", Toast.LENGTH_LONG)
+                    .show()
+                return
             }
+            Toast.makeText(ProEventApp.instance, "${error.message}", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -37,7 +40,7 @@ class CodePresenter : MvpPresenter<CodeView>() {
     // TODO: вынести в Dagger
     private var screens: IScreens = Screens()
 
-    fun continueRegistration(code: Int){
+    fun continueRegistration(code: Int) {
         // TODO: спросить у дизайнера нужено ли здесь отображать progress bar
         disposables.add(
             loginRepository
@@ -47,6 +50,12 @@ class CodePresenter : MvpPresenter<CodeView>() {
                 .subscribeWith(VerificationObserver())
         )
     }
+
+    fun authorize() {
+        router.navigateTo(screens.authorization())
+    }
+
+    fun getEmail() = loginRepository.getLocalEmail()
 
     fun backPressed(): Boolean {
         router.exit()

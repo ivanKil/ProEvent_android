@@ -20,7 +20,7 @@ class LoginPresenter : MvpPresenter<LoginView>() {
 
         override fun onError(error: Throwable) {
             error.printStackTrace()
-            Toast.makeText(ProEventApp.instance, "Этого не должно было произойти: $error", Toast.LENGTH_LONG).show()
+            Toast.makeText(ProEventApp.instance, "${error.message}", Toast.LENGTH_LONG).show()
         }
     }
 

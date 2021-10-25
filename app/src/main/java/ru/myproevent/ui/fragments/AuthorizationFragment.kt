@@ -13,6 +13,8 @@ import ru.myproevent.R
 import ru.myproevent.databinding.FragmentAuthorizationBinding
 import ru.myproevent.ui.presenters.authorization.AuthorizationPresenter
 import ru.myproevent.ui.presenters.authorization.AuthorizationView
+import ru.myproevent.ui.presenters.main.MainView
+import ru.myproevent.ui.presenters.main.Menu
 
 class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
     private var _view: FragmentAuthorizationBinding? = null
@@ -35,6 +37,7 @@ class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        (requireActivity() as MainView).hideBottomNavigation()
         _view = FragmentAuthorizationBinding.inflate(inflater, container, false).apply {
             authorizationConfirm.setOnClickListener {
                 presenter.authorize(emailEdit.text.toString(), passwordEdit.text.toString())

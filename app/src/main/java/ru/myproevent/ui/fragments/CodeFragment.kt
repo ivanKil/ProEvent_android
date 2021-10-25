@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.button.MaterialButton
 import moxy.MvpAppCompatFragment
@@ -17,6 +19,7 @@ import ru.myproevent.ui.BackButtonListener
 import ru.myproevent.ui.presenters.code.CodePresenter
 import ru.myproevent.ui.presenters.code.CodeView
 import ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+import java.lang.StringBuilder
 
 class CodeFragment : MvpAppCompatFragment(), CodeView, BackButtonListener {
     private var _view: FragmentCodeBinding? = null
@@ -80,11 +83,15 @@ class CodeFragment : MvpAppCompatFragment(), CodeView, BackButtonListener {
         }
     }
 
+    private val numberStringBuilder = StringBuilder()
+
     private fun getVerificationCode() = with(view) {
-        digit1Edit.text.toString().toInt() * 1000 +
-                digit2Edit.text.toString().toInt() * 100 +
-                digit3Edit.text.toString().toInt() * 10 +
-                digit4Edit.text.toString().toInt()
+        numberStringBuilder.clear()
+        numberStringBuilder.append(digit1Edit.text)
+        numberStringBuilder.append(digit2Edit.text)
+        numberStringBuilder.append(digit3Edit.text)
+        numberStringBuilder.append(digit4Edit.text)
+        return@with numberStringBuilder.toString().toIntOrNull()
     }
 
     private val presenter by moxyPresenter {
@@ -102,11 +109,19 @@ class CodeFragment : MvpAppCompatFragment(), CodeView, BackButtonListener {
         savedInstanceState: Bundle?
     ): View {
         _view = FragmentCodeBinding.inflate(inflater, container, false).apply {
+            codeExplanation.text = String.format(getString(R.string.code_explanation_text), presenter.getEmail())
             continueRegistration.setOnClickListener {
-                presenter.continueRegistration(
-                    getVerificationCode()
-                )
+                getVerificationCode()?.let { code -> presenter.continueRegistration(code) } ?: run {
+                    Toast.makeText(
+                        ProEventApp.instance.applicationContext,
+                        "Код не может быть пустым или содержать не числовые символы",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
+            authorize.setOnClickListener { presenter.authorize() }
+            ohNowIRemember.setOnClickListener { authorize.performClick() }
+            ohNowIRememberHitArea.setOnClickListener { authorize.performClick() }
             back.setOnClickListener { presenter.backPressed() }
             // TODO: отрефакторить - вынести это в кастомные вьюхи
             digit1Edit.selectionChangedListener =
@@ -163,6 +178,14 @@ class CodeFragment : MvpAppCompatFragment(), CodeView, BackButtonListener {
             }
         }
         return view.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Почему-то если нажать "Уже есть аккаунт",
+        // а потом с помощью кнопки back вернуться на этот экран,
+        // то digit4Edit получает фокус
+        view.digit4Edit.clearFocus()
     }
 
     override fun backPressed() = presenter.backPressed()

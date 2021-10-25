@@ -21,8 +21,14 @@ class RegistrationPresenter : MvpPresenter<RegistrationView>() {
         override fun onError(error: Throwable) {
             error.printStackTrace()
             if(error is retrofit2.adapter.rxjava2.HttpException){
+                if(error.code() == 409){
+                    Toast.makeText(ProEventApp.instance, "Для введённого email уже есть аккаунт", Toast.LENGTH_LONG).show()
+                    return
+                }
                 Toast.makeText(ProEventApp.instance, "Ошибка ${error.code()}", Toast.LENGTH_LONG).show()
+                return
             }
+            Toast.makeText(ProEventApp.instance, "${error.message}", Toast.LENGTH_LONG).show()
         }
     }
 
