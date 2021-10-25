@@ -60,7 +60,7 @@ class CodeFragment : MvpAppCompatFragment(), CodeView, BackButtonListener {
         }
 
         override fun afterTextChanged(s: Editable) {
-            if(isFirstValue){
+            if (isFirstValue) {
                 isFirstValue = false
                 nextViewInRow?.requestFocus()
             }
@@ -80,6 +80,13 @@ class CodeFragment : MvpAppCompatFragment(), CodeView, BackButtonListener {
         }
     }
 
+    private fun getVerificationCode() = with(view) {
+        digit1Edit.text.toString().toInt() * 1000 +
+                digit2Edit.text.toString().toInt() * 100 +
+                digit3Edit.text.toString().toInt() * 10 +
+                digit4Edit.text.toString().toInt()
+    }
+
     private val presenter by moxyPresenter {
         CodePresenter().apply {
             ProEventApp.instance.appComponent.inject(this)
@@ -95,16 +102,24 @@ class CodeFragment : MvpAppCompatFragment(), CodeView, BackButtonListener {
         savedInstanceState: Bundle?
     ): View {
         _view = FragmentCodeBinding.inflate(inflater, container, false).apply {
-            continueRegistration.setOnClickListener { presenter.continueRegistration() }
+            continueRegistration.setOnClickListener {
+                presenter.continueRegistration(
+                    getVerificationCode()
+                )
+            }
             back.setOnClickListener { presenter.backPressed() }
             // TODO: отрефакторить - вынести это в кастомные вьюхи
-            digit1Edit.selectionChangedListener = { _, _ -> digit1Edit.setSelection(digit1Edit.length()) }
+            digit1Edit.selectionChangedListener =
+                { _, _ -> digit1Edit.setSelection(digit1Edit.length()) }
             digit1Edit.addTextChangedListener(SingleDigitEditTextWatcher(digit2Edit))
-            digit2Edit.selectionChangedListener = { _, _ -> digit2Edit.setSelection(digit2Edit.length()) }
+            digit2Edit.selectionChangedListener =
+                { _, _ -> digit2Edit.setSelection(digit2Edit.length()) }
             digit2Edit.addTextChangedListener(SingleDigitEditTextWatcher(digit3Edit))
-            digit3Edit.selectionChangedListener = { _, _ -> digit3Edit.setSelection(digit3Edit.length()) }
+            digit3Edit.selectionChangedListener =
+                { _, _ -> digit3Edit.setSelection(digit3Edit.length()) }
             digit3Edit.addTextChangedListener(SingleDigitEditTextWatcher(digit4Edit))
-            digit4Edit.selectionChangedListener = { _, _ -> digit4Edit.setSelection(digit4Edit.length()) }
+            digit4Edit.selectionChangedListener =
+                { _, _ -> digit4Edit.setSelection(digit4Edit.length()) }
             digit4Edit.addTextChangedListener(SingleDigitEditTextWatcher(null))
             digit4Edit.addTextChangedListener {
                 if (it.toString().isNotEmpty()) {

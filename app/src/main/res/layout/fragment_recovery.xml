@@ -48,11 +48,11 @@
             app:layout_constraintTop_toTopOf="@id/logo_background" />
 
         <TextView
-            android:layout_marginHorizontal="20dp"
             android:id="@+id/form_title"
             fontPath="@string/default_font_bold_path"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="66dp"
             android:text="Восстановление пароля"
             android:textAlignment="center"
@@ -132,6 +132,15 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/email_input_container"
             app:rippleColor="@color/PE_bright_red" />
+
+        <View
+            android:id="@+id/authorize_hit_area"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="@id/oh_now_i_remember"
+            app:layout_constraintLeft_toLeftOf="@id/oh_now_i_remember"
+            app:layout_constraintRight_toRightOf="@id/authorize"
+            app:layout_constraintTop_toTopOf="@id/oh_now_i_remember" />
 
         <TextView
             android:id="@+id/oh_now_i_remember"

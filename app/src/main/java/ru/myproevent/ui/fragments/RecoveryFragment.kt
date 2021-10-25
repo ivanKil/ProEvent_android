@@ -30,7 +30,9 @@ class RecoveryFragment : MvpAppCompatFragment(), RecoveryView, BackButtonListene
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _view = FragmentRecoveryBinding.inflate(inflater, container, false)
+        _view = FragmentRecoveryBinding.inflate(inflater, container, false).apply {
+            authorizeHitArea.setOnClickListener { presenter.authorize() }
+        }
         return view.root
     }
 

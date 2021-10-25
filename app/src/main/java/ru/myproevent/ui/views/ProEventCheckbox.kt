@@ -12,7 +12,6 @@ import ru.myproevent.R
 
 
 class ProEventCheckbox : FrameLayout {
-    private var isChecked = true
     private lateinit var params: ViewGroup.LayoutParams
     private val backgroundView = ImageView(context).apply {
         setImageDrawable(ProEventApp.instance.getDrawable(R.drawable.checkbox_background))
@@ -38,6 +37,12 @@ class ProEventCheckbox : FrameLayout {
         }
         invalidate()
     }
+
+    var isChecked = true
+        set(value) {
+            field = value
+            updateContent()
+        }
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)

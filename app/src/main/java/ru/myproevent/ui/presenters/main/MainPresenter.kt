@@ -14,6 +14,9 @@ class MainPresenter : MvpPresenter<MainView>() {
     @Inject
     lateinit var router: Router
 
+    @Inject
+    lateinit var loginRepository: IProEventLoginRepository
+
     // TODO: Вынести в Dagger
     private var screens: IScreens = Screens()
 
@@ -21,7 +24,12 @@ class MainPresenter : MvpPresenter<MainView>() {
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        router.replaceScreen(screens.authorization())
+        if(loginRepository.getLocalToken() == null){
+            router.replaceScreen(screens.authorization())
+        } else {
+            router.replaceScreen(screens.home())
+        }
+
     }
 
     fun itemSelected(menu: Menu) {
