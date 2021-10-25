@@ -7,23 +7,21 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.R
 import ru.myproevent.databinding.FragmentAuthorizationBinding
-import ru.myproevent.ui.BackButtonListener
 import ru.myproevent.ui.presenters.authorization.AuthorizationPresenter
 import ru.myproevent.ui.presenters.authorization.AuthorizationView
 
-class AuthorizationFragment : MvpAppCompatFragment(), AuthorizationView, BackButtonListener {
+class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
     private var _view: FragmentAuthorizationBinding? = null
     private val view get() = _view!!
 
     private var emailInvalidError = false
     private var passwordInvalidError = false
 
-    private val presenter by moxyPresenter {
+    override val presenter by moxyPresenter {
         AuthorizationPresenter().apply {
             ProEventApp.instance.appComponent.inject(this)
         }
@@ -136,8 +134,6 @@ class AuthorizationFragment : MvpAppCompatFragment(), AuthorizationView, BackBut
             false
         }
     }
-
-    override fun backPressed() = presenter.backPressed()
 
     override fun onDestroyView() {
         super.onDestroyView()

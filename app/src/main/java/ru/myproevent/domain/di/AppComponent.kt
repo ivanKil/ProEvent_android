@@ -1,7 +1,9 @@
 package ru.myproevent.domain.di
 
 import dagger.Component
+import moxy.MvpView
 import ru.myproevent.ui.activity.MainActivity
+import ru.myproevent.ui.presenters.BaseMvpPresenter
 import ru.myproevent.ui.presenters.authorization.AuthorizationPresenter
 import ru.myproevent.ui.presenters.code.CodePresenter
 import ru.myproevent.ui.presenters.home.HomePresenter
@@ -32,4 +34,5 @@ interface AppComponent {
     fun inject(recoveryPresenter: RecoveryPresenter)
     fun inject(registrationPresenter: RegistrationPresenter)
     fun inject(settingsPresenter: SettingsPresenter)
+    fun inject(baseMvpPresenter: BaseMvpPresenter<MvpView>)
 }
