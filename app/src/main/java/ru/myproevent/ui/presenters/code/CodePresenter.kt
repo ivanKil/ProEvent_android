@@ -41,7 +41,7 @@ class CodePresenter : MvpPresenter<CodeView>() {
         // TODO: спросить у дизайнера нужено ли здесь отображать progress bar
         disposables.add(
             loginRepository
-                .verificate(loginRepository.getEmail()!!, code)
+                .verificate(loginRepository.getLocalEmail()!!, code)
                 // TODO: вынести AndroidSchedulers.mainThread() в Dagger
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(VerificationObserver())

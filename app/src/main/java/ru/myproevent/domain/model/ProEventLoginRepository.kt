@@ -1,33 +1,76 @@
 package ru.myproevent.domain.model
 
+import android.util.Base64
+import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import ru.myproevent.ProEventApp
 import javax.inject.Inject
 
 
 class ProEventLoginRepository @Inject constructor(private val api: IProEventDataSource) :
     IProEventLoginRepository {
-    private var token: String? = null
+    private var localToken: String? = null
+        set(value) {
+            if (value == null) {
+                removeTokenFromLocalStorage()
+            } else {
+                saveTokenInLocalStorage(value)
+            }
+            field = value
+        }
 
-    private var email: String? = null
+    private var localEmail: String? = null
 
-    private var password: String? = null
+    private var localPassword: String? = null
 
-    override fun getToken() = token
+    private val alias = "ProEventUserToken"
 
-    override fun getEmail() = email
+    // TODO: вынести в Dagger
+    private val encryptor = EnCryptor()
+    private val decryptor = DeCryptor()
 
-    override fun getPassword(): String? {
+    private fun saveTokenInLocalStorage(token: String) {
+        val encryptedText: ByteArray = encryptor.encryptText(alias, token)
+        val encryptedString = Base64.encodeToString(encryptedText, Base64.DEFAULT)
+        val iv = encryptor.iv
+        SettingsRepository.setProperty(
+            alias,
+            encryptedString,
+            iv,
+            ProEventApp.instance.applicationContext
+        )
+    }
+
+    private fun removeTokenFromLocalStorage() {
         TODO("Not yet implemented")
     }
+
+    override fun getLocalToken(): String? {
+        if (localToken != null) {
+            return localToken
+        }
+        val encryptedToken =
+            SettingsRepository.getProperty(alias, ProEventApp.instance.applicationContext)
+        Log.d("[MYLOG]", "encryptedData: ${encryptedToken.data}\n encryptedIv:${encryptedToken.iv}")
+        if(encryptedToken.data == null || encryptedToken.iv == null){
+            return null
+        }
+        localToken = decryptor.decryptData(alias, encryptedToken.data!!.toByteArray(), encryptedToken.iv)
+        return localToken
+    }
+
+    override fun getLocalEmail() = localEmail
+
+    override fun getLocalPassword() = localPassword
 
     // TODO: убрать toLowerCase() для email, когда на сервере пофиксят баг с email чувствительным к регистру
     override fun login(email: String, password: String) =
         api.login(LoginBody(email.toLowerCase(), password))
             .flatMapCompletable { body ->
-                this.token = body.token
-                this.email = email
-                this.password = password
+                this.localToken = body.token
+                this.localEmail = email
+                this.localPassword = password
                 Completable.complete()
             }
             // TODO: вынести Schedulers.io() в Dagger
@@ -37,8 +80,8 @@ class ProEventLoginRepository @Inject constructor(private val api: IProEventData
     override fun signup(agreement: Boolean, email: String, password: String) =
         api.signup(SignupBody(agreement, email.toLowerCase(), password))
             .flatMapCompletable { body ->
-                this.email = email
-                this.password = password
+                this.localEmail = email
+                this.localPassword = password
                 Completable.complete()
             }
             .subscribeOn(Schedulers.io())
