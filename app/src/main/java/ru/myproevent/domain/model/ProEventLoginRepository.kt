@@ -1,7 +1,7 @@
 package ru.myproevent.domain.model
 
-import android.util.Base64
-import android.util.Log
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import ru.myproevent.ProEventApp
@@ -24,39 +24,37 @@ class ProEventLoginRepository @Inject constructor(private val api: IProEventData
 
     private var localPassword: String? = null
 
-    private val alias = "ProEventUserToken"
+    private val localTokenAlias = "PROEVENT_USER_TOKEN"
+    private val tokenPreferencesName = "TOKEN_ENCRYPTED_SHARED_PREFERENCES"
 
-    // TODO: вынести в Dagger
-    private val encryptor = EnCryptor()
-    private val decryptor = DeCryptor()
+    val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+
+    val sharedPreferences = EncryptedSharedPreferences.create(
+        tokenPreferencesName,
+        masterKeyAlias,
+        ProEventApp.instance.applicationContext,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
+
+    val editor = sharedPreferences.edit()
 
     private fun saveTokenInLocalStorage(token: String) {
-        val encryptedText: ByteArray = encryptor.encryptText(alias, token)
-        val encryptedString = Base64.encodeToString(encryptedText, Base64.DEFAULT)
-        val iv = encryptor.iv
-        SettingsRepository.setProperty(
-            alias,
-            encryptedString,
-            iv,
-            ProEventApp.instance.applicationContext
-        )
+        editor.putString(localTokenAlias, token);
+        editor.apply();
     }
 
     private fun removeTokenFromLocalStorage() {
-        TODO("Not yet implemented")
+        editor.remove(localTokenAlias)
     }
 
     override fun getLocalToken(): String? {
         if (localToken != null) {
             return localToken
         }
-        val encryptedToken =
-            SettingsRepository.getProperty(alias, ProEventApp.instance.applicationContext)
-        Log.d("[MYLOG]", "encryptedData: ${encryptedToken.data}\n encryptedIv:${encryptedToken.iv}")
-        if(encryptedToken.data == null || encryptedToken.iv == null){
-            return null
+        if(sharedPreferences.contains(localTokenAlias)) {
+            localToken = sharedPreferences.getString(localTokenAlias, null)
         }
-        localToken = decryptor.decryptData(alias, encryptedToken.data!!.toByteArray(), encryptedToken.iv)
         return localToken
     }
 
