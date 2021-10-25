@@ -10,16 +10,16 @@ import ru.myproevent.domain.di.DaggerAppComponent
 
 class ProEventApp : Application() {
     companion object {
-        private var INSTANCE: ProEventApp? = null
-        val instance: ProEventApp
-            get() = INSTANCE!!
+        lateinit var instance: ProEventApp
+            private set
     }
 
     lateinit var appComponent: AppComponent
+        private set
 
     override fun onCreate() {
         super.onCreate()
-        INSTANCE = this
+        instance = this
 
         appComponent = DaggerAppComponent.builder()
             .appModule(AppModule(this))
