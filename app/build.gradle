@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -15,6 +17,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    kapt {
+        generateStubs = true
     }
 
     buildTypes {
@@ -33,13 +43,47 @@ android {
 }
 
 dependencies {
-
+    // Default - то что положил Android Studio при создании проекта
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.security:security-crypto:1.1.0-alpha02'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // Dagger 2 - управление зависимостями
+    implementation "com.google.dagger:dagger:2.37"
+    implementation "com.google.dagger:dagger-android:2.37"
+    implementation "com.google.dagger:dagger-android-support:2.37"
+    kapt "com.google.dagger:dagger-compiler:2.37"
+    kapt "com.google.dagger:dagger-android-processor:2.37"
+
+    // Moxy - lifecycle MVP presenter-a
+    implementation "com.github.moxy-community:moxy:2.1.2"
+    kapt "com.github.moxy-community:moxy-compiler:2.1.2"
+    implementation "com.github.moxy-community:moxy-ktx:2.1.2"
+    implementation "com.github.moxy-community:moxy-androidx:2.1.2"
+
+    // Cicerone - навигация
+    implementation 'com.github.terrakok:cicerone:6.6'
+
+    // Calligraphy - изменение шрифта по умолчанию
+    implementation 'io.github.inflationx:calligraphy3:3.1.1'
+    implementation 'io.github.inflationx:viewpump:2.0.3'
+
+    // Retrofit - взаимодействие с сетью
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
+
+    // HttpLoggingInterceptor - логирование Retrofit
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+
+    // RXJava - реактивное взаимодействие компонентов
+    implementation "io.reactivex.rxjava2:rxjava:2.2.20"
+    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
 }
