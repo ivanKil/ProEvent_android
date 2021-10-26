@@ -3,6 +3,7 @@ package ru.myproevent.ui.presenters.registration
 import android.widget.Toast
 import io.reactivex.observers.DisposableCompletableObserver
 import ru.myproevent.ProEventApp
+import ru.myproevent.domain.model.repositories.internet_access_info.IInternetAccessInfoRepository
 import ru.myproevent.domain.model.repositories.proevent_login.IProEventLoginRepository
 import ru.myproevent.ui.presenters.BaseMvpPresenter
 import javax.inject.Inject
@@ -24,19 +25,24 @@ class RegistrationPresenter : BaseMvpPresenter<RegistrationView>() {
                     ).show()
                     return
                 }
-                Toast.makeText(ProEventApp.instance, "Ошибка ${error.code()}", Toast.LENGTH_LONG)
-                    .show()
                 return
             }
-            Toast.makeText(ProEventApp.instance, "${error.message}", Toast.LENGTH_LONG).show()
+            interAccessInfoRepository
+                .hasInternetConnection()
+                .observeOn(uiScheduler)
+                .subscribeWith(InterAccessInfoObserver(error.message))
+                .disposeOnDestroy()
         }
     }
 
     @Inject
     lateinit var loginRepository: IProEventLoginRepository
+
+    @Inject
+    lateinit var interAccessInfoRepository: IInternetAccessInfoRepository
+
     fun signup() {
         router.navigateTo(screens.authorization())
-
     }
 
     fun continueRegistration(agreement: Boolean, email: String, password: String) {
