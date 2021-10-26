@@ -5,6 +5,9 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
@@ -21,7 +24,32 @@ import javax.inject.Inject
 
 class MainActivity : MvpAppCompatActivity(), MainView {
 
-    private val navigator = AppNavigator(this, R.id.container)
+    private val navigator: Navigator = object : AppNavigator(this, R.id.container) {
+        override fun setupFragmentTransaction(
+            fragmentTransaction: FragmentTransaction,
+            currentFragment: Fragment?,
+            nextFragment: Fragment?
+        ) {
+            setVerticalTransitionAnimation(
+                currentFragment,
+                nextFragment,
+                fragmentTransaction
+            )
+        }
+    }
+
+    private fun setVerticalTransitionAnimation(
+        profileFragment: Fragment?,
+        selectPhotoFragment: Fragment?,
+        fragmentTransaction: FragmentTransaction
+    ) {
+        fragmentTransaction.setCustomAnimations(
+            R.anim.enter_from_bottom,
+            R.anim.exit_to_bottom,
+            R.anim.enter_from_bottom,
+            R.anim.exit_to_bottom
+        )
+    }
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
