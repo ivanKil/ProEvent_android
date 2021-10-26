@@ -1,21 +1,12 @@
 package ru.myproevent.ui.presenters.authorization
 
-import android.widget.Toast
-import io.reactivex.Scheduler
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.observers.DisposableSingleObserver
-import ru.myproevent.ProEventApp
-import ru.myproevent.domain.model.IInternetAccessInfoRepository
-import ru.myproevent.domain.model.IProEventLoginRepository
+import ru.myproevent.domain.model.repositories.internet_access_info.IInternetAccessInfoRepository
+import ru.myproevent.domain.model.repositories.proevent_login.IProEventLoginRepository
 import ru.myproevent.ui.presenters.BaseMvpPresenter
 import javax.inject.Inject
 
 class AuthorizationPresenter : BaseMvpPresenter<AuthorizationView>() {
-
-    @Inject
-    lateinit var uiScheduler: Scheduler
-
     @Inject
     lateinit var loginRepository: IProEventLoginRepository
 

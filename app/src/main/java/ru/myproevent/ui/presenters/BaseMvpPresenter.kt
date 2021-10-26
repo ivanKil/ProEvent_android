@@ -2,6 +2,7 @@ package ru.myproevent.ui.presenters
 
 import android.widget.Toast
 import com.github.terrakok.cicerone.Router
+import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -12,6 +13,9 @@ import ru.myproevent.ui.screens.IScreens
 import javax.inject.Inject
 
 open class BaseMvpPresenter<V : MvpView> : MvpPresenter<V>() {
+
+    @Inject
+    lateinit var uiScheduler: Scheduler
 
     @Inject
     lateinit var router: Router

@@ -13,7 +13,6 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.R
@@ -24,7 +23,7 @@ import ru.myproevent.ui.presenters.registration.RegistrationPresenter
 import ru.myproevent.ui.presenters.registration.RegistrationView
 import java.lang.reflect.Field
 
-class RegistrationFragment : MvpAppCompatFragment(), RegistrationView, BackButtonListener {
+class RegistrationFragment : BaseMvpFragment(), RegistrationView, BackButtonListener {
     // TODO: вынести в кастомную вьюху
     private val licenceTouchListener = View.OnTouchListener { v, event ->
         when (event.action) {
@@ -44,7 +43,7 @@ class RegistrationFragment : MvpAppCompatFragment(), RegistrationView, BackButto
     private var _view: FragmentRegistrationBinding? = null
     private val view get() = _view!!
 
-    private val presenter by moxyPresenter {
+    override val presenter by moxyPresenter {
         RegistrationPresenter().apply {
             ProEventApp.instance.appComponent.inject(this)
         }
@@ -163,8 +162,6 @@ class RegistrationFragment : MvpAppCompatFragment(), RegistrationView, BackButto
         }
         return view.root
     }
-
-    override fun backPressed() = presenter.backPressed()
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,8 +1,6 @@
 package ru.myproevent.ui.fragments
 
-import androidx.viewbinding.ViewBinding
 import moxy.MvpAppCompatFragment
-import ru.myproevent.databinding.FragmentAuthorizationBinding
 import ru.myproevent.ui.BackButtonListener
 import ru.myproevent.ui.presenters.BaseMvpPresenter
 

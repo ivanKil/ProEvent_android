@@ -5,12 +5,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.button.MaterialButton
-import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.R
@@ -21,7 +19,7 @@ import ru.myproevent.ui.presenters.code.CodeView
 import ru.myproevent.ui.views.KeyboardAwareTextInputEditText
 import java.lang.StringBuilder
 
-class CodeFragment : MvpAppCompatFragment(), CodeView, BackButtonListener {
+class CodeFragment : BaseMvpFragment(), CodeView, BackButtonListener {
     private var _view: FragmentCodeBinding? = null
     private val view get() = _view!!
 
@@ -94,7 +92,7 @@ class CodeFragment : MvpAppCompatFragment(), CodeView, BackButtonListener {
         return@with numberStringBuilder.toString().toIntOrNull()
     }
 
-    private val presenter by moxyPresenter {
+    override val presenter by moxyPresenter {
         CodePresenter().apply {
             ProEventApp.instance.appComponent.inject(this)
         }
@@ -187,8 +185,6 @@ class CodeFragment : MvpAppCompatFragment(), CodeView, BackButtonListener {
         // то digit4Edit получает фокус
         view.digit4Edit.clearFocus()
     }
-
-    override fun backPressed() = presenter.backPressed()
 
     override fun onDestroyView() {
         super.onDestroyView()

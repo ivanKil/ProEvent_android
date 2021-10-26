@@ -1,4 +1,4 @@
-package ru.myproevent.domain.model
+package ru.myproevent.domain.model.repositories.proevent_login
 
 import io.reactivex.Completable
 

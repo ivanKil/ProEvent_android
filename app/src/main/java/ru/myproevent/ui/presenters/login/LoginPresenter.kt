@@ -1,18 +1,13 @@
 package ru.myproevent.ui.presenters.login
 
 import android.widget.Toast
-import com.github.terrakok.cicerone.Router
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableCompletableObserver
-import moxy.MvpPresenter
 import ru.myproevent.ProEventApp
-import ru.myproevent.domain.model.IProEventLoginRepository
-import ru.myproevent.ui.screens.IScreens
-import ru.myproevent.ui.screens.Screens
+import ru.myproevent.domain.model.repositories.proevent_login.IProEventLoginRepository
+import ru.myproevent.ui.presenters.BaseMvpPresenter
 import javax.inject.Inject
 
-class LoginPresenter : MvpPresenter<LoginView>() {
+class LoginPresenter : BaseMvpPresenter<LoginView>() {
     private inner class LoginObserver : DisposableCompletableObserver() {
         override fun onComplete() {
             router.newRootScreen(screens.home())
@@ -25,33 +20,22 @@ class LoginPresenter : MvpPresenter<LoginView>() {
     }
 
     @Inject
-    lateinit var router: Router
-
-    @Inject
     lateinit var loginRepository: IProEventLoginRepository
 
-    private var disposables: CompositeDisposable = CompositeDisposable()
-
-    // TODO: вынести в Dagger
-    private var screens: IScreens = Screens()
-
-    fun confirmLogin(){
-        if (loginRepository.getLocalEmail() == null || loginRepository.getLocalPassword() == null){
-            Toast.makeText(ProEventApp.instance, "Этого не должно было произойти: loginRepository.getLocalEmail() == null || loginRepository.getLocalPassword() == null", Toast.LENGTH_LONG).show()
+    fun confirmLogin() {
+        if (loginRepository.getLocalEmail() == null || loginRepository.getLocalPassword() == null) {
+            Toast.makeText(
+                ProEventApp.instance,
+                "Этого не должно было произойти: loginRepository.getLocalEmail() == null || loginRepository.getLocalPassword() == null",
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
         // TODO: уточнить у дизайнера нужен ли progress_bar
-        disposables.add(
-            loginRepository
-                .login(loginRepository.getLocalEmail()!!, loginRepository.getLocalPassword()!!)
-                // TODO: вынести AndroidSchedulers.mainThread() в Dagger
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(LoginObserver())
-        )
-    }
-
-    fun backPressed(): Boolean {
-        router.exit()
-        return true
+        loginRepository
+            .login(loginRepository.getLocalEmail()!!, loginRepository.getLocalPassword()!!)
+            .observeOn(uiScheduler)
+            .subscribeWith(LoginObserver())
+            .disposeOnDestroy()
     }
 }

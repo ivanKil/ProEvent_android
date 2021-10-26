@@ -2,10 +2,10 @@ package ru.myproevent.domain.di
 
 import dagger.Binds
 import dagger.Module
-import ru.myproevent.domain.model.IInternetAccessInfoRepository
-import ru.myproevent.domain.model.IProEventLoginRepository
-import ru.myproevent.domain.model.InternetAccessInfoRepository
-import ru.myproevent.domain.model.ProEventLoginRepository
+import ru.myproevent.domain.model.repositories.internet_access_info.IInternetAccessInfoRepository
+import ru.myproevent.domain.model.repositories.proevent_login.IProEventLoginRepository
+import ru.myproevent.domain.model.repositories.internet_access_info.InternetAccessInfoRepository
+import ru.myproevent.domain.model.repositories.proevent_login.ProEventLoginRepository
 import javax.inject.Singleton
 
 @Module

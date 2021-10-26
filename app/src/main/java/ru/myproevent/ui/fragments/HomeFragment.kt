@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.databinding.FragmentHomeBinding
@@ -14,11 +13,11 @@ import ru.myproevent.ui.presenters.home.HomeView
 import ru.myproevent.ui.presenters.main.MainView
 import ru.myproevent.ui.presenters.main.Menu
 
-class HomeFragment : MvpAppCompatFragment(), HomeView, BackButtonListener {
+class HomeFragment : BaseMvpFragment(), HomeView, BackButtonListener {
     private var _view: FragmentHomeBinding? = null
     private val view get() = _view!!
 
-    private val presenter by moxyPresenter {
+    override val presenter by moxyPresenter {
         HomePresenter().apply {
             ProEventApp.instance.appComponent.inject(this)
         }
@@ -28,9 +27,6 @@ class HomeFragment : MvpAppCompatFragment(), HomeView, BackButtonListener {
         fun newInstance() = HomeFragment()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,8 +38,6 @@ class HomeFragment : MvpAppCompatFragment(), HomeView, BackButtonListener {
         }
         return view.root
     }
-
-    override fun backPressed() = presenter.backPressed()
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,24 +1,14 @@
 package ru.myproevent.ui.presenters.main
 
 import android.widget.Toast
-import com.github.terrakok.cicerone.Router
-import moxy.MvpPresenter
 import ru.myproevent.ProEventApp
-import ru.myproevent.domain.model.IProEventLoginRepository
-import ru.myproevent.domain.model.LoginBody
-import ru.myproevent.ui.screens.IScreens
-import ru.myproevent.ui.screens.Screens
+import ru.myproevent.domain.model.repositories.proevent_login.IProEventLoginRepository
+import ru.myproevent.ui.presenters.BaseMvpPresenter
 import javax.inject.Inject
 
-class MainPresenter : MvpPresenter<MainView>() {
-    @Inject
-    lateinit var router: Router
-
+class MainPresenter : BaseMvpPresenter<MainView>() {
     @Inject
     lateinit var loginRepository: IProEventLoginRepository
-
-    // TODO: Вынести в Dagger
-    private var screens: IScreens = Screens()
 
     private var currActiveMenu = Menu.HOME
 
@@ -62,9 +52,5 @@ class MainPresenter : MvpPresenter<MainView>() {
         }
         currActiveMenu = Menu.SETTINGS
         router.navigateTo(screens.settings())
-    }
-
-    fun backClicked() {
-        router.exit()
     }
 }

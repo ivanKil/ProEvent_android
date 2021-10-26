@@ -32,7 +32,8 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         }
     }
 
-    private lateinit var view: ActivityMainBinding
+    private var _view: ActivityMainBinding? = null
+    private val view get() = _view!!
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
@@ -41,7 +42,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Proevent_NoActionBar)
         super.onCreate(savedInstanceState)
-        view = ActivityMainBinding.inflate(layoutInflater).apply {
+        _view = ActivityMainBinding.inflate(layoutInflater).apply {
             // TODO: отрефакторить
             home.setOnClickListener { presenter.openHome() }
             homeHitArea.setOnClickListener { home.performClick() }
@@ -127,6 +128,11 @@ class MainActivity : MvpAppCompatActivity(), MainView {
                 return
             }
         }
-        presenter.backClicked()
+        presenter.backPressed()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _view = null
     }
 }

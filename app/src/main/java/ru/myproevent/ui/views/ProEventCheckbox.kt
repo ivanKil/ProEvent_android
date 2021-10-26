@@ -2,14 +2,12 @@ package ru.myproevent.ui.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import ru.myproevent.ProEventApp
 import ru.myproevent.R
-
 
 class ProEventCheckbox : FrameLayout {
     private lateinit var params: ViewGroup.LayoutParams

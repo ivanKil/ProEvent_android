@@ -1,18 +1,14 @@
 package ru.myproevent.ui.presenters.code
 
 import android.widget.Toast
-import com.github.terrakok.cicerone.Router
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableCompletableObserver
-import moxy.MvpPresenter
 import ru.myproevent.ProEventApp
-import ru.myproevent.domain.model.IProEventLoginRepository
-import ru.myproevent.ui.screens.IScreens
-import ru.myproevent.ui.screens.Screens
+import ru.myproevent.domain.model.repositories.internet_access_info.IInternetAccessInfoRepository
+import ru.myproevent.domain.model.repositories.proevent_login.IProEventLoginRepository
+import ru.myproevent.ui.presenters.BaseMvpPresenter
 import javax.inject.Inject
 
-class CodePresenter : MvpPresenter<CodeView>() {
+class CodePresenter : BaseMvpPresenter<CodeView>() {
     private inner class VerificationObserver : DisposableCompletableObserver() {
         override fun onComplete() {
             router.newRootScreen(screens.login())
@@ -21,34 +17,36 @@ class CodePresenter : MvpPresenter<CodeView>() {
         override fun onError(error: Throwable) {
             error.printStackTrace()
             if (error is retrofit2.adapter.rxjava2.HttpException) {
+                if(error.code() == 401){
+                    Toast.makeText(ProEventApp.instance, "Неверный код", Toast.LENGTH_LONG)
+                        .show()
+                    return
+                }
                 Toast.makeText(ProEventApp.instance, "Ошибка ${error.code()}", Toast.LENGTH_LONG)
                     .show()
                 return
             }
-            Toast.makeText(ProEventApp.instance, "${error.message}", Toast.LENGTH_LONG).show()
+            interAccessInfoRepository
+                .hasInternetConnection()
+                .observeOn(uiScheduler)
+                .subscribeWith(InterAccessInfoObserver(error.message))
+                .disposeOnDestroy()
         }
     }
 
     @Inject
-    lateinit var router: Router
-
-    @Inject
     lateinit var loginRepository: IProEventLoginRepository
 
-    private var disposables: CompositeDisposable = CompositeDisposable()
-
-    // TODO: вынести в Dagger
-    private var screens: IScreens = Screens()
+    @Inject
+    lateinit var interAccessInfoRepository: IInternetAccessInfoRepository
 
     fun continueRegistration(code: Int) {
         // TODO: спросить у дизайнера нужено ли здесь отображать progress bar
-        disposables.add(
-            loginRepository
-                .verificate(loginRepository.getLocalEmail()!!, code)
-                // TODO: вынести AndroidSchedulers.mainThread() в Dagger
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(VerificationObserver())
-        )
+        loginRepository
+            .verificate(loginRepository.getLocalEmail()!!, code)
+            .observeOn(uiScheduler)
+            .subscribeWith(VerificationObserver())
+            .disposeOnDestroy()
     }
 
     fun authorize() {
@@ -56,9 +54,4 @@ class CodePresenter : MvpPresenter<CodeView>() {
     }
 
     fun getEmail() = loginRepository.getLocalEmail()
-
-    fun backPressed(): Boolean {
-        router.exit()
-        return true
-    }
 }

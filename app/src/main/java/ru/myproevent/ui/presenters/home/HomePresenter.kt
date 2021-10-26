@@ -1,31 +1,17 @@
 package ru.myproevent.ui.presenters.home
 
-import com.github.terrakok.cicerone.Router
-import moxy.MvpPresenter
-import ru.myproevent.domain.model.IProEventLoginRepository
-import ru.myproevent.ui.screens.IScreens
-import ru.myproevent.ui.screens.Screens
+import ru.myproevent.domain.model.repositories.proevent_login.IProEventLoginRepository
+import ru.myproevent.ui.presenters.BaseMvpPresenter
 import javax.inject.Inject
 
-class HomePresenter : MvpPresenter<HomeView>() {
+class HomePresenter : BaseMvpPresenter<HomeView>() {
     @Inject
     lateinit var loginRepository: IProEventLoginRepository
-
-    @Inject
-    lateinit var router: Router
-
-    // TODO: вынести в Dagger
-    private var screens: IScreens = Screens()
 
     fun getToken(): String? = loginRepository.getLocalToken()
 
     fun logout(){
         loginRepository.logoutFromThisDevice()
         router.newRootScreen(screens.authorization())
-    }
-
-    fun backPressed(): Boolean {
-        router.exit()
-        return true
     }
 }

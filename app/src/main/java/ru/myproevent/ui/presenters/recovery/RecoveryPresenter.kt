@@ -1,24 +1,9 @@
 package ru.myproevent.ui.presenters.recovery
 
-import com.github.terrakok.cicerone.Router
-import moxy.MvpPresenter
-import ru.myproevent.ui.screens.IScreens
-import ru.myproevent.ui.screens.Screens
-import javax.inject.Inject
+import ru.myproevent.ui.presenters.BaseMvpPresenter
 
-class RecoveryPresenter : MvpPresenter<RecoveryView>() {
-    @Inject
-    lateinit var router: Router
-
-    // TODO: вынести в Dagger
-    private var screens: IScreens = Screens()
-
+class RecoveryPresenter : BaseMvpPresenter<RecoveryView>() {
     fun authorize(){
         router.navigateTo(screens.authorization())
-    }
-
-    fun backPressed(): Boolean {
-        router.exit()
-        return true
     }
 }

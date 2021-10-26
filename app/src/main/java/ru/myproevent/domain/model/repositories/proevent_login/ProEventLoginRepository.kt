@@ -1,7 +1,10 @@
-package ru.myproevent.domain.model
+package ru.myproevent.domain.model.repositories.proevent_login
 
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import ru.myproevent.domain.model.*
+import ru.myproevent.domain.model.repositories.local_proevent_user_token.ITokenLocalRepository
+import ru.myproevent.domain.model.repositories.local_proevent_user_token.TokenLocalRepository
 import javax.inject.Inject
 
 class ProEventLoginRepository @Inject constructor(private val api: IProEventDataSource) :

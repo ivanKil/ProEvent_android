@@ -14,7 +14,6 @@ import ru.myproevent.databinding.FragmentAuthorizationBinding
 import ru.myproevent.ui.presenters.authorization.AuthorizationPresenter
 import ru.myproevent.ui.presenters.authorization.AuthorizationView
 import ru.myproevent.ui.presenters.main.MainView
-import ru.myproevent.ui.presenters.main.Menu
 
 class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
     private var _view: FragmentAuthorizationBinding? = null

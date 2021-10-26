@@ -1,4 +1,4 @@
-package ru.myproevent.domain.model
+package ru.myproevent.domain.model.repositories.internet_access_info
 
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

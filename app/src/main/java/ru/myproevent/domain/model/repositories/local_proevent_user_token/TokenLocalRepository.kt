@@ -1,4 +1,4 @@
-package ru.myproevent.domain.model
+package ru.myproevent.domain.model.repositories.local_proevent_user_token
 
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
