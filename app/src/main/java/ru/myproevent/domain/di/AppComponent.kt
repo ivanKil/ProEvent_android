@@ -34,5 +34,4 @@ interface AppComponent {
     fun inject(recoveryPresenter: RecoveryPresenter)
     fun inject(registrationPresenter: RegistrationPresenter)
     fun inject(settingsPresenter: SettingsPresenter)
-    fun inject(baseMvpPresenter: BaseMvpPresenter<MvpView>)
 }
