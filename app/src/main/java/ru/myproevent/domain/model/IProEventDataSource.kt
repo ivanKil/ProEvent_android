@@ -34,11 +34,11 @@ data class VerificationBody(val code: Int, val email: String)
 
 data class ProfileDto(
     val userId: Long,
-    val fullName: String,
-    val nickName: String,
-    val msisdn: String,
-    val position: String,
-    val birthdate: String,
-    val imgUri: String,
-    val description: String
+    val fullName: String?,
+    val nickName: String?,
+    val msisdn: String?,
+    val position: String?,
+    val birthdate: String?,
+    val imgUri: String?,
+    val description: String?
 )
