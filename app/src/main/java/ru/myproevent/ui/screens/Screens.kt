@@ -11,4 +11,6 @@ class Screens : IScreens {
     override fun code() = FragmentScreen { CodeFragment.newInstance() }
     override fun login() = FragmentScreen { LoginFragment.newInstance() }
     override fun recovery() = FragmentScreen { RecoveryFragment.newInstance() }
+    override fun account() = FragmentScreen { AccountFragment.newInstance() }
+    override fun security() = FragmentScreen { SecurityFragment.newInstance() }
 }

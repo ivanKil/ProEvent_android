@@ -32,7 +32,14 @@ class SettingsFragment : BaseMvpFragment(), SettingsView, BackButtonListener {
         savedInstanceState: Bundle?
     ): View {
         (requireActivity() as MainView).selectItem(Menu.SETTINGS)
-        _view = FragmentSettingsBinding.inflate(inflater, container, false)
+        _view = FragmentSettingsBinding.inflate(inflater, container, false).apply {
+            account.setOnClickListener { presenter.account() }
+            security.setOnClickListener { presenter.security() }
+            subscriptions.setOnClickListener { }
+            help.setOnClickListener { }
+            about.setOnClickListener { }
+            logout.setOnClickListener { presenter.logout() }
+        }
         return view.root
     }
 

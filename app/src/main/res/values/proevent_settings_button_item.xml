@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ProEventSettingsButtonItem" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:minHeight">24dp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/PE_blue_gray_01</item>
+        <item name="android:textSize">20sp</item>
+        <item name="cornerRadius">0dp</item>
+        <item name="iconGravity">end</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconTint">@color/PE_blue_gray_01</item>
+        <item name="rippleColor">@color/PE_blue_gray_light</item>
+        <item name="fontPath">@string/default_font_path</item>
+        <item name="icon">@drawable/ic_go_to</item>
+    </style>
+</resources>

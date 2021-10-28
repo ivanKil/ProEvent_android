@@ -10,4 +10,6 @@ interface IScreens {
     fun code(): Screen
     fun login(): Screen
     fun recovery(): Screen
+    fun account(): Screen
+    fun security(): Screen
 }
