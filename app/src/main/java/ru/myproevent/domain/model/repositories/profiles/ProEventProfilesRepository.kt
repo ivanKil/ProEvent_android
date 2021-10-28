@@ -1,6 +1,7 @@
 package ru.myproevent.domain.model.repositories.profiles
 
 import io.reactivex.Completable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import ru.myproevent.domain.model.IProEventDataSource
 import ru.myproevent.domain.model.ProfileDto
@@ -17,7 +18,7 @@ class ProEventProfilesRepository @Inject constructor(private val api: IProEventD
         return Completable.fromSingle(api.editProfile(profile)).subscribeOn(Schedulers.io())
     }
 
-    override fun getProfile(id: Long): Completable {
-        return Completable.fromSingle(api.getProfile(id)).subscribeOn(Schedulers.io())
+    override fun getProfile(id: Long): Single<ProfileDto> {
+        return api.getProfile(id).subscribeOn(Schedulers.io())
     }
 }
