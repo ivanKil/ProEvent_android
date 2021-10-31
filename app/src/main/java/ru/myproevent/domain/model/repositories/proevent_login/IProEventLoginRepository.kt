@@ -4,6 +4,7 @@ import io.reactivex.Completable
 
 interface IProEventLoginRepository {
     fun getLocalToken(): String?
+    fun getLocalId(): Long?
     fun getLocalEmail(): String?
     fun getLocalPassword(): String?
     fun login(email: String, password: String): Completable
