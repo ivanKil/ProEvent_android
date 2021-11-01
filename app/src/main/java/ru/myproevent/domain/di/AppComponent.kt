@@ -28,7 +28,6 @@ import javax.inject.Singleton
 interface AppComponent {
     fun inject(mainActivity: MainActivity)
 
-    fun inject(baseMvpPresenter: BaseMvpPresenter<MvpView>)
     fun inject(mainPresenter: MainPresenter)
     fun inject(authorizationPresenter: AuthorizationPresenter)
     fun inject(codePresenter: CodePresenter)

@@ -3,8 +3,9 @@ package ru.myproevent.domain.model.repositories.local_proevent_user_token
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import ru.myproevent.ProEventApp
+import javax.inject.Inject
 
-class TokenLocalRepository : ITokenLocalRepository {
+class TokenLocalRepository @Inject constructor() : ITokenLocalRepository {
     private val localTokenAlias = "PROEVENT_USER_TOKEN"
     private val tokenPreferencesName = "TOKEN_ENCRYPTED_SHARED_PREFERENCES"
     private val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
