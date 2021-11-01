@@ -5,7 +5,6 @@ import io.reactivex.Single
 import ru.myproevent.domain.model.ProfileDto
 
 interface IProEventProfilesRepository {
-    fun createProfile(profile: ProfileDto) : Completable
-    fun editProfile(profile: ProfileDto) : Completable
-    fun getProfile(id: Long) : Single<ProfileDto>
+    fun saveProfile(profile: ProfileDto) : Completable
+    fun getProfile(id: Long) : Single<ProfileDto?>
 }

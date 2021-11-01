@@ -50,5 +50,4 @@ class AuthorizationPresenter : BaseMvpPresenter<AuthorizationView>() {
     fun recoverPassword() {
         router.navigateTo(screens.recovery())
     }
-
 }

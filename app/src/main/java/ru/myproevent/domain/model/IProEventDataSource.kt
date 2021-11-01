@@ -2,6 +2,7 @@ package ru.myproevent.domain.model
 
 import io.reactivex.Completable
 import io.reactivex.Single
+import retrofit2.Call
 import retrofit2.http.*
 
 interface IProEventDataSource {
@@ -21,7 +22,7 @@ interface IProEventDataSource {
     fun editProfile(@Body profile: ProfileDto): Single<ProfileDto>
 
     @GET("profiles/user/{userId}")
-    fun getProfile(@Path("userId") userId: Long): Single<ProfileDto>
+    fun getProfile(@Path("userId") userId: Long): Call<ProfileDto>
 }
 
 data class LoginBody(val email: String, val password: String)
