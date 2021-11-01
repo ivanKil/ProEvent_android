@@ -9,9 +9,4 @@ class HomePresenter : BaseMvpPresenter<HomeView>() {
     lateinit var loginRepository: IProEventLoginRepository
 
     fun getToken(): String? = loginRepository.getLocalToken()
-
-    fun logout(){
-        loginRepository.logoutFromThisDevice()
-        router.newRootScreen(screens.authorization())
-    }
 }

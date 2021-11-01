@@ -88,7 +88,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/email_input"
-                style="@style/TextInputLayoutStyle">
+                style="@style/ProEventTextInputLayoutStyle">
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/email_edit"
