@@ -75,7 +75,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/name_input_hint"
-                        android:inputType="none"
+                        android:inputType="textPersonName"
                         android:maxLength="320"
                         android:textColorHint="@color/PE_blue_gray_03"
                         android:textIsSelectable="true" />
@@ -110,7 +110,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/phone_edit_hint"
-                        android:inputType="textEmailAddress"
+                        android:inputType="phone"
                         android:maxLength="320"
                         android:textColorHint="@color/PE_blue_gray_03" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -144,7 +144,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/date_of_birth_edit_hint"
-                        android:inputType="textEmailAddress"
+                        android:inputType="datetime"
                         android:maxLength="320"
                         android:textColorHint="@color/PE_blue_gray_03" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -178,7 +178,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/position_edit_hint"
-                        android:inputType="textEmailAddress"
+                        android:inputType="text"
                         android:maxLength="320"
                         android:textColorHint="@color/PE_blue_gray_03" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -212,7 +212,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/role_edit_hint"
-                        android:inputType="textEmailAddress"
+                        android:inputType="text"
                         android:maxLength="320"
                         android:textColorHint="@color/PE_blue_gray_03" />
                 </com.google.android.material.textfield.TextInputLayout>

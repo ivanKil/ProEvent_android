@@ -16,10 +16,10 @@ interface IProEventDataSource {
     fun verificate(@Body verificationBody: VerificationBody): Completable
 
     @POST("profiles")
-    fun createProfile(@Body profile: ProfileDto): Single<ProfileDto>
+    fun createProfile(@Body profile: ProfileDto): Call<ProfileDto>
 
     @PUT("profiles")
-    fun editProfile(@Body profile: ProfileDto): Single<ProfileDto>
+    fun editProfile(@Body profile: ProfileDto): Call<ProfileDto>
 
     @GET("profiles/user/{userId}")
     fun getProfile(@Path("userId") userId: Long): Call<ProfileDto>
@@ -35,11 +35,11 @@ data class VerificationBody(val code: Int, val email: String)
 
 data class ProfileDto(
     val userId: Long,
-    val fullName: String?,
-    val nickName: String?,
-    val msisdn: String?,
-    val position: String?,
-    val birthdate: String?,
-    val imgUri: String?,
-    val description: String?
+    var fullName: String? = null,
+    var nickName: String? = null,
+    var msisdn: String? = null,
+    var position: String? = null,
+    var birthdate: String? = null,
+    var imgUri: String? = null,
+    var description: String? = null
 )

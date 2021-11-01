@@ -30,7 +30,7 @@ class LoginFragment : BaseMvpFragment(), LoginView, BackButtonListener {
         savedInstanceState: Bundle?
     ): View {
         _view = FragmentLoginBinding.inflate(inflater, container, false).apply {
-            confirmLogin.setOnClickListener { presenter.confirmLogin() }
+            confirmLogin.setOnClickListener { presenter.confirmLogin(loginEdit.text.toString()) }
         }
         return view.root
     }

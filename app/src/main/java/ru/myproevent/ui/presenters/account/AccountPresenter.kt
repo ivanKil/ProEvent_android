@@ -1,6 +1,5 @@
 package ru.myproevent.ui.presenters.account
 
-import android.util.Log
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import ru.myproevent.domain.model.ProfileDto
@@ -63,25 +62,23 @@ class AccountPresenter : BaseMvpPresenter<AccountView>() {
         position: String,
         role: String
     ) {
-        profilesRepository.saveProfile(
-            ProfileDto(
-                loginRepository.getLocalId()!!,
-                name,
-                "LOGIN PLACEHOLDER",
-                phone,
-                position,
-                dateOfBirth,
-                "IMG URI PLACEHOLDER",
-                role
+        profilesRepository
+            .saveProfile(
+                ProfileDto(
+                    userId = loginRepository.getLocalId()!!,
+                    fullName = name,
+                    msisdn = phone,
+                    position = position,
+                    birthdate = dateOfBirth,
+                    description = role
+                )
             )
-        )
             .observeOn(uiScheduler)
             .subscribeWith(ProfileEditObserver())
             .disposeOnDestroy()
     }
 
     fun getProfile() {
-        Log.d("[getProfile]", "token: ${loginRepository.getLocalToken()}, id: ${loginRepository.getLocalId()}")
         profilesRepository
             .getProfile(loginRepository.getLocalId()!!)
             .observeOn(uiScheduler)

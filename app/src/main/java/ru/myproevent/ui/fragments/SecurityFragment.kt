@@ -1,6 +1,7 @@
 package ru.myproevent.ui.fragments
 
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.text.method.KeyListener
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.google.android.material.textfield.TextInputLayout
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.databinding.FragmentSecurityBinding
+import ru.myproevent.domain.model.ProfileDto
 import ru.myproevent.ui.BackButtonListener
 import ru.myproevent.ui.presenters.main.MainView
 import ru.myproevent.ui.presenters.main.Menu
@@ -21,6 +23,7 @@ import ru.myproevent.ui.presenters.security.SecurityPresenter
 import ru.myproevent.ui.presenters.security.SecurityView
 import ru.myproevent.ui.views.KeyboardAwareTextInputEditText
 
+// TODO: рефакторинг: Данный фрагмент во многом копирует AccountFragment. Вынести общее в абстрактынй класс
 class SecurityFragment : BaseMvpFragment(), SecurityView, BackButtonListener {
     private var _view: FragmentSecurityBinding? = null
     private val view get() = _view!!
@@ -53,7 +56,7 @@ class SecurityFragment : BaseMvpFragment(), SecurityView, BackButtonListener {
     }
 
     private fun showSaveButton() {
-        if(view.save.visibility == GONE){
+        if (view.save.visibility == GONE) {
             view.save.visibility = VISIBLE
         }
     }
@@ -79,7 +82,7 @@ class SecurityFragment : BaseMvpFragment(), SecurityView, BackButtonListener {
                     Toast.makeText(context, "Пароли не совпадают", Toast.LENGTH_LONG).show()
                     return@setOnClickListener
                 }
-                presenter.save(
+                presenter.saveProfile(
                     emailEdit.text.toString(),
                     loginEdit.text.toString(),
                     newPasswordEdit.text.toString(),
@@ -87,11 +90,29 @@ class SecurityFragment : BaseMvpFragment(), SecurityView, BackButtonListener {
             }
             titleButton.setOnClickListener { presenter.backPressed() }
         }
+        presenter.getProfile()
         return view.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _view = null
+    }
+
+    override fun showProfile(profileDto: ProfileDto) {
+        with(view) {
+            with(profileDto) {
+                nickName?.let { loginEdit.text = SpannableStringBuilder(it) }
+            }
+        }
+    }
+
+    override fun makeProfileEditable() {
+        // TODO:
+        Toast.makeText(context, "makeProfileEditable()", Toast.LENGTH_LONG).show()
+    }
+
+    override fun showMessage(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 }

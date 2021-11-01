@@ -91,7 +91,7 @@
                 style="@style/ProEventTextInputLayoutStyle">
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
-                    android:id="@+id/email_edit"
+                    android:id="@+id/login_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/login_input_hint"

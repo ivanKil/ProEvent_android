@@ -9,15 +9,6 @@ import javax.inject.Inject
 
 class ProEventProfilesRepository @Inject constructor(private val api: IProEventDataSource) :
     IProEventProfilesRepository {
-
-    private fun createProfile(profile: ProfileDto): Completable {
-        return Completable.fromSingle(api.createProfile(profile)).subscribeOn(Schedulers.io())
-    }
-
-    private fun editProfile(profile: ProfileDto): Completable {
-        return Completable.fromSingle(api.editProfile(profile)).subscribeOn(Schedulers.io())
-    }
-
     override fun getProfile(id: Long): Single<ProfileDto?> = Single.fromCallable {
         val response = api.getProfile(id).execute()
         if (response.isSuccessful) {
@@ -26,5 +17,24 @@ class ProEventProfilesRepository @Inject constructor(private val api: IProEventD
         throw retrofit2.adapter.rxjava2.HttpException(response)
     }.subscribeOn(Schedulers.io())
 
-    override fun saveProfile(profile: ProfileDto) = createProfile(profile)
+    override fun saveProfile(profile: ProfileDto) = Completable.fromCallable {
+        val oldProfileResponse = api.getProfile(profile.userId).execute()
+        val newProfileResponse = if (oldProfileResponse.isSuccessful) {
+            val oldProfile = oldProfileResponse.body()!!
+            if(profile.fullName == null){ profile.fullName = oldProfile.fullName }
+            if(profile.nickName == null){ profile.nickName = oldProfile.nickName }
+            if(profile.msisdn == null){ profile.msisdn = oldProfile.msisdn }
+            if(profile.position == null){ profile.position = oldProfile.position }
+            if(profile.birthdate == null){ profile.birthdate = oldProfile.birthdate }
+            if(profile.imgUri == null){ profile.imgUri = oldProfile.imgUri }
+            if(profile.description == null){ profile.description = oldProfile.description }
+            api.editProfile(profile).execute()
+        } else {
+            api.createProfile(profile).execute()
+        }
+        if(!newProfileResponse.isSuccessful){
+            throw retrofit2.adapter.rxjava2.HttpException(newProfileResponse)
+        }
+        return@fromCallable null
+    }.subscribeOn(Schedulers.io())
 }
