@@ -1,6 +1,5 @@
 package ru.myproevent.domain.model.repositories.profiles
 
-import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -27,15 +26,5 @@ class ProEventProfilesRepository @Inject constructor(private val api: IProEventD
         throw retrofit2.adapter.rxjava2.HttpException(response)
     }.subscribeOn(Schedulers.io())
 
-    override fun saveProfile(profile: ProfileDto) = Completable.fromCallable {
-        api.getProfile(profile.userId).execute().also { response ->
-            return@fromCallable if (response.isSuccessful) {
-                editProfile(profile)
-            } else if (response.code() == 404) {
-                createProfile(profile)
-            } else {
-                Completable.error(Throwable(response.errorBody().toString()))
-            }
-        }
-    }.subscribeOn(Schedulers.io())
+    override fun saveProfile(profile: ProfileDto) = createProfile(profile)
 }
