@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/title_button"
+        style="@style/ProEventSettingsButtonItem"
+        fontPath="@string/default_font_bold_path"
+        android:layout_marginTop="25dp"
+        android:text="@string/account_text"
+        android:textAlignment="center"
+        app:icon="@drawable/ic_back_to"
+        app:iconGravity="start" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="3dp"
+                android:src="@drawable/profile_picture_placeholder" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="6dp"
+                android:text="@string/profile_picture_placeholder"
+                android:textAlignment="center"
+                android:textColor="@color/PE_blue_gray_03"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/name_input_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:maxWidth="320dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/name_input_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/name_input_title"
+                    android:textColor="@color/PE_bright_red"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/name_input"
+                    style="@style/ProEventRWTextInputLayoutStyle"
+                    android:clickable="true">
+
+                    <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                        android:id="@+id/name_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/name_input_hint"
+                        android:inputType="textPersonName"
+                        android:maxLength="320"
+                        android:textColorHint="@color/PE_blue_gray_03"
+                        android:textIsSelectable="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/phone_input_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="12dp"
+                android:maxWidth="320dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/phone_input_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/phone_input_title"
+                    android:textColor="@color/PE_bright_red"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/phone_input"
+                    style="@style/ProEventRWTextInputLayoutStyle">
+
+                    <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                        android:id="@+id/phone_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/phone_edit_hint"
+                        android:inputType="phone"
+                        android:maxLength="320"
+                        android:textColorHint="@color/PE_blue_gray_03" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/date_of_birth_input_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="12dp"
+                android:maxWidth="320dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/date_of_birth_input_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/date_of_birth_input_title"
+                    android:textColor="@color/PE_bright_red"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/date_of_birth_input"
+                    style="@style/ProEventRWTextInputLayoutStyle">
+
+                    <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                        android:id="@+id/date_of_birth_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/date_of_birth_edit_hint"
+                        android:inputType="datetime"
+                        android:maxLength="320"
+                        android:textColorHint="@color/PE_blue_gray_03" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/position_input_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="12dp"
+                android:maxWidth="320dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/position_input_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/position_input_title"
+                    android:textColor="@color/PE_bright_red"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/position_input"
+                    style="@style/ProEventRWTextInputLayoutStyle">
+
+                    <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                        android:id="@+id/position_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/position_edit_hint"
+                        android:inputType="text"
+                        android:maxLength="320"
+                        android:textColorHint="@color/PE_blue_gray_03" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/role_input_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="12dp"
+                android:maxWidth="320dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/role_input_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/role_input_title"
+                    android:textColor="@color/PE_bright_red"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/role_input"
+                    style="@style/ProEventRWTextInputLayoutStyle">
+
+                    <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                        android:id="@+id/role_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/role_edit_hint"
+                        android:inputType="text"
+                        android:maxLength="320"
+                        android:textColorHint="@color/PE_blue_gray_03" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save"
+                fontPath="@string/default_font_bold_path"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp"
+                android:backgroundTint="@color/PE_peach_04"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:letterSpacing="0"
+                android:text="@string/save_text"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:visibility="gone"
+                app:cornerRadius="10dp"
+                app:rippleColor="@color/PE_bright_red" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

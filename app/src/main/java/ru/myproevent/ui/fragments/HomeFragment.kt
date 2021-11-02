@@ -34,7 +34,6 @@ class HomeFragment : BaseMvpFragment(), HomeView, BackButtonListener {
         (requireActivity() as MainView).selectItem(Menu.HOME)
         _view = FragmentHomeBinding.inflate(inflater, container, false).apply {
             token.text = "TOKEN\n${presenter.getToken()}"
-            logout.setOnClickListener { presenter.logout() }
         }
         return view.root
     }

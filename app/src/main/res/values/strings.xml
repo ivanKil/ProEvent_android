@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ProEvent</string>
     <string name="default_font">Inter-Regular.ttf</string>
+    <string name="default_font_path">fonts/Inter-Regular.ttf</string>
     <string name="default_font_bold_path">fonts/Inter-Bold.ttf</string>
     <string name="authorization_title">Вход</string>
     <string name="authorization_confirm">Войти</string>
@@ -33,4 +34,29 @@
     <string name="login_input_hint">Придумайте логин</string>
     <string name="continue_text">Продолжить</string>
     <string name="password_recovery_explanation_text">Введите адрес электронной почты,\nуказанный при регистрации аккаунта.\nНа данный адрес будет выслано\nписьмо с дальнейшими инструкциями.</string>
+    <string name="account_text">Профиль</string>
+    <string name="security_text">Безопасность</string>
+    <string name="subscriptions_text">Подписки</string>
+    <string name="help">Помощь</string>
+    <string name="about_text">О приложении</string>
+    <string name="logout_text">Выйти</string>
+    <string name="profile_picture_placeholder">Изменить фото профиля</string>
+    <string name="name_input_title">ФИО</string>
+    <string name="phone_input_title">Телефон</string>
+    <string name="date_of_birth_input_title">Дата рождения</string>
+    <string name="position_input_title">Должность</string>
+    <string name="role_input_title">О себе</string>
+    <string name="name_input_hint">Введите ваши ФИО</string>
+    <string name="phone_edit_hint">Введите номер телефона</string>
+    <string name="date_of_birth_edit_hint">Введите дату вашего рождения</string>
+    <string name="position_edit_hint">Введите вашу должность</string>
+    <string name="role_edit_hint">Например: куратор, волонтер</string>
+    <string name="save_text">Сохранить</string>
+    <string name="old_password_title">Старый пароль</string>
+    <string name="old_password_input_hint">Введите старый пароль</string>
+    <string name="new_password_title">Новый пароль</string>
+    <string name="new_password_input_hint">Введите новый пароль</string>
+    <string name="confirm_new_password_hint">Повторите новый пароль</string>
+    <string name="confirm_password_title">Повторите пароль</string>
+    <string name="dateFormat">yyyy-MM-dd</string>
 </resources>

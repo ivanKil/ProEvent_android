@@ -86,7 +86,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/email_input"
-                style="@style/TextInputLayoutStyle">
+                style="@style/ProEventTextInputLayoutStyle">
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/email_edit"
@@ -123,7 +123,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/password_input"
-                style="@style/TextInputLayoutStyle"
+                style="@style/ProEventTextInputLayoutStyle"
                 app:endIconMode="password_toggle"
                 app:endIconTint="@color/PE_blue_gray_04">
 
