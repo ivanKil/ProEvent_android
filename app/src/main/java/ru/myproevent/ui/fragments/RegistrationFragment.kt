@@ -72,7 +72,7 @@ class RegistrationFragment : BaseMvpFragment(), RegistrationView, BackButtonList
                         license2.setOnTouchListener(licenceTouchListener)
                     }.root
                 )
-
+                bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
                 // https://stackoverflow.com/questions/46861306/how-to-disable-bottomsheetdialogfragment-dragging
                 try {
                     val behaviorField: Field =

@@ -14,8 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:maxWidth="360dp"
-        android:paddingBottom="40dp">
+        android:maxWidth="360dp">
 
         <TextView
             android:id="@+id/form_title"
@@ -25,7 +24,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/registration_title"
             android:textColor="@color/PE_blue_gray_01"
-            android:textSize="@dimen/fixed_title_text_size"
+            android:textSize="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -61,8 +60,8 @@
                     android:id="@+id/email_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Введите ваш e-mail"
                     android:textSize="@dimen/fixed_input_text_size"
+                    android:hint="Введите ваш e-mail"
                     android:inputType="textEmailAddress"
                     android:maxLength="320"
                     android:textColorHint="@color/PE_blue_gray_03" />
@@ -99,9 +98,9 @@
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/password_edit"
+                    android:textSize="@dimen/fixed_input_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="@dimen/fixed_input_text_size"
                     android:hint="@string/password_input_hint"
                     android:inputType="textPassword"
                     android:textColorHint="@color/PE_blue_gray_03" />
@@ -138,9 +137,9 @@
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/password_confirm_edit"
+                    android:textSize="@dimen/fixed_input_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="@dimen/fixed_input_text_size"
                     android:hint="@string/password_confirm_hint"
                     android:inputType="textPassword"
                     android:textColorHint="@color/PE_blue_gray_03" />
@@ -173,7 +172,7 @@
             android:layout_marginTop="17dp"
             android:layout_marginRight="20dp"
             android:maxWidth="254dp"
-            android:textSize="@dimen/fixed_small_text_size"
+            android:textSize="12dp"
             app:layout_constraintLeft_toRightOf="@id/license_checkbox"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_confirm_input_container"
@@ -193,7 +192,7 @@
             android:letterSpacing="0"
             android:text="@string/registration_continue"
             android:textAllCaps="false"
-            android:textSize="@dimen/fixed_title_text_size"
+            android:textSize="20dp"
             app:cornerRadius="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -207,13 +206,12 @@
             android:layout_marginHorizontal="4dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="40dp"
-            android:gravity="center_horizontal"
             android:text="@string/has_account"
             android:textColor="@color/PE_blue_gray_03"
             android:textSize="@dimen/fixed_input_text_size"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/authorize"
             app:layout_constraintTop_toBottomOf="@id/continue_registration" />
 
         <TextView
@@ -221,21 +219,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="40dp"
             android:text="@string/authorize"
             android:textColor="@color/PE_bright_red"
             android:textSize="@dimen/fixed_input_text_size"
-            app:layout_constraintLeft_toLeftOf="@id/oh_now_i_remember"
-            app:layout_constraintRight_toRightOf="@id/oh_now_i_remember"
-            app:layout_constraintTop_toBottomOf="@id/oh_now_i_remember" />
+            app:layout_constraintLeft_toRightOf="@+id/oh_now_i_remember"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/continue_registration" />
 
         <View
             android:id="@+id/oh_now_i_remember_hit_area"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            app:layout_constraintBottom_toBottomOf="@id/authorize"
+            app:layout_constraintBottom_toBottomOf="@id/oh_now_i_remember"
             app:layout_constraintLeft_toLeftOf="@id/oh_now_i_remember"
-            app:layout_constraintRight_toRightOf="@id/oh_now_i_remember"
+            app:layout_constraintRight_toRightOf="@id/authorize"
             app:layout_constraintTop_toTopOf="@id/oh_now_i_remember" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
