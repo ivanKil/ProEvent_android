@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:background="@color/white"
     android:fadeScrollbars="false"
-    android:scrollbarThumbVertical="@color/PE_peach_04">
+    android:scrollbarThumbVertical="@color/ProEvent_orange_200">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/body"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fragment_registration_padding_bottom_vertical"
             android:text="@string/registration_title"
-            android:textColor="@color/PE_blue_gray_01"
+            android:textColor="@color/ProEvent_blue_800"
             android:textSize="@dimen/fixed_title_text_size"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -50,7 +50,7 @@
                 android:layout_marginLeft="@dimen/inner_margin_horizontal"
                 android:layout_marginBottom="4dp"
                 android:text="@string/e_mail_input_title"
-                android:textColor="@color/PE_bright_red"
+                android:textColor="@color/ProEvent_bright_orange_500"
                 android:textSize="@dimen/fixed_input_text_size" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -65,7 +65,7 @@
                     android:textSize="@dimen/fixed_input_text_size"
                     android:inputType="textEmailAddress"
                     android:maxLength="320"
-                    android:textColorHint="@color/PE_blue_gray_03" />
+                    android:textColorHint="@color/ProEvent_blue_600" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -87,14 +87,14 @@
                 android:layout_marginLeft="@dimen/inner_margin_horizontal"
                 android:layout_marginBottom="4dp"
                 android:text="@string/password_input_title"
-                android:textColor="@color/PE_bright_red"
+                android:textColor="@color/ProEvent_bright_orange_500"
                 android:textSize="@dimen/fixed_input_text_size" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/password_input"
                 style="@style/ProEventTextInputLayoutStyle"
                 app:endIconMode="password_toggle"
-                app:endIconTint="@color/PE_blue_gray_04">
+                app:endIconTint="@color/ProEvent_blue_300">
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/password_edit"
@@ -103,7 +103,7 @@
                     android:textSize="@dimen/fixed_input_text_size"
                     android:hint="@string/password_input_hint"
                     android:inputType="textPassword"
-                    android:textColorHint="@color/PE_blue_gray_03" />
+                    android:textColorHint="@color/ProEvent_blue_600" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -125,14 +125,14 @@
                 android:layout_marginLeft="@dimen/inner_margin_horizontal"
                 android:layout_marginBottom="4dp"
                 android:text="@string/password_confirm_tite"
-                android:textColor="@color/PE_bright_red"
+                android:textColor="@color/ProEvent_bright_orange_500"
                 android:textSize="@dimen/fixed_input_text_size" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/password_confirm_input"
                 style="@style/ProEventTextInputLayoutStyle"
                 app:endIconMode="password_toggle"
-                app:endIconTint="@color/PE_blue_gray_04">
+                app:endIconTint="@color/ProEvent_blue_300">
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/password_confirm_edit"
@@ -141,7 +141,7 @@
                     android:textSize="@dimen/fixed_input_text_size"
                     android:hint="@string/password_confirm_hint"
                     android:inputType="textPassword"
-                    android:textColorHint="@color/PE_blue_gray_03" />
+                    android:textColorHint="@color/ProEvent_blue_600" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -176,25 +176,17 @@
             app:layout_constraintTop_toBottomOf="@+id/password_confirm_input_container"
             tools:text="Я согласен (а) с Условиями использования\nи Политикой конфиденциальности" />
 
-        <com.google.android.material.button.MaterialButton
+        <ru.myproevent.ui.views.ProEventConfirmButton
             android:id="@+id/continue_registration"
-            fontPath="@string/default_font_bold_path"
+            style="@style/ProEventConfirmButton"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/PE_peach_04"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:letterSpacing="0"
             android:text="@string/registration_continue"
-            android:textAllCaps="false"
-            android:textSize="@dimen/fixed_title_text_size"
-            app:cornerRadius="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/license_text"
-            app:rippleColor="@color/PE_bright_red" />
+            app:layout_constraintTop_toBottomOf="@id/license_text" />
 
         <TextView
             android:id="@+id/oh_now_i_remember"
@@ -204,7 +196,7 @@
             android:layout_marginBottom="40dp"
             android:gravity="center_horizontal"
             android:text="@string/has_account"
-            android:textColor="@color/PE_blue_gray_03"
+            android:textColor="@color/ProEvent_blue_600"
             android:textSize="@dimen/fixed_input_text_size"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -217,7 +209,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/authorize"
-            android:textColor="@color/PE_bright_red"
+            android:textColor="@color/ProEvent_bright_orange_500"
             android:textSize="@dimen/fixed_input_text_size"
             app:layout_constraintLeft_toLeftOf="@id/oh_now_i_remember"
             app:layout_constraintRight_toRightOf="@id/oh_now_i_remember"
