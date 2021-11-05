@@ -1,25 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/white"
-    android:fadeScrollbars="false"
-    android:scrollbarThumbVertical="@color/PE_peach_04">
+    android:maxWidth="360dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/body"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:maxWidth="@dimen/auth_max_width"
-        android:paddingBottom="@dimen/fragment_authorization_scroll_padding_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="640dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/logo_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_logo_background"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/logo_foreground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7.84dp"
+            android:layout_marginTop="17.17dp"
+            android:layout_marginRight="6.87dp"
+            android:layout_marginBottom="36.69dp"
+            android:src="@drawable/ic_logo"
+            app:layout_constraintBottom_toBottomOf="@id/logo_background"
+            app:layout_constraintLeft_toLeftOf="@id/logo_background"
+            app:layout_constraintRight_toRightOf="@id/logo_background"
+            app:layout_constraintTop_toTopOf="@id/logo_background" />
 
         <TextView
             android:id="@+id/form_title"
@@ -30,9 +57,9 @@
             android:text="@string/authorization_title"
             android:textColor="@color/PE_blue_gray_01"
             android:textSize="20dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/logo_background"
+            app:layout_constraintRight_toRightOf="@id/logo_background"
+            app:layout_constraintTop_toBottomOf="@id/logo_background"
             tools:ignore="MissingPrefix" />
 
         <LinearLayout
@@ -131,7 +158,6 @@
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="40dp"
             android:backgroundTint="@color/PE_peach_04"
             android:insetTop="0dp"
             android:insetBottom="0dp"
@@ -140,51 +166,54 @@
             android:textAllCaps="false"
             android:textSize="20dp"
             app:cornerRadius="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/password_input_container"
+            app:layout_constraintVertical_bias="0.39249146757"
             app:rippleColor="@color/PE_bright_red" />
-
-        <TextView
-            android:id="@+id/password_recovery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="@string/remember_password"
-            android:textColor="@color/PE_blue_gray_03"
-            android:textSize="20dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/authorization_confirm" />
-
-        <View
-            android:id="@+id/password_recovery_hit_area"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            app:layout_constraintBottom_toBottomOf="@id/password_recovery"
-            app:layout_constraintLeft_toLeftOf="@id/password_recovery"
-            app:layout_constraintRight_toRightOf="@id/password_recovery"
-            app:layout_constraintTop_toTopOf="@id/password_recovery" />
-
-        <TextView
-            android:id="@+id/registration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:text="@string/registration"
-            android:textColor="@color/PE_bright_red"
-            android:textSize="20dp"
-            app:layout_constraintLeft_toLeftOf="@id/password_recovery"
-            app:layout_constraintRight_toRightOf="@id/password_recovery"
-            app:layout_constraintTop_toBottomOf="@id/password_recovery" />
-
-        <View
-            android:id="@+id/registration_hit_area"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            app:layout_constraintBottom_toBottomOf="@id/registration"
-            app:layout_constraintLeft_toLeftOf="@id/registration"
-            app:layout_constraintRight_toRightOf="@id/registration"
-            app:layout_constraintTop_toTopOf="@id/registration" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+
+    <TextView
+        android:id="@+id/password_recovery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="26dp"
+        android:text="@string/remember_password"
+        android:textColor="@color/PE_blue_gray_03"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@id/registration"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <View
+        android:id="@+id/password_recovery_hit_area"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@id/password_recovery"
+        app:layout_constraintLeft_toLeftOf="@id/password_recovery"
+        app:layout_constraintRight_toRightOf="@id/password_recovery"
+        app:layout_constraintTop_toTopOf="@id/password_recovery" />
+
+    <TextView
+        android:id="@+id/registration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:text="@string/registration"
+        android:textColor="@color/PE_bright_red"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <View
+        android:id="@+id/registration_hit_area"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@id/registration"
+        app:layout_constraintLeft_toLeftOf="@id/registration"
+        app:layout_constraintRight_toRightOf="@id/registration"
+        app:layout_constraintTop_toTopOf="@id/registration" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

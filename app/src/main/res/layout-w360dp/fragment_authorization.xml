@@ -14,8 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:maxWidth="@dimen/auth_max_width"
-        android:paddingBottom="@dimen/fragment_authorization_scroll_padding_bottom"
+        android:maxWidth="360dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -63,13 +62,13 @@
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/email_edit"
+                    android:textSize="@dimen/fixed_input_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/e_mail_input_hint"
                     android:inputType="textEmailAddress"
                     android:maxLength="320"
-                    android:textColorHint="@color/PE_blue_gray_03"
-                    android:textSize="@dimen/fixed_input_text_size" />
+                    android:textColorHint="@color/PE_blue_gray_03" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -103,12 +102,12 @@
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/password_edit"
+                    android:textSize="@dimen/fixed_input_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/password_input_hint"
                     android:inputType="textPassword"
-                    android:textColorHint="@color/PE_blue_gray_03"
-                    android:textSize="@dimen/fixed_input_text_size" />
+                    android:textColorHint="@color/PE_blue_gray_03" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -149,12 +148,13 @@
             android:id="@+id/password_recovery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
             android:text="@string/remember_password"
             android:textColor="@color/PE_blue_gray_03"
             android:textSize="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/authorization_confirm" />
 
         <View
@@ -170,13 +170,14 @@
             android:id="@+id/registration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="40dp"
             android:text="@string/registration"
             android:textColor="@color/PE_bright_red"
             android:textSize="20dp"
-            app:layout_constraintLeft_toLeftOf="@id/password_recovery"
-            app:layout_constraintRight_toRightOf="@id/password_recovery"
-            app:layout_constraintTop_toBottomOf="@id/password_recovery" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/authorization_confirm" />
 
         <View
             android:id="@+id/registration_hit_area"
