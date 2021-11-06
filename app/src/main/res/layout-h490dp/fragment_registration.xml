@@ -26,6 +26,8 @@
         android:id="@+id/body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toTopOf="@id/continue_registration"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -64,8 +66,8 @@
                     android:hint="Введите ваш e-mail"
                     android:inputType="textEmailAddress"
                     android:maxLength="320"
-                    android:textSize="@dimen/fixed_input_text_size"
-                    android:textColorHint="@color/ProEvent_blue_600" />
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -102,9 +104,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/password_input_hint"
-                    android:textSize="@dimen/fixed_input_text_size"
                     android:inputType="textPassword"
-                    android:textColorHint="@color/ProEvent_blue_600" />
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -141,9 +143,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/password_confirm_hint"
-                    android:textSize="@dimen/fixed_input_text_size"
+                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
-                    android:textColorHint="@color/ProEvent_blue_600" />
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -203,10 +206,10 @@
         android:text="@string/has_account"
         android:textColor="@color/ProEvent_blue_600"
         android:textSize="@dimen/fixed_input_text_size"
+        app:layout_constraintBottom_toTopOf="@id/authorize"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/authorize" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/authorize"
@@ -218,9 +221,9 @@
         android:text="@string/authorize"
         android:textColor="@color/ProEvent_bright_orange_500"
         android:textSize="@dimen/fixed_input_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/oh_now_i_remember"
-        app:layout_constraintRight_toRightOf="@id/oh_now_i_remember"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintRight_toRightOf="@id/oh_now_i_remember" />
 
     <View
         android:id="@+id/oh_now_i_remember_hit_area"

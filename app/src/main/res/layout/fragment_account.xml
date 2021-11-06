@@ -212,6 +212,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/role_edit_hint"
+                        android:imeOptions="actionDone"
                         android:inputType="text"
                         android:maxLength="320"
                         android:textColorHint="@color/ProEvent_blue_600" />

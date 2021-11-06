@@ -14,6 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:maxWidth="@dimen/auth_max_width"
         android:paddingHorizontal="@dimen/padding_horizontal"
         android:paddingBottom="@dimen/fragment_registration_padding_bottom_vertical">
@@ -62,10 +64,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="Введите ваш e-mail"
-                    android:textSize="@dimen/fixed_input_text_size"
                     android:inputType="textEmailAddress"
                     android:maxLength="320"
-                    android:textColorHint="@color/ProEvent_blue_600" />
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -100,10 +102,10 @@
                     android:id="@+id/password_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="@dimen/fixed_input_text_size"
                     android:hint="@string/password_input_hint"
                     android:inputType="textPassword"
-                    android:textColorHint="@color/ProEvent_blue_600" />
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -138,10 +140,11 @@
                     android:id="@+id/password_confirm_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="@dimen/fixed_input_text_size"
                     android:hint="@string/password_confirm_hint"
+                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
-                    android:textColorHint="@color/ProEvent_blue_600" />
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 

@@ -116,7 +116,8 @@
 
             <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                 android:id="@+id/digit_4_edit"
-                style="@style/ProEventSingleDigitTextInputEditText" />
+                style="@style/ProEventSingleDigitTextInputEditText"
+                android:imeOptions="actionDone" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ru.myproevent.ui.views.ProEventConfirmButton

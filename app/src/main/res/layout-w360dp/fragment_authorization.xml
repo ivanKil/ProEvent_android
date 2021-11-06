@@ -14,6 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:maxWidth="360dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -105,6 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/password_input_hint"
+                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:textColorHint="@color/ProEvent_blue_600"
                     android:textSize="@dimen/fixed_input_text_size" />

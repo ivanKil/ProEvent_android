@@ -3,15 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@color/white"
     android:maxWidth="360dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -90,13 +92,13 @@
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/email_edit"
-                    android:maxLength="320"
-                    android:textSize="@dimen/fixed_input_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="Введите ваш e-mail"
                     android:inputType="textEmailAddress"
-                    android:textColorHint="@color/ProEvent_blue_600" />
+                    android:maxLength="320"
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -131,11 +133,11 @@
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/password_edit"
                     android:layout_width="match_parent"
-                    android:textSize="@dimen/fixed_input_text_size"
                     android:layout_height="match_parent"
                     android:hint="@string/password_input_hint"
                     android:inputType="textPassword"
-                    android:textColorHint="@color/ProEvent_blue_600" />
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -171,10 +173,11 @@
                     android:id="@+id/password_confirm_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="@dimen/fixed_input_text_size"
                     android:hint="@string/password_confirm_hint"
+                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
-                    android:textColorHint="@color/ProEvent_blue_600" />
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -199,11 +202,11 @@
         <TextView
             android:id="@+id/license_text"
             android:layout_width="0dp"
-            android:maxWidth="254dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="14dp"
             android:layout_marginTop="17dp"
             android:layout_marginRight="20dp"
+            android:maxWidth="254dp"
             android:textSize="12dp"
             app:layout_constraintLeft_toRightOf="@id/license_checkbox"
             app:layout_constraintRight_toRightOf="parent"
@@ -234,10 +237,10 @@
         android:text="@string/has_account"
         android:textColor="@color/ProEvent_blue_600"
         android:textSize="@dimen/fixed_input_text_size"
+        app:layout_constraintBottom_toTopOf="@id/authorize"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/authorize" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/authorize"
@@ -249,9 +252,9 @@
         android:text="@string/authorize"
         android:textColor="@color/ProEvent_bright_orange_500"
         android:textSize="@dimen/fixed_input_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/oh_now_i_remember"
-        app:layout_constraintRight_toRightOf="@id/oh_now_i_remember"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintRight_toRightOf="@id/oh_now_i_remember" />
 
     <View
         android:id="@+id/oh_now_i_remember_hit_area"

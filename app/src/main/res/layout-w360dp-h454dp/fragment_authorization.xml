@@ -12,6 +12,8 @@
         android:id="@+id/body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -66,13 +68,13 @@
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/email_edit"
-                    android:textSize="@dimen/fixed_input_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/e_mail_input_hint"
                     android:inputType="textEmailAddress"
                     android:maxLength="320"
-                    android:textColorHint="@color/ProEvent_blue_600" />
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -106,12 +108,13 @@
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/password_edit"
-                    android:textSize="@dimen/fixed_input_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/password_input_hint"
+                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
-                    android:textColorHint="@color/ProEvent_blue_600" />
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
