@@ -111,7 +111,7 @@
                         android:layout_height="match_parent"
                         android:hint="@string/phone_edit_hint"
                         android:inputType="phone"
-                        android:maxLength="320"
+                        android:maxLength="16"
                         android:textColorHint="@color/ProEvent_blue_600" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
