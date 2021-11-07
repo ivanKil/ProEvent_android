@@ -1,9 +1,11 @@
 package ru.myproevent.ui.fragments
 
-import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.os.Build
 import android.os.Bundle
+import android.telephony.PhoneNumberFormattingTextWatcher
+import android.telephony.PhoneNumberUtils
+import android.telephony.TelephonyManager
+import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.method.KeyListener
 import android.util.Log
@@ -14,6 +16,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textfield.TextInputLayout.END_ICON_NONE
 import moxy.ktx.moxyPresenter
@@ -39,9 +46,16 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
     var currMonth: Int = calendar.get(Calendar.MONTH)
     var currDay: Int = calendar.get(Calendar.DAY_OF_MONTH)
 
-    // TODO: рефакторинг: сделать свой DatePickerDialog, так как использование готового DatePickerDialog требует Android Nougat
-    @RequiresApi(Build.VERSION_CODES.N)
     private val DateEditClickListener = View.OnClickListener {
+        // TODO: отрефакторить
+        // https://github.com/terrakok/Cicerone/issues/106
+        val ft: FragmentTransaction = parentFragmentManager.beginTransaction()
+        val prev: Fragment? = parentFragmentManager.findFragmentByTag("dialog")
+        if (prev != null) {
+            ft.remove(prev)
+        }
+        ft.addToBackStack(null)
+
         var pickerYear = currYear
         var pickerMonth = currMonth
         var pickerDay = currDay
@@ -54,30 +68,23 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
             pickerMonth = pickerDate.get(Calendar.MONTH)
             pickerDay = pickerDate.get(Calendar.DATE)
         }
-        DatePickerDialog(
-            requireContext(),
-            AlertDialog.THEME_HOLO_LIGHT,
-            null,
-            pickerYear,
-            pickerMonth,
-            pickerDay
-        ).apply {
-            setOnDateSetListener { _, year, month, dayOfMonth ->
-                val gregorianCalendar = GregorianCalendar(
-                    year,
-                    month,
-                    dayOfMonth
-                )
-                view.dateOfBirthEdit.text = SpannableStringBuilder(
-                    // TODO: для вывода сделать local date format
-                    SimpleDateFormat(getString(R.string.dateFormat)).apply {
-                        calendar = gregorianCalendar
-                    }.format(
-                        gregorianCalendar.time
+        val newFragment: DialogFragment =
+            ProEventDatePickerDialog.newInstance(pickerYear, pickerMonth, pickerDay).apply {
+                onDateSetListener = { year, month, dayOfMonth ->
+                    val gregorianCalendar = GregorianCalendar(
+                        year, month, dayOfMonth
                     )
-                )
+                    this@AccountFragment.view.dateOfBirthEdit.text = SpannableStringBuilder(
+                        // TODO: для вывода сделать local date format
+                        SimpleDateFormat(getString(R.string.dateFormat)).apply {
+                            calendar = gregorianCalendar
+                        }.format(
+                            gregorianCalendar.time
+                        )
+                    )
+                }
             }
-        }.show()
+        newFragment.show(ft, "dialog")
     }
 
     private fun showKeyBoard(view: View) {
@@ -91,6 +98,9 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
             ProEventApp.instance.appComponent.inject(this)
         }
     }
+
+    private lateinit var defaultKeyListener: KeyListener
+    private lateinit var phoneKeyListener: KeyListener
 
     private fun setEditListeners(
         textInput: TextInputLayout,
@@ -107,11 +117,24 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
         }
     }
 
+    private fun setPhoneListeners(
+        textInput: TextInputLayout,
+        textEdit: KeyboardAwareTextInputEditText
+    ) {
+        textEdit.keyListener = null
+        textInput.setEndIconOnClickListener {
+            textEdit.keyListener = phoneKeyListener
+            textEdit.requestFocus()
+            showKeyBoard(textEdit)
+            textEdit.text?.let { it1 -> textEdit.setSelection(it1.length) }
+            textInput.endIconMode = END_ICON_NONE
+            view.save.visibility = VISIBLE
+        }
+    }
+
     companion object {
         fun newInstance() = AccountFragment()
     }
-
-    private lateinit var defaultKeyListener: KeyListener
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -122,7 +145,8 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
         _view = FragmentAccountBinding.inflate(inflater, container, false).apply {
             defaultKeyListener = nameEdit.keyListener
             setEditListeners(nameInput, nameEdit)
-            setEditListeners(phoneInput, phoneEdit)
+            phoneKeyListener = phoneEdit.keyListener
+            setPhoneListeners(phoneInput, phoneEdit)
             dateOfBirthEdit.keyListener = null
             dateOfBirthEdit.setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus) {
@@ -148,6 +172,14 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
                 )
             }
             titleButton.setOnClickListener { presenter.backPressed() }
+            phoneEdit.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+            phoneEdit.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    if (phoneEdit.text.isNullOrEmpty()) {
+                        phoneEdit.text = SpannableStringBuilder("+7")
+                    }
+                }
+            }
         }
         presenter.getProfile()
         return view.root

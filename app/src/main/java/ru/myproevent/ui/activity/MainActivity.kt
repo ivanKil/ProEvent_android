@@ -39,8 +39,8 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     }
 
     private fun setVerticalTransitionAnimation(
-        profileFragment: Fragment?,
-        selectPhotoFragment: Fragment?,
+        currFragment: Fragment?,
+        nextFragment: Fragment?,
         fragmentTransaction: FragmentTransaction
     ) {
         fragmentTransaction.setCustomAnimations(
@@ -70,6 +70,14 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Proevent_NoActionBar)
         super.onCreate(savedInstanceState)
+        defaultColorState = ColorStateList(
+            arrayOf(intArrayOf()),
+            intArrayOf(applicationContext.getColor(R.color.ProEvent_blue_300))
+        )
+        activeColorState = ColorStateList(
+            arrayOf(intArrayOf()),
+            intArrayOf(applicationContext.getColor(R.color.ProEvent_bright_orange_300))
+        )
         _view = ActivityMainBinding.inflate(layoutInflater).apply {
             // TODO: отрефакторить
             home.setOnClickListener { presenter.openHome() }
@@ -111,13 +119,12 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         view.bottomNavigation.visibility = VISIBLE
     }
 
+    private lateinit var defaultColorState: ColorStateList
+    private lateinit var activeColorState: ColorStateList
+
     override fun selectItem(menu: Menu) {
         presenter.itemSelected(menu)
         with(view) {
-            val defaultColorState = ColorStateList(
-                arrayOf(intArrayOf()),
-                intArrayOf(applicationContext.getColor(R.color.PE_blue_gray_light))
-            )
             home.backgroundTintList = defaultColorState
             contacts.backgroundTintList = defaultColorState
             chat.backgroundTintList = defaultColorState
@@ -125,26 +132,11 @@ class MainActivity : MvpAppCompatActivity(), MainView {
             settings.backgroundTintList = defaultColorState
 
             when (menu) {
-                Menu.HOME -> home.backgroundTintList = ColorStateList(
-                    arrayOf(intArrayOf()),
-                    intArrayOf(applicationContext.getColor(R.color.PE_peach_04))
-                )
-                Menu.CONTACTS -> contacts.backgroundTintList = ColorStateList(
-                    arrayOf(intArrayOf()),
-                    intArrayOf(applicationContext.getColor(R.color.PE_peach_04))
-                )
-                Menu.CHAT -> chat.backgroundTintList = ColorStateList(
-                    arrayOf(intArrayOf()),
-                    intArrayOf(applicationContext.getColor(R.color.PE_peach_04))
-                )
-                Menu.EVENTS -> events.backgroundTintList = ColorStateList(
-                    arrayOf(intArrayOf()),
-                    intArrayOf(applicationContext.getColor(R.color.PE_peach_04))
-                )
-                Menu.SETTINGS -> settings.backgroundTintList = ColorStateList(
-                    arrayOf(intArrayOf()),
-                    intArrayOf(applicationContext.getColor(R.color.PE_peach_04))
-                )
+                Menu.HOME -> home.backgroundTintList = activeColorState
+                Menu.CONTACTS -> contacts.backgroundTintList = activeColorState
+                Menu.CHAT -> chat.backgroundTintList = activeColorState
+                Menu.EVENTS -> events.backgroundTintList = activeColorState
+                Menu.SETTINGS -> settings.backgroundTintList = activeColorState
             }
         }
         showBottomNavigation()

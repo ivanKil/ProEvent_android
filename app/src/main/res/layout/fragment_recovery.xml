@@ -1,52 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:maxWidth="360dp">
+    android:background="@color/white"
+    android:fadeScrollbars="false"
+    android:scrollbarThumbVertical="@color/ProEvent_orange_200">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/body"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:maxWidth="360dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="640dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/logo_background"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:src="@drawable/ic_logo_background"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/logo_foreground"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="7.84dp"
-            android:layout_marginTop="17.17dp"
-            android:layout_marginRight="6.87dp"
-            android:layout_marginBottom="36.69dp"
-            android:src="@drawable/ic_logo"
-            app:layout_constraintBottom_toBottomOf="@id/logo_background"
-            app:layout_constraintLeft_toLeftOf="@id/logo_background"
-            app:layout_constraintRight_toRightOf="@id/logo_background"
-            app:layout_constraintTop_toTopOf="@id/logo_background" />
 
         <TextView
             android:id="@+id/form_title"
@@ -57,11 +31,11 @@
             android:layout_marginVertical="66dp"
             android:text="Восстановление пароля"
             android:textAlignment="center"
-            android:textColor="@color/PE_blue_gray_01"
-            android:textSize="20sp"
+            android:textColor="@color/ProEvent_blue_800"
+            android:textSize="@dimen/fixed_title_text_size"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/logo_background"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingPrefix" />
 
         <TextView
@@ -72,8 +46,8 @@
             android:layout_marginTop="10dp"
             android:maxWidth="320dp"
             android:text="@string/password_recovery_explanation_text"
-            android:textColor="@color/PE_blue_gray_01"
-            android:textSize="16dp"
+            android:textColor="@color/ProEvent_blue_800"
+            android:textSize="@dimen/fixed_input_text_size"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/form_title" />
@@ -97,8 +71,8 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/e_mail_input_title"
-                android:textColor="@color/PE_bright_red"
-                android:textSize="16sp" />
+                android:textColor="@color/ProEvent_bright_orange_500"
+                android:textSize="@dimen/fixed_input_text_size" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/email_input"
@@ -106,34 +80,28 @@
 
                 <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                     android:id="@+id/email_edit"
-                    android:maxLength="320"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/e_mail_input_hint"
+                    android:imeOptions="actionDone"
                     android:inputType="textEmailAddress"
-                    android:textColorHint="@color/PE_blue_gray_03" />
+                    android:maxLength="320"
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
+        <ru.myproevent.ui.views.ProEventConfirmButton
             android:id="@+id/continue_recovery"
-            fontPath="@string/default_font_bold_path"
+            style="@style/ProEventConfirmButton"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="64dp"
-            android:backgroundTint="@color/PE_peach_04"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:letterSpacing="0"
+            android:layout_marginTop="40dp"
             android:text="@string/continue_text"
-            android:textAllCaps="false"
-            android:textSize="20dp"
-            app:cornerRadius="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/email_input_container"
-            app:rippleColor="@color/PE_bright_red" />
+            app:layout_constraintTop_toBottomOf="@id/email_input_container" />
 
         <View
             android:id="@+id/authorize_hit_area"
@@ -151,8 +119,8 @@
             android:layout_marginHorizontal="4dp"
             android:layout_marginTop="12dp"
             android:text="Вспомнили пароль?"
-            android:textColor="@color/PE_blue_gray_03"
-            android:textSize="16sp"
+            android:textColor="@color/ProEvent_blue_600"
+            android:textSize="@dimen/fixed_input_text_size"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/authorize"
@@ -165,10 +133,10 @@
             android:layout_marginHorizontal="4dp"
             android:layout_marginTop="12dp"
             android:text="Войти"
-            android:textColor="@color/PE_bright_red"
-            android:textSize="16sp"
+            android:textColor="@color/ProEvent_bright_orange_500"
+            android:textSize="@dimen/fixed_input_text_size"
             app:layout_constraintLeft_toRightOf="@+id/oh_now_i_remember"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/continue_recovery" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -147,25 +147,25 @@ class CodeFragment : BaseMvpFragment(), CodeView, BackButtonListener {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN ->
                         with((v as MaterialButton)) {
-                            setTextColor(ProEventApp.instance.getColor(R.color.PE_bright_red))
+                            setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_900))
                             val colorState = ColorStateList(
                                 arrayOf(
                                     intArrayOf(-android.R.attr.state_focused),
                                 ),
                                 intArrayOf(
-                                    requireContext().getColor(R.color.PE_bright_red),
+                                    requireContext().getColor(R.color.ProEvent_bright_orange_300),
                                 )
                             )
                             back.strokeColor = colorState
                         }
                     MotionEvent.ACTION_UP -> {
-                        (v as MaterialButton).setTextColor(ProEventApp.instance.getColor(R.color.PE_peach_04))
+                        (v as MaterialButton).setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_800))
                         val colorState = ColorStateList(
                             arrayOf(
                                 intArrayOf(-android.R.attr.state_focused),
                             ),
                             intArrayOf(
-                                requireContext().getColor(R.color.PE_peach_04),
+                                requireContext().getColor(R.color.ProEvent_blue_800),
                             )
                         )
                         back.strokeColor = colorState

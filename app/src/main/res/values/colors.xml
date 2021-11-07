@@ -7,11 +7,15 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="PE_blue_gray_01">#FF282858</color>
-    <color name="PE_bright_red">#FFFE3F19</color>
-    <color name="PE_blue_gray_04">#CFCFE6</color>
-    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/PE_blue_gray_04</color>
-    <color name="PE_blue_gray_03">#9898B2</color>
-    <color name="PE_peach_04">#FF8F79</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/ProEvent_blue_300</color>
     <color name="PE_blue_gray_light">#FFDEDEED</color>
+    <color name="ProEvent_blue_900">#121233</color>
+    <color name="ProEvent_blue_800">#2D2D59</color>
+    <color name="ProEvent_blue_700">#46468C</color>
+    <color name="ProEvent_blue_600">#5C5C99</color>
+    <color name="ProEvent_blue_300">#C3C3E5</color>
+    <color name="button_text_color">@color/ProEvent_blue_800</color>
+    <color name="ProEvent_bright_orange_500">#CC3314</color>
+    <color name="ProEvent_bright_orange_300">#FE3F19</color>
+    <color name="ProEvent_orange_200">#FF9580</color>
 </resources>
