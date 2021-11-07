@@ -3,8 +3,11 @@ package ru.myproevent.domain.model.repositories.profiles
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import ru.myproevent.domain.model.ContactDto
 import ru.myproevent.domain.model.IProEventDataSource
 import ru.myproevent.domain.model.ProfileDto
+import ru.myproevent.domain.model.entities.Status
+import ru.myproevent.utils.toContact
 import javax.inject.Inject
 
 class ProEventProfilesRepository @Inject constructor(private val api: IProEventDataSource) :
@@ -32,9 +35,15 @@ class ProEventProfilesRepository @Inject constructor(private val api: IProEventD
         } else {
             api.createProfile(profile).execute()
         }
-        if(!newProfileResponse.isSuccessful){
+        if (!newProfileResponse.isSuccessful) {
             throw retrofit2.adapter.rxjava2.HttpException(newProfileResponse)
         }
         return@fromCallable null
     }.subscribeOn(Schedulers.io())
+
+    override fun getContact(contactDto: ContactDto) =
+        getProfile(contactDto.id).map { it.toContact(Status.fromString(contactDto.status)) }
+            .subscribeOn(Schedulers.io())
+
+
 }

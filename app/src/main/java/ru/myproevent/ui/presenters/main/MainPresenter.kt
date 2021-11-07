@@ -35,7 +35,11 @@ class MainPresenter : BaseMvpPresenter<MainView>() {
     }
 
     fun openContacts() {
-        Toast.makeText(ProEventApp.instance, "CONTACTS", Toast.LENGTH_LONG).show()
+        if (currActiveMenu == Menu.CONTACTS) {
+            return
+        }
+        currActiveMenu = Menu.CONTACTS
+        router.navigateTo(screens.contacts())
     }
 
     fun openChat() {

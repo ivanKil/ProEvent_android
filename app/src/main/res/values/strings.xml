@@ -37,6 +37,7 @@
     <string name="account_text">Профиль</string>
     <string name="security_text">Безопасность</string>
     <string name="subscriptions_text">Подписки</string>
+    <string name="contacts_text">Контакты</string>
     <string name="help">Помощь</string>
     <string name="about_text">О приложении</string>
     <string name="logout_text">Выйти</string>

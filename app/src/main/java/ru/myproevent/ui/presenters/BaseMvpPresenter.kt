@@ -23,7 +23,7 @@ open class BaseMvpPresenter<V : MvpView> : MvpPresenter<V>() {
     @Inject
     lateinit var screens: IScreens
 
-    protected var compositeDisposable = CompositeDisposable()
+    private var compositeDisposable = CompositeDisposable()
 
     protected inner class InterAccessInfoObserver(private val onAccessErrorMessage: String?): DisposableSingleObserver<Boolean>() {
         override fun onSuccess(hasInternetAccess: Boolean) {
