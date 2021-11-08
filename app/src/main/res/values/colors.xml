@@ -7,6 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="PE_blue_gray_03">#9898B2</color>
+    <color name="PE_peach_04">#FF8F79</color>
+    <color name="PE_blue_gray_01">#FF282858</color>
+    <color name="PE_bright_red">#FFFE3F19</color>
+    <color name="PE_blue_gray_04">#CFCFE6</color>
+
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/ProEvent_blue_300</color>
     <color name="PE_blue_gray_light">#FFDEDEED</color>
     <color name="ProEvent_blue_900">#121233</color>

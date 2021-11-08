@@ -3,6 +3,7 @@ package ru.myproevent.ui.fragments
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import moxy.MvpView
 import moxy.ktx.moxyPresenter
@@ -13,7 +14,7 @@ import ru.myproevent.ui.presenters.BaseMvpPresenter
 
 class ContactFragment : BaseMvpFragment(), MvpView {
 
-    private lateinit var contact : Contact
+    private lateinit var contact: Contact
 
     companion object {
         private const val BUNDLE_CONTACT = "contact"
@@ -41,8 +42,34 @@ class ContactFragment : BaseMvpFragment(), MvpView {
         fillFields()
     }
 
-    fun fillFields(){
-        contact.fullName?.let { vb.nameEdit.setText(it)}
+    fun fillFields() {
+        with(vb) {
+            with(contact) {
+                titleButton.text =
+                    if (!fullName.isNullOrBlank()) {
+                        fullName
+                    } else if (!nickName.isNullOrBlank()) {
+                        nickName
+                    } else {
+                        "[id: ${userId}]"
+                    }
+                if(!birthdate.isNullOrBlank()){
+                    dateOfBirthTitle.visibility = VISIBLE
+                    dateOfBirthValue.visibility = VISIBLE
+                    dateOfBirthValue.text = birthdate
+                }
+                if(!position.isNullOrBlank()){
+                    positionTitle.visibility = VISIBLE
+                    positionValue.visibility = VISIBLE
+                    positionValue.text = position
+                }
+                if(!msisdn.isNullOrBlank()){
+                    phoneTitle.visibility = VISIBLE
+                    phoneValue.visibility = VISIBLE
+                    phoneValue.text = msisdn
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

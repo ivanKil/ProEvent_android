@@ -17,4 +17,5 @@ class Screens : IScreens {
     override fun security() = FragmentScreen { SecurityFragment.newInstance() }
     override fun contacts() = FragmentScreen { ContactsFragment.newInstance() }
     override fun contact(contact: Contact): Screen = FragmentScreen { ContactFragment.newInstance(contact) }
+    override fun contactAdd(): Screen = FragmentScreen { ContactAddFragment.newInstance() }
 }

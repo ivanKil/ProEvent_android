@@ -1,6 +1,7 @@
 package ru.myproevent.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +34,9 @@ class HomeFragment : BaseMvpFragment(), HomeView, BackButtonListener {
     ): View {
         (requireActivity() as MainView).selectItem(Menu.HOME)
         _view = FragmentHomeBinding.inflate(inflater, container, false).apply {
-            token.text = "TOKEN\n${presenter.getToken()}"
+            id.text = "ID: ${presenter.getId()}"
+            token.text = "token:\n${presenter.getToken()}"
+            Log.d("[MYLOG]", "token: ${presenter.getToken()}")
         }
         return view.root
     }

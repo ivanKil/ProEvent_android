@@ -44,7 +44,7 @@ open class BaseMvpPresenter<V : MvpView> : MvpPresenter<V>() {
         compositeDisposable.add(this)
     }
 
-    fun backPressed(): Boolean {
+    open fun backPressed(): Boolean {
         router.exit()
         return true
     }

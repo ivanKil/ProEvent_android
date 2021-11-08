@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/title_button"
+        style="@style/ProEventSettingsButtonItem"
+        fontPath="@string/default_font_bold_path"
+        android:layout_marginTop="25dp"
+        android:text="@string/account_text"
+        android:textAlignment="center"
+        app:icon="@drawable/ic_back_to"
+        app:iconGravity="start" />
+
+    <TextView
+        android:id="@+id/contact_add_explanation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:text="@string/contact_add_explanation"
+        android:textColor="@color/ProEvent_blue_600"
+        android:textSize="16sp"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/email_input_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:maxWidth="320dp"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/form_title">
+
+        <TextView
+            android:id="@+id/email_input_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/e_mail_input_title"
+            android:textColor="@color/ProEvent_bright_orange_500"
+            android:textSize="16dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_input"
+            style="@style/ProEventTextInputLayoutStyle">
+
+            <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                android:id="@+id/email_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/contact_search_hint"
+                android:inputType="textEmailAddress"
+                android:maxLength="320"
+                android:textColorHint="@color/ProEvent_blue_600"
+                android:textSize="@dimen/fixed_input_text_size" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/contact_invite_explanation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:text="@string/contact_invite_explanation"
+        android:textColor="@color/ProEvent_blue_600"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/name_input_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:maxWidth="320dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/form_title">
+
+        <TextView
+            android:id="@+id/name_input_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="4dp"
+            android:text="Имя"
+            android:textColor="@color/ProEvent_bright_orange_500"
+            android:textSize="16dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/name_input"
+            style="@style/ProEventTextInputLayoutStyle">
+
+            <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                android:id="@+id/name_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/name_edit_hint"
+                android:inputType="textEmailAddress"
+                android:maxLength="320"
+                android:textColorHint="@color/ProEvent_blue_600"
+                android:textSize="@dimen/fixed_input_text_size" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <ru.myproevent.ui.views.ProEventConfirmButton
+        android:id="@+id/search_contact"
+        style="@style/ProEventConfirmButton"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="167dp"
+        android:text="@string/search_contact"
+        android:visibility="visible" />
+
+    <ru.myproevent.ui.views.ProEventConfirmButton
+        android:id="@+id/invite_contact"
+        style="@style/ProEventConfirmButton"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="95dp"
+        android:text="@string/invite_contact"
+        android:visibility="gone" />
+</LinearLayout>

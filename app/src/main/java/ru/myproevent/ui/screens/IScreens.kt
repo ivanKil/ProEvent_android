@@ -15,4 +15,5 @@ interface IScreens {
     fun security(): Screen
     fun contacts(): Screen
     fun contact(contact: Contact): Screen
+    fun contactAdd(): Screen
 }

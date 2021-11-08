@@ -1,7 +1,9 @@
 package ru.myproevent.ui.presenters.contacts
 
+import android.util.Log
+import android.widget.Toast
+import ru.myproevent.ProEventApp
 import ru.myproevent.domain.model.ContactDto
-import ru.myproevent.domain.model.Page
 import ru.myproevent.domain.model.entities.Contact
 import ru.myproevent.domain.model.entities.Status
 import ru.myproevent.domain.model.repositories.contacts.IProEventContactsRepository
@@ -39,9 +41,22 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
 
             if (pos < contacts.size) {
                 contacts[pos].apply {
-                    fullName?.let { view.setName(it) }
-                    description?.let { view.setDescription(it) }
-                    imgUri?.let { view.loadImg(it) }
+                    if (!fullName.isNullOrEmpty()) {
+                        view.setName(fullName!!)
+                    } else if(!nickName.isNullOrEmpty()){
+                        view.setName(nickName!!)
+                    } else {
+                        view.setName(userId.toString())
+                    }
+                    if (!description.isNullOrEmpty()) {
+                        view.setDescription(description!!)
+                    } else if(!nickName.isNullOrEmpty()){
+                        view.setDescription(nickName!!)
+                    } else {
+                        view.setDescription("id пользователя: $userId")
+                    }
+                    //imgUri?.let { view.loadImg(it) }
+                    status?.let { view.setStatus(it) }
                 }
             } else {
                 profilesRepository.getContact(contactDTOs[pos])
@@ -73,10 +88,13 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
         router.navigateTo(screens.contact(contact))
     }
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
+    fun init() {
         viewState.init()
         loadData()
+    }
+
+    fun addContact() {
+        router.navigateTo(screens.contactAdd())
     }
 
     private fun loadData() {
@@ -86,6 +104,7 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
                 contactsListPresenter.setData(data.content, data.totalElements.toInt())
             }, {
                 println("Error: ${it.message}")
+                Toast.makeText(ProEventApp.instance.applicationContext, "ПРОИЗОШЛА ОШИБКА: ${it.message}", Toast.LENGTH_LONG).show()
             }).disposeOnDestroy()
     }
 

@@ -60,4 +60,13 @@
     <string name="confirm_new_password_hint">Повторите новый пароль</string>
     <string name="confirm_password_title">Повторите пароль</string>
     <string name="dateFormat">yyyy-MM-dd</string>
+    <string name="contacts_title">Контакты</string>
+    <string name="add_contact">Добавить контакт</string>
+    <string name="no_contacts">Здесь пока ничего нет</string>
+    <string name="contact_add_explanation">Введите email пользователя, которого хотите добавить в свой список контактов.</string>
+    <string name="search_contact">Поиск</string>
+    <string name="contact_search_hint">Введите e-mail пользователя</string>
+    <string name="contact_invite_explanation">Пользователя с таким email в системе нет. Чтобы пригласить пользователя, укажите имя.</string>
+    <string name="name_edit_hint">Введите имя</string>
+    <string name="invite_contact">Продолжить</string>
 </resources>

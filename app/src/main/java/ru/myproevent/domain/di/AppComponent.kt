@@ -7,6 +7,7 @@ import ru.myproevent.ui.presenters.BaseMvpPresenter
 import ru.myproevent.ui.presenters.account.AccountPresenter
 import ru.myproevent.ui.presenters.authorization.AuthorizationPresenter
 import ru.myproevent.ui.presenters.code.CodePresenter
+import ru.myproevent.ui.presenters.contact_add.ContactAddPresenter
 import ru.myproevent.ui.presenters.contacts.ContactsPresenter
 import ru.myproevent.ui.presenters.home.HomePresenter
 import ru.myproevent.ui.presenters.login.LoginPresenter
@@ -41,4 +42,5 @@ interface AppComponent {
     fun inject(accountPresenter: AccountPresenter)
     fun inject(securityPresenter: SecurityPresenter)
     fun inject(contactsPresenter: ContactsPresenter)
+    fun inject(contactAddPresenter: ContactAddPresenter)
 }
