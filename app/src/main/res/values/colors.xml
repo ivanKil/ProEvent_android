@@ -6,7 +6,7 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="ProEvent_white">#FFFFFFFF</color>
 
     <color name="PE_blue_gray_03">#9898B2</color>
     <color name="PE_peach_04">#FF8F79</color>
@@ -25,4 +25,5 @@
     <color name="ProEvent_bright_orange_500">#CC3314</color>
     <color name="ProEvent_bright_orange_300">#FE3F19</color>
     <color name="ProEvent_orange_200">#FF9580</color>
+    <color name="ProEvent_blue_800_opacity_20">#332D2D59</color>
 </resources>

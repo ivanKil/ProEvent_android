@@ -1,5 +1,7 @@
 package ru.myproevent.ui.presenters.contacts
 
+import android.widget.Toast
+import ru.myproevent.ProEventApp
 import ru.myproevent.domain.model.ContactDto
 import ru.myproevent.domain.model.entities.Contact
 import ru.myproevent.domain.model.entities.Status
@@ -27,7 +29,9 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
     ) : IContactsListPresenter {
 
         private val contactDTOs = mutableListOf<ContactDto>()
+
         private var size = 0
+
         private val contacts = mutableListOf<Contact>()
 
         override fun getCount() = size

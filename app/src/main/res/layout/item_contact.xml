@@ -7,7 +7,7 @@
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    tools:background="@color/white">
+    tools:background="@color/ProEvent_white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profileContainer"
