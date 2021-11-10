@@ -69,4 +69,10 @@
     <string name="contact_invite_explanation">Пользователя с таким email в системе нет. Чтобы пригласить пользователя, укажите имя.</string>
     <string name="name_edit_hint">Введите имя</string>
     <string name="invite_contact">Продолжить</string>
+    <string name="delete_contact_question">Удалить контакт?</string>
+    <string name="decline_contact_request_question">Отклонить запрос?</string>
+    <string name="accept_contact_request_question">Принять заявку?</string>
+    <string name="cancel_request_question">Отменить заявку?</string>
+    <string name="yes_text">Да</string>
+    <string name="no_text">Нет</string>
 </resources>
