@@ -26,23 +26,23 @@ class ProEventProfilesRepository @Inject constructor(private val api: IProEventD
         throw retrofit2.adapter.rxjava2.HttpException(response)
     }.subscribeOn(Schedulers.io())
 
+    // TODO: рефакторинг: пределать это так, чтобы использовались только средства RXJava
     private val single = Executors.newSingleThreadExecutor()
     override fun getQueuedContact(id: Long, status: String): Single<Contact> {
-        val returnValue = single.submit(MyCallable(id, status)).get()
+        val returnValue = single.submit(Callable<Single<Contact>> {
+            Single.fromCallable {
+                Log.d("[CONTACTS]", "getProfile($id) start")
+                // TODO: исправить баг приводящий к вылету приложения, если эта функция не успевает выполниться вовремя(до того как будет совершенно нажатие на элемент из списка контактов)
+                // Thread.sleep(2000)
+                val response = api.getProfile(id).execute()
+                if (response.isSuccessful) {
+                    return@fromCallable response.body()!!.toContact(Status.fromString(status))
+                }
+                throw retrofit2.adapter.rxjava2.HttpException(response)
+            }
+        }).get()
         Log.d("[CONTACTS]", "getProfile($id) finish")
         return returnValue
-    }
-
-
-    private inner class MyCallable(private val id: Long, private val status: String) : Callable<Single<Contact>> {
-        override fun call(): Single<Contact> = Single.fromCallable {
-            Log.d("[CONTACTS]", "getProfile($id) start")
-            val response = api.getProfile(id).execute()
-            if (response.isSuccessful) {
-                return@fromCallable response.body()!!.toContact(Status.fromString(status))
-            }
-            throw retrofit2.adapter.rxjava2.HttpException(response)
-        }
     }
 
     override fun saveProfile(profile: ProfileDto) = Completable.fromCallable {
@@ -81,9 +81,5 @@ class ProEventProfilesRepository @Inject constructor(private val api: IProEventD
     }.subscribeOn(Schedulers.io())
 
     override fun getContact(contactDto: ContactDto) =
-//        getProfile(contactDto.id).subscribeOn(Schedulers.single()).map {
-//            Log.d("[CONTACTS]", "it.toContact: $it")
-//            it.toContact(Status.fromString(contactDto.status))
-//        }
         getQueuedContact(contactDto.id, contactDto.status).subscribeOn(Schedulers.single())
 }
