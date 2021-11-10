@@ -1,5 +1,8 @@
 package ru.myproevent.ui.presenters.contacts
 
+import android.util.Log
+import android.widget.Toast
+import ru.myproevent.ProEventApp
 import ru.myproevent.domain.model.ContactDto
 import ru.myproevent.domain.model.entities.Contact
 import ru.myproevent.domain.model.entities.Status
@@ -27,7 +30,9 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
     ) : IContactsListPresenter {
 
         private val contactDTOs = mutableListOf<ContactDto>()
+
         private var size = 0
+
         private val contacts = mutableListOf<Contact>()
 
         override fun getCount() = size
@@ -41,6 +46,7 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
                 profilesRepository.getContact(contactDTOs[pos])
                     .observeOn(uiScheduler)
                     .subscribe({
+                        Log.d("[CONTACTS]", "contacts.add($it)")
                         contacts.add(it)
                         fillItemView(view, it)
                     }, {
@@ -125,8 +131,8 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
         router.navigateTo(screens.contactAdd())
     }
 
-    private fun loadData() {
-        contactsRepository.getContacts(1, Int.MAX_VALUE, Status.ALL)
+    fun loadData(status: Status = Status.ALL) {
+        contactsRepository.getContacts(1, Int.MAX_VALUE, status)
             .observeOn(uiScheduler)
             .subscribe({ data ->
                 contactsListPresenter.setData(data.content, data.totalElements.toInt())

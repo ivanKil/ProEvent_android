@@ -29,10 +29,10 @@ class RegistrationFragment : BaseMvpFragment(), RegistrationView, BackButtonList
         when (event.action) {
             MotionEvent.ACTION_DOWN -> with(v as TextView) {
                 setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_600))
-                setTextColor(ProEventApp.instance.getColor(R.color.white))
+                setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
             }
             MotionEvent.ACTION_UP -> with(v as TextView) {
-                setBackgroundColor(ProEventApp.instance.getColor(R.color.white))
+                setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
                 setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_800))
                 performClick()
             }

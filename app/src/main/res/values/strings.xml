@@ -75,4 +75,7 @@
     <string name="cancel_request_question">Отменить заявку?</string>
     <string name="yes_text">Да</string>
     <string name="no_text">Нет</string>
+    <string name="all_contacts">Все контакты</string>
+    <string name="outgoing_contacts">Исходящие заявки</string>
+    <string name="incoming_contacts">Входящие заявки</string>
 </resources>
