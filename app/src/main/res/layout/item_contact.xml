@@ -54,9 +54,18 @@
             android:id="@+id/request_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:src="@drawable/ic_outgoing_request"
             app:layout_constraintBottom_toBottomOf="@id/iv_img"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/iv_img" />
+            app:layout_constraintTop_toTopOf="@id/iv_img"
+            tools:src="@drawable/ic_outgoing_request" />
+
+        <View
+            android:id="@+id/request_status_hit_area"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="@id/request_status"
+            app:layout_constraintLeft_toLeftOf="@id/request_status"
+            app:layout_constraintRight_toRightOf="@id/request_status"
+            app:layout_constraintTop_toTopOf="@id/request_status" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

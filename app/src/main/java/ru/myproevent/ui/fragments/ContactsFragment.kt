@@ -17,6 +17,7 @@ import ru.myproevent.ProEventApp
 import ru.myproevent.R
 import ru.myproevent.databinding.FragmentContactsBinding
 import ru.myproevent.domain.model.entities.Contact
+import ru.myproevent.domain.model.entities.Status
 import ru.myproevent.ui.adapters.contacts.ContactsRVAdapter
 import ru.myproevent.ui.presenters.contacts.ContactsPresenter
 import ru.myproevent.ui.presenters.contacts.ContactsView
@@ -49,6 +50,37 @@ class ContactsFragment : BaseMvpFragment(), ContactsView {
             }
         }
         true
+    }
+
+    private fun selectFilterOption(option: TextView) {
+        with(vb) {
+            allContacts.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
+            allContacts.setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_800))
+            outgoingContacts.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
+            outgoingContacts.setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_800))
+            incomingContacts.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
+            incomingContacts.setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_800))
+
+            option.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_600))
+            option.setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
+
+            when (option.id) {
+                R.id.all_contacts -> {
+                    // TODO: Вынести в ресурсы
+                    title.text = "Контакты: Все"
+                    noContactsText.text = "У вас пока нет контактов"
+                }
+                R.id.outgoing_contacts -> {
+                    title.text = "Контакты: Исходящие"
+                    noContactsText.text = "У вас нет активных запросов"
+                }
+
+                R.id.incoming_contacts -> {
+                    title.text = "Контакты: Входящие"
+                    noContactsText.text = "У вас нет активных запросов"
+                }
+            }
+        }
     }
 
     override val presenter by moxyPresenter {
@@ -106,8 +138,23 @@ class ContactsFragment : BaseMvpFragment(), ContactsView {
         _vb = FragmentContactsBinding.inflate(inflater, container, false)
         return vb.apply {
             allContacts.setOnTouchListener(filterOptionTouchListener)
+            allContacts.setOnClickListener {
+                selectFilterOption(allContacts)
+                presenter.loadData(Status.ALL)
+                hideFilterOptions()
+            }
             outgoingContacts.setOnTouchListener(filterOptionTouchListener)
+            outgoingContacts.setOnClickListener {
+                selectFilterOption(outgoingContacts)
+                presenter.loadData(Status.REQUESTED)
+                hideFilterOptions()
+            }
             incomingContacts.setOnTouchListener(filterOptionTouchListener)
+            incomingContacts.setOnClickListener {
+                selectFilterOption(incomingContacts)
+                presenter.loadData(Status.PENDING)
+                hideFilterOptions()
+            }
             addContact.setOnClickListener { presenter.addContact() }
             addFirstContact.setOnClickListener { presenter.addContact() }
             filter.setOnClickListener {

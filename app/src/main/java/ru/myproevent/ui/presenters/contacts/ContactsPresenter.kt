@@ -131,8 +131,8 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
         router.navigateTo(screens.contactAdd())
     }
 
-    private fun loadData() {
-        contactsRepository.getContacts(1, Int.MAX_VALUE, Status.ALL)
+    fun loadData(status: Status = Status.ALL) {
+        contactsRepository.getContacts(1, Int.MAX_VALUE, status)
             .observeOn(uiScheduler)
             .subscribe({ data ->
                 contactsListPresenter.setData(data.content, data.totalElements.toInt())

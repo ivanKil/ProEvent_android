@@ -30,6 +30,7 @@ class ContactsRVAdapter(val presenter: IContactsListPresenter) :
         init {
             itemView.setOnClickListener { presenter.onItemClick(this) }
             vb.requestStatus.setOnClickListener { (presenter.onStatusClick(this)) }
+            vb.requestStatusHitArea.setOnClickListener { vb.requestStatus.performClick() }
         }
 
         override fun setName(name: String) {
