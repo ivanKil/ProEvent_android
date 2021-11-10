@@ -146,13 +146,13 @@ class ContactsFragment : BaseMvpFragment(), ContactsView {
             outgoingContacts.setOnTouchListener(filterOptionTouchListener)
             outgoingContacts.setOnClickListener {
                 selectFilterOption(outgoingContacts)
-                presenter.loadData(Status.REQUESTED)
+                presenter.loadData(Status.PENDING)
                 hideFilterOptions()
             }
             incomingContacts.setOnTouchListener(filterOptionTouchListener)
             incomingContacts.setOnClickListener {
                 selectFilterOption(incomingContacts)
-                presenter.loadData(Status.PENDING)
+                presenter.loadData(Status.REQUESTED)
                 hideFilterOptions()
             }
             addContact.setOnClickListener { presenter.addContact() }
