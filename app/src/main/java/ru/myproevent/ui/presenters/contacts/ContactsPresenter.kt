@@ -1,5 +1,6 @@
 package ru.myproevent.ui.presenters.contacts
 
+import android.util.Log
 import android.widget.Toast
 import ru.myproevent.ProEventApp
 import ru.myproevent.domain.model.ContactDto
@@ -45,6 +46,7 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
                 profilesRepository.getContact(contactDTOs[pos])
                     .observeOn(uiScheduler)
                     .subscribe({
+                        Log.d("[CONTACTS]", "contacts.add($it)")
                         contacts.add(it)
                         fillItemView(view, it)
                     }, {
