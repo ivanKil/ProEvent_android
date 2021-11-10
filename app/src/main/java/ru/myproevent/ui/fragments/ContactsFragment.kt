@@ -123,7 +123,7 @@ class ContactsFragment : BaseMvpFragment(), ContactsView {
             btnNo.setOnClickListener { confirmScreenCallBack?.invoke(false) }
         }.root.apply {
             // https://stackoverflow.com/questions/20103888/animatelayoutchanges-does-not-work-well-with-nested-layout
-            layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+            vb.container.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         }
     }
 
