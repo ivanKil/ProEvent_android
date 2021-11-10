@@ -2,11 +2,12 @@ package ru.myproevent.ui.adapters.contacts
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
-import ru.myproevent.ProEventApp
 import ru.myproevent.R
 import ru.myproevent.databinding.ItemContactBinding
 import ru.myproevent.domain.model.entities.Status
+import ru.myproevent.ui.presenters.contacts.IContactItemView
 import ru.myproevent.utils.load
 
 
@@ -28,6 +29,7 @@ class ContactsRVAdapter(val presenter: IContactsListPresenter) :
 
         init {
             itemView.setOnClickListener { presenter.onItemClick(this) }
+            vb.requestStatus.setOnClickListener { (presenter.onStatusClick(this)) }
         }
 
         override fun setName(name: String) {
@@ -43,14 +45,23 @@ class ContactsRVAdapter(val presenter: IContactsListPresenter) :
         }
 
         override fun setStatus(status: Status) = with(vb) {
-            when (status) {
-                Status.REQUESTED ->
-                    requestStatus.setImageDrawable(ProEventApp.instance.getDrawable(R.drawable.ic_incomming_request))
-                Status.DECLINED ->
-                    requestStatus.setImageDrawable(ProEventApp.instance.getDrawable(R.drawable.ic_rejected_request))
-                Status.PENDING ->
-                    requestStatus.setImageDrawable(ProEventApp.instance.getDrawable(R.drawable.ic_outgoing_request))
-            }
+            requestStatus.setImageDrawable(
+                when (status) {
+                    Status.REQUESTED -> AppCompatResources.getDrawable(
+                        itemView.context,
+                        R.drawable.ic_incomming_request
+                    )
+                    Status.DECLINED -> AppCompatResources.getDrawable(
+                        itemView.context,
+                        R.drawable.ic_rejected_request
+                    )
+                    Status.PENDING -> AppCompatResources.getDrawable(
+                        itemView.context,
+                        R.drawable.ic_outgoing_request
+                    )
+                    else -> null
+                }
+            )
         }
 
         override var pos = -1

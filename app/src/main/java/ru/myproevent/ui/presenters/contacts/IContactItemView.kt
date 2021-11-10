@@ -1,4 +1,4 @@
-package ru.myproevent.ui.adapters.contacts
+package ru.myproevent.ui.presenters.contacts
 
 import ru.myproevent.domain.model.entities.Status
 import ru.myproevent.ui.adapters.IItemView

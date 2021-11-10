@@ -14,7 +14,9 @@ data class Contact(
     var birthdate: String? = null,
     var imgUri: String? = null,
     var description: String? = null
-) : Parcelable
+) : Parcelable {
+    enum class Action{ ADD, ACCEPT, CANCEL, DECLINE, DELETE }
+}
 
 enum class Status(val value: String) {
     ALL("ALL"),
@@ -24,6 +26,6 @@ enum class Status(val value: String) {
     REQUESTED("REQUESTED");
 
     companion object {
-        fun fromString(status: String) = Status.valueOf(status)
+        fun fromString(status: String) = valueOf(status)
     }
 }
