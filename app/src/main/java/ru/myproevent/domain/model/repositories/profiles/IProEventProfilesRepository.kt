@@ -10,5 +10,5 @@ interface IProEventProfilesRepository {
     fun saveProfile(profile: ProfileDto) : Completable
     fun getProfile(id: Long) : Single<ProfileDto?>
     fun getContact(contactDto: ContactDto): Single<Contact>
-    fun getQueuedContact(id: Long, status: String): Single<Contact>
+    //fun getQueuedContact(id: Long, status: String): Single<Contact>
 }

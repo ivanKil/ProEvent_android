@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:includeFontPadding="false"
-                android:text="example@email.com"
+                tools:text="example@email.com"
                 android:textColor="@color/ProEvent_blue_800"
                 android:textSize="16sp" />
 
@@ -138,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:includeFontPadding="false"
-                android:text="\@example"
+                tools:text="\@example"
                 android:textColor="@color/ProEvent_blue_800"
                 android:textSize="16sp" />
 
@@ -158,7 +158,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:includeFontPadding="false"
-                android:text="https://vk.com/example"
+                tools:text="https://vk.com/example"
                 android:textColor="@color/ProEvent_blue_800"
                 android:textSize="16sp" />
         </LinearLayout>

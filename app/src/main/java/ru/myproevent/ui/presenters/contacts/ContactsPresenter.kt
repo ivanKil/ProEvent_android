@@ -1,8 +1,6 @@
 package ru.myproevent.ui.presenters.contacts
 
 import android.util.Log
-import android.widget.Toast
-import ru.myproevent.ProEventApp
 import ru.myproevent.domain.model.ContactDto
 import ru.myproevent.domain.model.entities.Contact
 import ru.myproevent.domain.model.entities.Status
@@ -33,24 +31,32 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
 
         private var size = 0
 
-        private val contacts = mutableListOf<Contact>()
+        private var contacts = mutableListOf<Contact?>()
 
         override fun getCount() = size
 
         override fun bindView(view: IContactItemView) {
             val pos = view.pos
 
-            if (pos < contacts.size) {
-                fillItemView(view, contacts[pos])
+            if (contacts[pos] != null) {
+                fillItemView(view, contacts[pos]!!)
             } else {
-                profilesRepository.getContact(contactDTOs[pos])
+                val contactDto = contactDTOs[pos]
+                profilesRepository.getContact(contactDto)
                     .observeOn(uiScheduler)
-                    .subscribe({
-                        Log.d("[CONTACTS]", "contacts.add($it)")
-                        contacts.add(it)
-                        fillItemView(view, it)
+                    .subscribe({ contact ->
+                        Log.d("[CONTACTS]", "contacts.add($contact)")
+                        contacts[pos] = contact
+                        fillItemView(view, contact)
                     }, {
                         println("Error: ${it.message}")
+                        contacts[pos] = Contact(
+                            contactDto.id,
+                            fullName = "Заглушка",
+                            description = "Профиля нет, или не загрузился",
+                            status = Status.fromString(contactDto.status)
+                        )
+                        fillItemView(view, contacts[pos]!!)
                     }).disposeOnDestroy()
             }
         }
@@ -77,19 +83,19 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
         }
 
         override fun onItemClick(view: IContactItemView) {
-            itemClickListener?.invoke(view, contacts[view.pos])
+            contacts[view.pos]?.let { itemClickListener?.invoke(view, it) }
         }
 
         override fun onStatusClick(view: IContactItemView) {
-            statusClickListener?.invoke(contacts[view.pos])
+            contacts[view.pos]?.let { statusClickListener?.invoke(it) }
         }
 
         fun setData(data: List<ContactDto>, size: Int) {
+            this.size = 0
             contactDTOs.clear()
-            contacts.clear()
             contactDTOs.addAll(data)
+            contacts = MutableList(size) { null }
             this.size = size
-
             viewState.updateList()
         }
     }
