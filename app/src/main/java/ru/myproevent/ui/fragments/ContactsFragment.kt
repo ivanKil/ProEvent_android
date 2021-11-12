@@ -134,7 +134,6 @@ class ContactsFragment : BaseMvpFragment(), ContactsView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (requireActivity() as MainView).selectItem(Menu.CONTACTS)
         _vb = FragmentContactsBinding.inflate(inflater, container, false)
         return vb.apply {
             allContacts.setOnTouchListener(filterOptionTouchListener)

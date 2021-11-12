@@ -78,4 +78,6 @@
     <string name="all_contacts">Все контакты</string>
     <string name="outgoing_contacts">Исходящие заявки</string>
     <string name="incoming_contacts">Входящие заявки</string>
+    <string name="events_title">Мероприятия</string>
+    <string name="chat_title">Чат</string>
 </resources>

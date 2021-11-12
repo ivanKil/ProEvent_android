@@ -34,7 +34,6 @@ class ContactAddFragment : BaseMvpFragment(), ContactAddView, BackButtonListener
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (requireActivity() as MainView).selectItem(Menu.CONTACTS)
         _view = FragmentContactAddBinding.inflate(inflater, container, false)
         return view.apply {
             searchContact.setOnClickListener {

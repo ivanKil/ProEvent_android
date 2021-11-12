@@ -18,4 +18,6 @@ class Screens : IScreens {
     override fun contacts() = FragmentScreen { ContactsFragment.newInstance() }
     override fun contact(contact: Contact): Screen = FragmentScreen { ContactFragment.newInstance(contact) }
     override fun contactAdd(): Screen = FragmentScreen { ContactAddFragment.newInstance() }
+    override fun chat() = FragmentScreen { HomeFragment.newInstance() }
+    override fun events() = FragmentScreen { HomeFragment.newInstance() }
 }

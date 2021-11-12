@@ -16,4 +16,6 @@ interface IScreens {
     fun contacts(): Screen
     fun contact(contact: Contact): Screen
     fun contactAdd(): Screen
+    fun chat(): Screen
+    fun events(): Screen
 }
