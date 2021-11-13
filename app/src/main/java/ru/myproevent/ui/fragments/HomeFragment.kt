@@ -32,7 +32,10 @@ class HomeFragment : BaseMvpFragment(), HomeView, BackButtonListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (requireActivity() as MainView).selectItem(Menu.HOME)
+        with(requireActivity() as MainView){
+            showBottomNavigation()
+            selectItem(Menu.HOME)
+        }
         _view = FragmentHomeBinding.inflate(inflater, container, false).apply {
             id.text = "ID: ${presenter.getId()}"
             token.text = "token:\n${presenter.getToken()}"
