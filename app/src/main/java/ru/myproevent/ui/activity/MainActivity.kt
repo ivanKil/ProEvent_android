@@ -117,6 +117,16 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         view.bottomNavigationView.visibility = VISIBLE
     }
 
+    override fun selectItem(menu: Menu) {
+        view.bottomNavigationView.menu.findItem(when(menu){
+            Menu.HOME ->R.id.home
+            Menu.CONTACTS ->R.id.contacts
+            Menu.CHAT ->R.id.chat
+            Menu.EVENTS ->R.id.events
+            Menu.SETTINGS ->R.id.settings
+        }).isChecked = true
+    }
+
     override fun onBackPressed() {
         supportFragmentManager.fragments.forEach {
             if (it is BackButtonListener && it.backPressed()) {

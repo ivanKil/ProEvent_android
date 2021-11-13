@@ -7,4 +7,5 @@ import moxy.viewstate.strategy.alias.SingleState
 interface MainView : MvpView{
     fun hideBottomNavigation()
     fun showBottomNavigation()
+    fun selectItem(menu: Menu)
 }
