@@ -34,10 +34,10 @@ class AuthorizationPresenter : BaseMvpPresenter<AuthorizationView>() {
         }
     }
 
-    fun authorize(email: String, password: String) {
+    fun authorize(email: String, password: String, rememberMe: Boolean) {
         // TODO: спросить у дизайнера нужено ли здесь отображать progress bar
         loginRepository
-            .login(email, password)
+            .login(email, password, rememberMe)
             .observeOn(uiScheduler)
             .subscribeWith(LoginObserver())
             .disposeOnDestroy()

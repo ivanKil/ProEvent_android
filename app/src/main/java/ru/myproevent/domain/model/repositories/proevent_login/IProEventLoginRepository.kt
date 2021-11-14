@@ -7,7 +7,7 @@ interface IProEventLoginRepository {
     fun getLocalId(): Long?
     fun getLocalEmail(): String?
     fun getLocalPassword(): String?
-    fun login(email: String, password: String): Completable
+    fun login(email: String, password: String, rememberMe : Boolean): Completable
     fun logoutFromThisDevice()
     fun signup(agreement: Boolean, email: String, password: String): Completable
     fun verificate(email: String, code: Int): Completable
