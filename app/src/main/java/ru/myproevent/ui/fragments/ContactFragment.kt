@@ -38,11 +38,12 @@ class ContactFragment : BaseMvpFragment(), MvpView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        vb.titleButton.setOnClickListener { presenter.backPressed() }
         arguments?.getParcelable<Contact>(BUNDLE_CONTACT)?.let { contact = it }
         fillFields()
     }
 
-    fun fillFields() {
+    private fun fillFields() {
         with(vb) {
             with(contact) {
                 titleButton.text =
