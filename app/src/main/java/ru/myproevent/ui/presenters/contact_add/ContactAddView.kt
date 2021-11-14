@@ -1,12 +1,10 @@
 package ru.myproevent.ui.presenters.contact_add
 
 import moxy.MvpView
-import moxy.viewstate.strategy.AddToEndStrategy
-import moxy.viewstate.strategy.StateStrategyType
+import moxy.viewstate.strategy.alias.AddToEndSingle
 
-// TODO: возможно стоит выбрать другую стратегию
-@StateStrategyType(AddToEndStrategy::class)
-interface ContactAddView: MvpView{
+@AddToEndSingle
+interface ContactAddView : MvpView {
     fun showInvitationForm()
     fun showSearchForm()
 }
