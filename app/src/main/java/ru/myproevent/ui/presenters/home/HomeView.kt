@@ -1,9 +1,7 @@
 package ru.myproevent.ui.presenters.home
 
 import moxy.MvpView
-import moxy.viewstate.strategy.AddToEndStrategy
-import moxy.viewstate.strategy.StateStrategyType
+import moxy.viewstate.strategy.alias.AddToEndSingle
 
-// TODO: возможно стоит выбрать другую стратегию
-@StateStrategyType(AddToEndStrategy::class)
-interface HomeView: MvpView
+@AddToEndSingle
+interface HomeView : MvpView

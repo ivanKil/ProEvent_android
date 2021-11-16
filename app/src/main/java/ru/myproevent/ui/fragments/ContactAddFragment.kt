@@ -13,8 +13,6 @@ import ru.myproevent.databinding.FragmentContactAddBinding
 import ru.myproevent.ui.BackButtonListener
 import ru.myproevent.ui.presenters.contact_add.ContactAddPresenter
 import ru.myproevent.ui.presenters.contact_add.ContactAddView
-import ru.myproevent.ui.presenters.main.MainView
-import ru.myproevent.ui.presenters.main.Menu
 
 class ContactAddFragment : BaseMvpFragment(), ContactAddView, BackButtonListener {
     private var _view: FragmentContactAddBinding? = null
@@ -34,7 +32,6 @@ class ContactAddFragment : BaseMvpFragment(), ContactAddView, BackButtonListener
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (requireActivity() as MainView).selectItem(Menu.CONTACTS)
         _view = FragmentContactAddBinding.inflate(inflater, container, false)
         return view.apply {
             searchContact.setOnClickListener {
@@ -44,6 +41,7 @@ class ContactAddFragment : BaseMvpFragment(), ContactAddView, BackButtonListener
                     Toast.makeText(requireContext(), "Значение должно быть числом обозначающее id пользователя", Toast.LENGTH_LONG).show()
                 }
             }
+            titleButton.setOnClickListener { presenter.backPressed() }
         }.root
     }
 

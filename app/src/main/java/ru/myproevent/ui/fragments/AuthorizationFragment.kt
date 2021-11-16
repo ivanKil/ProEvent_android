@@ -39,7 +39,11 @@ class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
         (requireActivity() as MainView).hideBottomNavigation()
         _view = FragmentAuthorizationBinding.inflate(inflater, container, false).apply {
             authorizationConfirm.setOnClickListener {
-                presenter.authorize(emailEdit.text.toString(), passwordEdit.text.toString())
+                presenter.authorize(
+                    emailEdit.text.toString(),
+                    passwordEdit.text.toString(),
+                    rememberMeCheckbox?.isChecked ?: true
+                )
             }
             registration.setOnClickListener {
                 presenter.openRegistration()

@@ -15,17 +15,20 @@ class ProEventLoginRepository @Inject constructor(private val api: IProEventData
     IProEventLoginRepository {
     private var localToken: String? = null
         set(value) {
+            field = value
+
             if (value == null) {
                 tokenLocalRepository.removeTokenFromLocalStorage()
-            } else {
+            } else if (rememberMe) {
                 tokenLocalRepository.saveTokenInLocalStorage(value)
             }
-            field = value
         }
 
     private var localEmail: String? = null
 
     private var localPassword: String? = null
+
+    private var rememberMe = true
 
     // TODO: вынести в Dagger
     private val tokenLocalRepository: ITokenLocalRepository = TokenLocalRepository()
@@ -43,7 +46,7 @@ class ProEventLoginRepository @Inject constructor(private val api: IProEventData
     override fun getLocalPassword() = localPassword
 
     override fun getLocalId(): Long? {
-        val token = tokenLocalRepository.getTokenOrNull() ?: return null
+        val token = getLocalToken() ?: return null
 
         var start = token.indexOf('.') + 1
         var end = token.indexOf('.', start)
@@ -55,8 +58,9 @@ class ProEventLoginRepository @Inject constructor(private val api: IProEventData
     }
 
     // TODO: убрать toLowerCase() для email, когда на сервере пофиксят баг с email чувствительным к регистру
-    override fun login(email: String, password: String) =
-        api.login(LoginBody(email.toLowerCase(), password))
+    override fun login(email: String, password: String, rememberMe: Boolean): Completable {
+        this.rememberMe = rememberMe
+        return api.login(LoginBody(email.toLowerCase(), password))
             .flatMapCompletable { body ->
                 this.localToken = body.token
                 this.localEmail = email
@@ -65,6 +69,7 @@ class ProEventLoginRepository @Inject constructor(private val api: IProEventData
             }
             // TODO: вынести Schedulers.io() в Dagger
             .subscribeOn(Schedulers.io())
+    }
 
     override fun logoutFromThisDevice() {
         localToken = null

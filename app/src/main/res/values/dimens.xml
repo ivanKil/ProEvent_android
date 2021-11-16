@@ -11,4 +11,6 @@
     <dimen name="fragment_registration_padding_bottom_vertical">16dp</dimen>
     <dimen name="auth_first_input_top_margin">8dp</dimen>
     <dimen name="auth_input_top_margin">16dp</dimen>
+    <dimen name="bottom_nav_height">64dp</dimen>
+    <dimen name="bottom_nav_icon_size">20dp</dimen>
 </resources>

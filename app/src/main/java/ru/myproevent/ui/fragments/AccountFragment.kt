@@ -141,7 +141,6 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (requireActivity() as MainView).selectItem(Menu.SETTINGS)
         _view = FragmentAccountBinding.inflate(inflater, container, false).apply {
             defaultKeyListener = nameEdit.keyListener
             setEditListeners(nameInput, nameEdit)

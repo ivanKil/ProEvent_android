@@ -19,9 +19,6 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
     @Inject
     lateinit var profilesRepository: IProEventProfilesRepository
 
-    @Inject
-    lateinit var interAccessInfoRepository: IInternetAccessInfoRepository
-
     inner class ContactsListPresenter(
         private var itemClickListener: ((IContactItemView, Contact) -> Unit)? = null,
         private var statusClickListener: ((Contact) -> Unit)? = null
@@ -45,11 +42,10 @@ class ContactsPresenter : BaseMvpPresenter<ContactsView>() {
                 profilesRepository.getContact(contactDto)
                     .observeOn(uiScheduler)
                     .subscribe({ contact ->
-                        Log.d("[CONTACTS]", "contacts.add($contact)")
                         contacts[pos] = contact
                         fillItemView(view, contact)
                     }, {
-                        println("Error: ${it.message}")
+                        Log.d("[CONTACTS]", "Error: ${it.message}")
                         contacts[pos] = Contact(
                             contactDto.id,
                             fullName = "Заглушка",

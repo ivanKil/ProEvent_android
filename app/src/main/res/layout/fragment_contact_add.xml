@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
@@ -14,7 +13,7 @@
         style="@style/ProEventSettingsButtonItem"
         fontPath="@string/default_font_bold_path"
         android:layout_marginTop="25dp"
-        android:text="@string/account_text"
+        android:text="@string/add_contact"
         android:textAlignment="center"
         app:icon="@drawable/ic_back_to"
         app:iconGravity="start" />
