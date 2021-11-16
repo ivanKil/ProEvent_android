@@ -8,5 +8,7 @@ class HomePresenter : BaseMvpPresenter<HomeView>() {
     @Inject
     lateinit var loginRepository: IProEventLoginRepository
 
-    fun getToken(): String? = loginRepository.getLocalToken()
+    fun getId(): String = loginRepository.getLocalId().toString()
+
+    fun getToken(): String = loginRepository.getLocalToken().toString()
 }

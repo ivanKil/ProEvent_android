@@ -39,7 +39,11 @@ class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
         (requireActivity() as MainView).hideBottomNavigation()
         _view = FragmentAuthorizationBinding.inflate(inflater, container, false).apply {
             authorizationConfirm.setOnClickListener {
-                presenter.authorize(emailEdit.text.toString(), passwordEdit.text.toString())
+                presenter.authorize(
+                    emailEdit.text.toString(),
+                    passwordEdit.text.toString(),
+                    rememberMeCheckbox?.isChecked ?: true
+                )
             }
             registration.setOnClickListener {
                 presenter.openRegistration()
@@ -60,12 +64,12 @@ class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
                     intArrayOf(-android.R.attr.state_enabled)
                 ),
                 intArrayOf(
-                    requireContext().getColor(R.color.PE_blue_gray_04),
-                    requireContext().getColor(R.color.PE_blue_gray_03),
-                    requireContext().getColor(R.color.PE_blue_gray_03),
-                    requireContext().getColor(R.color.PE_blue_gray_04),
-                    requireContext().getColor(R.color.PE_blue_gray_04),
-                    requireContext().getColor(R.color.PE_blue_gray_04)
+                    requireContext().getColor(R.color.ProEvent_blue_300),
+                    requireContext().getColor(R.color.ProEvent_blue_600),
+                    requireContext().getColor(R.color.ProEvent_blue_600),
+                    requireContext().getColor(R.color.ProEvent_blue_300),
+                    requireContext().getColor(R.color.ProEvent_blue_300),
+                    requireContext().getColor(R.color.ProEvent_blue_300)
                 )
             )
             emailEdit.setOnFocusChangeListener { v, hasFocus ->
@@ -90,14 +94,14 @@ class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
                     passwordInput.setEndIconTintList(
                         ColorStateList(
                             arrayOf(intArrayOf()),
-                            intArrayOf(requireContext().getColor(R.color.PE_blue_gray_04))
+                            intArrayOf(requireContext().getColor(R.color.ProEvent_blue_300))
                         )
                     )
                 } else {
                     passwordInput.setEndIconTintList(
                         ColorStateList(
                             arrayOf(intArrayOf()),
-                            intArrayOf(requireContext().getColor(R.color.PE_blue_gray_01))
+                            intArrayOf(requireContext().getColor(R.color.ProEvent_blue_800))
                         )
                     )
                 }
@@ -119,12 +123,12 @@ class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
                     intArrayOf(-android.R.attr.state_enabled)
                 ),
                 intArrayOf(
-                    requireContext().getColor(R.color.PE_bright_red),
-                    requireContext().getColor(R.color.PE_blue_gray_03),
-                    requireContext().getColor(R.color.PE_blue_gray_03),
-                    requireContext().getColor(R.color.PE_bright_red),
-                    requireContext().getColor(R.color.PE_bright_red),
-                    requireContext().getColor(R.color.PE_bright_red)
+                    requireContext().getColor(R.color.ProEvent_bright_orange_300),
+                    requireContext().getColor(R.color.ProEvent_blue_600),
+                    requireContext().getColor(R.color.ProEvent_blue_600),
+                    requireContext().getColor(R.color.ProEvent_bright_orange_300),
+                    requireContext().getColor(R.color.ProEvent_bright_orange_300),
+                    requireContext().getColor(R.color.ProEvent_bright_orange_300)
                 )
             )
             emailInvalidError = true

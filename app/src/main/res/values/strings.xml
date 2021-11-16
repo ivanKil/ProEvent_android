@@ -37,6 +37,7 @@
     <string name="account_text">Профиль</string>
     <string name="security_text">Безопасность</string>
     <string name="subscriptions_text">Подписки</string>
+    <string name="contacts_text">Контакты</string>
     <string name="help">Помощь</string>
     <string name="about_text">О приложении</string>
     <string name="logout_text">Выйти</string>
@@ -59,4 +60,24 @@
     <string name="confirm_new_password_hint">Повторите новый пароль</string>
     <string name="confirm_password_title">Повторите пароль</string>
     <string name="dateFormat">yyyy-MM-dd</string>
+    <string name="contacts_title">Контакты</string>
+    <string name="add_contact">Добавить контакт</string>
+    <string name="no_contacts">Здесь пока ничего нет</string>
+    <string name="contact_add_explanation">Введите email пользователя, которого хотите добавить в свой список контактов.</string>
+    <string name="search_contact">Поиск</string>
+    <string name="contact_search_hint">Введите e-mail пользователя</string>
+    <string name="contact_invite_explanation">Пользователя с таким email в системе нет. Чтобы пригласить пользователя, укажите имя.</string>
+    <string name="name_edit_hint">Введите имя</string>
+    <string name="invite_contact">Продолжить</string>
+    <string name="delete_contact_question">Удалить контакт?</string>
+    <string name="decline_contact_request_question">Отклонить запрос?</string>
+    <string name="accept_contact_request_question">Принять заявку?</string>
+    <string name="cancel_request_question">Отменить заявку?</string>
+    <string name="yes_text">Да</string>
+    <string name="no_text">Нет</string>
+    <string name="all_contacts">Все контакты</string>
+    <string name="outgoing_contacts">Исходящие заявки</string>
+    <string name="incoming_contacts">Входящие заявки</string>
+    <string name="events_title">Мероприятия</string>
+    <string name="chat_title">Чат</string>
 </resources>

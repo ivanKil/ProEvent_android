@@ -23,7 +23,7 @@ open class BaseMvpPresenter<V : MvpView> : MvpPresenter<V>() {
     @Inject
     lateinit var screens: IScreens
 
-    protected var compositeDisposable = CompositeDisposable()
+    private var compositeDisposable = CompositeDisposable()
 
     protected inner class InterAccessInfoObserver(private val onAccessErrorMessage: String?): DisposableSingleObserver<Boolean>() {
         override fun onSuccess(hasInternetAccess: Boolean) {
@@ -44,7 +44,7 @@ open class BaseMvpPresenter<V : MvpView> : MvpPresenter<V>() {
         compositeDisposable.add(this)
     }
 
-    fun backPressed(): Boolean {
+    open fun backPressed(): Boolean {
         router.exit()
         return true
     }

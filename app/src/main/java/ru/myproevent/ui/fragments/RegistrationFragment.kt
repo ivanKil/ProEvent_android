@@ -28,12 +28,12 @@ class RegistrationFragment : BaseMvpFragment(), RegistrationView, BackButtonList
     private val licenceTouchListener = View.OnTouchListener { v, event ->
         when (event.action) {
             MotionEvent.ACTION_DOWN -> with(v as TextView) {
-                setBackgroundColor(ProEventApp.instance.getColor(R.color.PE_blue_gray_03))
-                setTextColor(ProEventApp.instance.getColor(R.color.white))
+                setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_600))
+                setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
             }
             MotionEvent.ACTION_UP -> with(v as TextView) {
-                setBackgroundColor(ProEventApp.instance.getColor(R.color.white))
-                setTextColor(ProEventApp.instance.getColor(R.color.PE_blue_gray_01))
+                setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
+                setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_800))
                 performClick()
             }
         }
@@ -72,7 +72,7 @@ class RegistrationFragment : BaseMvpFragment(), RegistrationView, BackButtonList
                         license2.setOnTouchListener(licenceTouchListener)
                     }.root
                 )
-
+                bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
                 // https://stackoverflow.com/questions/46861306/how-to-disable-bottomsheetdialogfragment-dragging
                 try {
                     val behaviorField: Field =
@@ -123,7 +123,7 @@ class RegistrationFragment : BaseMvpFragment(), RegistrationView, BackButtonList
             val licenseTextIAgree: Spannable =
                 SpannableString(getString(R.string.license_i_agree_with))
             licenseTextIAgree.setSpan(
-                ForegroundColorSpan(ProEventApp.instance.getColor(R.color.PE_blue_gray_01)),
+                ForegroundColorSpan(ProEventApp.instance.getColor(R.color.ProEvent_blue_800)),
                 0,
                 licenseTextIAgree.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -133,7 +133,7 @@ class RegistrationFragment : BaseMvpFragment(), RegistrationView, BackButtonList
             val licenseTextConditionOne: Spannable =
                 SpannableString(getString(R.string.license_condition_1))
             licenseTextConditionOne.setSpan(
-                ForegroundColorSpan(ProEventApp.instance.getColor(R.color.PE_bright_red)),
+                ForegroundColorSpan(ProEventApp.instance.getColor(R.color.ProEvent_bright_orange_500)),
                 0,
                 licenseTextConditionOne.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -143,7 +143,7 @@ class RegistrationFragment : BaseMvpFragment(), RegistrationView, BackButtonList
             val licenseTextConditionSeparator: Spannable =
                 SpannableString(getString(R.string.license_condition_separator))
             licenseTextConditionSeparator.setSpan(
-                ForegroundColorSpan(ProEventApp.instance.getColor(R.color.PE_blue_gray_01)),
+                ForegroundColorSpan(ProEventApp.instance.getColor(R.color.ProEvent_blue_800)),
                 0,
                 licenseTextConditionSeparator.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -153,7 +153,7 @@ class RegistrationFragment : BaseMvpFragment(), RegistrationView, BackButtonList
             val licenseTextConditionTwo: Spannable =
                 SpannableString(getString(R.string.license_condition_2))
             licenseTextConditionTwo.setSpan(
-                ForegroundColorSpan(ProEventApp.instance.getColor(R.color.PE_bright_red)),
+                ForegroundColorSpan(ProEventApp.instance.getColor(R.color.ProEvent_bright_orange_500)),
                 0,
                 licenseTextConditionTwo.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

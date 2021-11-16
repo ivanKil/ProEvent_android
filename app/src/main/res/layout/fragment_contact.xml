@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ProEvent_white"
+    android:orientation="vertical">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/title_button"
+        style="@style/ProEventSettingsButtonItem"
+        fontPath="@string/default_font_bold_path"
+        android:layout_marginTop="25dp"
+        android:textAlignment="center"
+        app:icon="@drawable/ic_back_to"
+        app:iconGravity="start"
+        tools:text="Иванова Анна" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingHorizontal="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/ProEvent_white"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="3dp"
+                android:src="@drawable/ic_profile_picture_placeholder_big" />
+
+            <TextView
+                android:id="@+id/date_of_birth_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:includeFontPadding="false"
+                android:text="@string/date_of_birth_input_title"
+                android:textColor="@color/ProEvent_blue_600"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/date_of_birth_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:includeFontPadding="false"
+                android:textColor="@color/ProEvent_blue_800"
+                android:textSize="16sp"
+                android:visibility="gone"
+                tools:text="01.01.1990" />
+
+            <TextView
+                android:id="@+id/position_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:includeFontPadding="false"
+                android:text="@string/position_input_title"
+                android:textColor="@color/ProEvent_blue_600"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/position_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:includeFontPadding="false"
+                android:textColor="@color/ProEvent_blue_800"
+                android:textSize="16sp"
+                android:visibility="gone"
+                tools:text="Куратор, волонтер, фотограф" />
+
+            <TextView
+                android:id="@+id/phone_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="20dp"
+                android:includeFontPadding="false"
+                android:text="@string/phone_input_title"
+                android:textColor="@color/ProEvent_blue_600"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/phone_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="8dp"
+                android:includeFontPadding="false"
+                android:textColor="@color/ProEvent_blue_800"
+                android:textSize="16sp"
+                tools:text="+7 (999) 123-45-67  " />
+
+            <TextView
+                android:id="@+id/email_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:includeFontPadding="false"
+                android:text="@string/e_mail_input_title"
+                android:textColor="@color/ProEvent_blue_600"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/email_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:includeFontPadding="false"
+                tools:text="example@email.com"
+                android:textColor="@color/ProEvent_blue_800"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/telegram_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:includeFontPadding="false"
+                android:text="Telegram"
+                android:textColor="@color/ProEvent_blue_600"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/telegram_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:includeFontPadding="false"
+                tools:text="\@example"
+                android:textColor="@color/ProEvent_blue_800"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/vk_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:includeFontPadding="false"
+                android:text="VK"
+                android:textColor="@color/ProEvent_blue_600"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/vk_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:includeFontPadding="false"
+                tools:text="https://vk.com/example"
+                android:textColor="@color/ProEvent_blue_800"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

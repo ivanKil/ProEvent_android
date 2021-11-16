@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/ProEvent_white"
+    android:maxWidth="360dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="640dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/form_title"
+            fontPath="@string/default_font_bold_path"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="66dp"
+            android:text="Восстановление пароля"
+            android:textAlignment="center"
+            android:textColor="@color/ProEvent_blue_800"
+            android:textSize="@dimen/fixed_title_text_size"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingPrefix" />
+
+        <TextView
+            android:id="@+id/password_recovery_explanation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:maxWidth="320dp"
+            android:text="@string/password_recovery_explanation_text"
+            android:textColor="@color/ProEvent_blue_800"
+            android:textSize="@dimen/fixed_input_text_size"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/form_title" />
+
+        <LinearLayout
+            android:id="@+id/email_input_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="59dp"
+            android:maxWidth="320dp"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_recovery_explanation">
+
+            <TextView
+                android:id="@+id/email_input_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/e_mail_input_title"
+                android:textColor="@color/ProEvent_bright_orange_500"
+                android:textSize="@dimen/fixed_input_text_size" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email_input"
+                style="@style/ProEventTextInputLayoutStyle">
+
+                <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                    android:id="@+id/email_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/e_mail_input_hint"
+                    android:imeOptions="actionDone"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="320"
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <ru.myproevent.ui.views.ProEventConfirmButton
+            android:id="@+id/continue_recovery"
+            style="@style/ProEventConfirmButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="71dp"
+            android:text="@string/continue_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <View
+            android:id="@+id/authorize_hit_area"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="@id/oh_now_i_remember"
+            app:layout_constraintLeft_toLeftOf="@id/oh_now_i_remember"
+            app:layout_constraintRight_toRightOf="@id/authorize"
+            app:layout_constraintTop_toTopOf="@id/oh_now_i_remember" />
+
+        <TextView
+            android:id="@+id/oh_now_i_remember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="12dp"
+            android:text="Вспомнили пароль?"
+            android:textColor="@color/ProEvent_blue_600"
+            android:textSize="@dimen/fixed_input_text_size"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/authorize"
+            app:layout_constraintTop_toBottomOf="@id/continue_recovery" />
+
+        <TextView
+            android:id="@+id/authorize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="12dp"
+            android:text="Войти"
+            android:textColor="@color/ProEvent_bright_orange_500"
+            android:textSize="@dimen/fixed_input_text_size"
+            app:layout_constraintLeft_toRightOf="@+id/oh_now_i_remember"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/continue_recovery" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

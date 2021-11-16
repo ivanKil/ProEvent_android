@@ -70,7 +70,7 @@ class LoginPresenter : BaseMvpPresenter<LoginView>() {
         }
         // TODO: уточнить у дизайнера нужен ли progress_bar
         loginRepository
-            .login(loginRepository.getLocalEmail()!!, loginRepository.getLocalPassword()!!)
+            .login(loginRepository.getLocalEmail()!!, loginRepository.getLocalPassword()!!, true)
             .observeOn(uiScheduler)
             .subscribeWith(AuthObserver(login))
             .disposeOnDestroy()

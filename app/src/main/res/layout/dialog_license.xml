@@ -11,7 +11,7 @@
         android:paddingHorizontal="20dp"
         android:gravity="center_vertical"
         android:text="@string/license_1_title"
-        android:textColor="@color/PE_blue_gray_01"
+        android:textColor="@color/ProEvent_blue_800"
         android:textSize="16sp" />
 
     <TextView
@@ -21,6 +21,6 @@
         android:paddingHorizontal="20dp"
         android:gravity="center_vertical"
         android:text="@string/license_2_title"
-        android:textColor="@color/PE_blue_gray_01"
+        android:textColor="@color/ProEvent_blue_800"
         android:textSize="16sp" />
 </LinearLayout>

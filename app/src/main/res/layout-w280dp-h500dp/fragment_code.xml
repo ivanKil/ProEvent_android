@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/ProEvent_white"
+    android:maxWidth="360dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="640dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/form_title"
+            fontPath="@string/default_font_bold_path"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:text="@string/registration_title"
+            android:textColor="@color/ProEvent_blue_800"
+            android:textSize="@dimen/fixed_title_text_size"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingPrefix" />
+
+        <TextView
+            android:id="@+id/code_explanation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:maxWidth="320dp"
+            android:text="@string/code_explanation_text"
+            android:textColor="@color/ProEvent_blue_800"
+            android:textSize="@dimen/fixed_input_text_size"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/form_title" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/digit_1"
+            style="@style/ProEventTextInputLayoutStyle"
+            android:layout_width="48dp"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="22dp"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/digit_2"
+            app:layout_constraintTop_toBottomOf="@+id/code_explanation">
+
+            <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                android:id="@+id/digit_1_edit"
+                style="@style/ProEventSingleDigitTextInputEditText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/digit_2"
+            style="@style/ProEventTextInputLayoutStyle"
+            android:layout_width="48dp"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="22dp"
+            app:layout_constraintLeft_toRightOf="@id/digit_1"
+            app:layout_constraintRight_toLeftOf="@id/digit_3"
+            app:layout_constraintTop_toBottomOf="@+id/code_explanation">
+
+            <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                android:id="@+id/digit_2_edit"
+                style="@style/ProEventSingleDigitTextInputEditText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/digit_3"
+            style="@style/ProEventTextInputLayoutStyle"
+            android:layout_width="48dp"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="22dp"
+            app:layout_constraintLeft_toRightOf="@id/digit_2"
+            app:layout_constraintRight_toLeftOf="@id/digit_4"
+            app:layout_constraintTop_toBottomOf="@+id/code_explanation">
+
+            <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                android:id="@+id/digit_3_edit"
+                style="@style/ProEventSingleDigitTextInputEditText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/digit_4"
+            style="@style/ProEventTextInputLayoutStyle"
+            android:layout_width="48dp"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="22dp"
+            app:layout_constraintLeft_toRightOf="@id/digit_3"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/code_explanation">
+
+            <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                android:id="@+id/digit_4_edit"
+                style="@style/ProEventSingleDigitTextInputEditText"
+                android:imeOptions="actionDone" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ru.myproevent.ui.views.ProEventConfirmButton
+            android:id="@+id/continue_registration"
+            style="@style/ProEventConfirmButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/registration_continue"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/digit_1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/if_data_invalid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="12dp"
+        android:maxWidth="320dp"
+        android:text="@string/if_data_invalid_text"
+        android:textAlignment="center"
+        android:textColor="@color/ProEvent_blue_800"
+        android:textSize="@dimen/fixed_input_text_size"
+        app:layout_constraintBottom_toTopOf="@id/back"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/back"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        fontPath="@string/default_font_bold_path"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="@color/ProEvent_white"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:letterSpacing="0"
+        android:text="@string/back"
+        android:textAllCaps="false"
+        android:textColor="@color/ProEvent_orange_200"
+        android:textSize="@dimen/fixed_title_text_size"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@id/oh_now_i_remember"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:rippleColor="@android:color/transparent"
+        app:strokeColor="@color/ProEvent_orange_200"
+        app:strokeWidth="2dp" />
+
+    <TextView
+        android:id="@+id/oh_now_i_remember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="40dp"
+        android:text="@string/has_account"
+        android:textColor="@color/ProEvent_blue_600"
+        android:textSize="@dimen/fixed_input_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/authorize" />
+
+    <TextView
+        android:id="@+id/authorize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="40dp"
+        android:text="@string/authorize"
+        android:textColor="@color/ProEvent_bright_orange_500"
+        android:textSize="@dimen/fixed_input_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/oh_now_i_remember"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <View
+        android:id="@+id/oh_now_i_remember_hit_area"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@id/oh_now_i_remember"
+        app:layout_constraintLeft_toLeftOf="@id/oh_now_i_remember"
+        app:layout_constraintRight_toRightOf="@id/authorize"
+        app:layout_constraintTop_toTopOf="@id/oh_now_i_remember" />
+</androidx.constraintlayout.widget.ConstraintLayout>

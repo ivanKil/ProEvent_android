@@ -71,7 +71,6 @@ class SecurityFragment : BaseMvpFragment(), SecurityView, BackButtonListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (requireActivity() as MainView).selectItem(Menu.SETTINGS)
         _view = FragmentSecurityBinding.inflate(inflater, container, false).apply {
             defaultKeyListener = emailEdit.keyListener
             setEditListeners(emailInput, emailEdit)

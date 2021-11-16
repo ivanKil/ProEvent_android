@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/ProEvent_white"
+    android:maxWidth="360dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="640dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/logo_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_logo_background"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/logo_foreground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7.84dp"
+            android:layout_marginTop="17.17dp"
+            android:layout_marginRight="6.87dp"
+            android:layout_marginBottom="36.69dp"
+            android:src="@drawable/ic_logo"
+            app:layout_constraintBottom_toBottomOf="@id/logo_background"
+            app:layout_constraintLeft_toLeftOf="@id/logo_background"
+            app:layout_constraintRight_toRightOf="@id/logo_background"
+            app:layout_constraintTop_toTopOf="@id/logo_background" />
+
+        <TextView
+            android:id="@+id/form_title"
+            fontPath="@string/default_font_bold_path"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:text="@string/authorization_title"
+            android:textColor="@color/ProEvent_blue_800"
+            android:textSize="20dp"
+            app:layout_constraintLeft_toLeftOf="@id/logo_background"
+            app:layout_constraintRight_toRightOf="@id/logo_background"
+            app:layout_constraintTop_toBottomOf="@id/logo_background"
+            tools:ignore="MissingPrefix" />
+
+        <LinearLayout
+            android:id="@+id/email_input_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:maxWidth="320dp"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/form_title">
+
+            <TextView
+                android:id="@+id/email_input_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/e_mail_input_title"
+                android:textColor="@color/ProEvent_bright_orange_500"
+                android:textSize="16dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email_input"
+                style="@style/ProEventTextInputLayoutStyle">
+
+                <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                    android:id="@+id/email_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/e_mail_input_hint"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="320"
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/password_input_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="12dp"
+            android:maxWidth="320dp"
+            android:orientation="vertical"
+            app:endIconMode="password_toggle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email_input_container">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/password_input_title"
+                android:textColor="@color/ProEvent_bright_orange_500"
+                android:textSize="16dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_input"
+                style="@style/ProEventTextInputLayoutStyle"
+                app:endIconMode="password_toggle"
+                app:endIconTint="@color/ProEvent_blue_300">
+
+                <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                    android:id="@+id/password_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/password_input_hint"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/error_message"
+            style="@style/ProEventErrorText"
+            android:text="@string/authorization_data_invalid"
+            app:layout_constraintLeft_toLeftOf="@id/password_input_container"
+            app:layout_constraintTop_toBottomOf="@id/password_input_container" />
+
+        <ru.myproevent.ui.views.ProEventCheckbox
+            android:id="@+id/rememberMeCheckbox"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_input_container" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Запомнить меня"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/rememberMeCheckbox"
+            app:layout_constraintStart_toEndOf="@+id/rememberMeCheckbox"
+            app:layout_constraintTop_toTopOf="@+id/rememberMeCheckbox" />
+
+        <ru.myproevent.ui.views.ProEventConfirmButton
+            android:id="@+id/authorization_confirm"
+            style="@style/ProEventConfirmButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="20dp"
+            android:text="@string/authorization_confirm"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_input_container"
+            app:layout_constraintVertical_bias="0.39249146757" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/password_recovery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="40dp"
+        android:text="@string/remember_password"
+        android:textColor="@color/ProEvent_blue_600"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <View
+        android:id="@+id/password_recovery_hit_area"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@id/password_recovery"
+        app:layout_constraintLeft_toLeftOf="@id/password_recovery"
+        app:layout_constraintRight_toRightOf="@id/password_recovery"
+        app:layout_constraintTop_toTopOf="@id/password_recovery" />
+
+    <TextView
+        android:id="@+id/registration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="40dp"
+        android:text="@string/registration"
+        android:textColor="@color/ProEvent_bright_orange_500"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <View
+        android:id="@+id/registration_hit_area"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@id/registration"
+        app:layout_constraintLeft_toLeftOf="@id/registration"
+        app:layout_constraintRight_toRightOf="@id/registration"
+        app:layout_constraintTop_toTopOf="@id/registration" />
+</androidx.constraintlayout.widget.ConstraintLayout>
