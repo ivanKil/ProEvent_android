@@ -12,25 +12,34 @@ import ru.myproevent.ProEventApp
 import ru.myproevent.ui.screens.IScreens
 import javax.inject.Inject
 
-open class BaseMvpPresenter<V : MvpView> : MvpPresenter<V>() {
+open class BaseMvpPresenter<V : MvpView>(protected open var localRouter: Router) : MvpPresenter<V>() {
 
     @Inject
     lateinit var uiScheduler: Scheduler
 
     @Inject
-    lateinit var router: Router
+    lateinit var globalRouter: Router
 
     @Inject
     lateinit var screens: IScreens
 
     private var compositeDisposable = CompositeDisposable()
 
-    protected inner class InterAccessInfoObserver(private val onAccessErrorMessage: String?): DisposableSingleObserver<Boolean>() {
+    protected inner class InterAccessInfoObserver(private val onAccessErrorMessage: String?) :
+        DisposableSingleObserver<Boolean>() {
         override fun onSuccess(hasInternetAccess: Boolean) {
-            if(!hasInternetAccess){
-                Toast.makeText(ProEventApp.instance, "У устройства нет выхода в Интернет.\n(От Google Public DNS нет ответа)", Toast.LENGTH_LONG).show()
+            if (!hasInternetAccess) {
+                Toast.makeText(
+                    ProEventApp.instance,
+                    "У устройства нет выхода в Интернет.\n(От Google Public DNS нет ответа)",
+                    Toast.LENGTH_LONG
+                ).show()
             } else {
-                Toast.makeText(ProEventApp.instance, "ERROR_MESSAGE: $onAccessErrorMessage", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    ProEventApp.instance,
+                    "ERROR_MESSAGE: $onAccessErrorMessage",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
@@ -44,8 +53,8 @@ open class BaseMvpPresenter<V : MvpView> : MvpPresenter<V>() {
         compositeDisposable.add(this)
     }
 
-    open fun backPressed(): Boolean {
-        router.exit()
+    open fun onBackPressed(): Boolean {
+        localRouter.exit()
         return true
     }
 

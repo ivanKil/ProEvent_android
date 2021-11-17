@@ -1,7 +1,7 @@
 package ru.myproevent.ui.screens
 
 import com.github.terrakok.cicerone.Screen
-import ru.myproevent.domain.model.entities.Contact
+import ru.myproevent.domain.models.entities.Contact
 
 interface IScreens {
     fun authorization(): Screen

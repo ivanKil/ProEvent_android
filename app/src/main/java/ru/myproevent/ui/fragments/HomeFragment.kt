@@ -11,15 +11,16 @@ import ru.myproevent.databinding.FragmentHomeBinding
 import ru.myproevent.ui.BackButtonListener
 import ru.myproevent.ui.presenters.home.HomePresenter
 import ru.myproevent.ui.presenters.home.HomeView
-import ru.myproevent.ui.presenters.main.MainView
-import ru.myproevent.ui.presenters.main.Menu
+import ru.myproevent.ui.presenters.main.BottomNavigationView
+import ru.myproevent.ui.presenters.main.Tab
+import ru.myproevent.ui.presenters.main.RouterProvider
 
 class HomeFragment : BaseMvpFragment(), HomeView, BackButtonListener {
     private var _view: FragmentHomeBinding? = null
     private val view get() = _view!!
 
     override val presenter by moxyPresenter {
-        HomePresenter().apply {
+        HomePresenter((parentFragment as RouterProvider).router).apply {
             ProEventApp.instance.appComponent.inject(this)
         }
     }
@@ -32,9 +33,9 @@ class HomeFragment : BaseMvpFragment(), HomeView, BackButtonListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        with(requireActivity() as MainView){
+        with(requireActivity() as BottomNavigationView){
             showBottomNavigation()
-            selectItem(Menu.HOME)
+            checkTab(Tab.HOME)
         }
         _view = FragmentHomeBinding.inflate(inflater, container, false).apply {
             id.text = "ID: ${presenter.getId()}"

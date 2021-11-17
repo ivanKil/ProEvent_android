@@ -12,8 +12,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.myproevent.domain.model.IProEventDataSource
-import ru.myproevent.domain.model.repositories.local_proevent_user_token.ITokenLocalRepository
+import ru.myproevent.domain.models.IProEventDataSource
+import ru.myproevent.domain.models.repositories.local_proevent_user_token.ITokenLocalRepository
 import javax.inject.Named
 import javax.inject.Singleton
 
