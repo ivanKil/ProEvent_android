@@ -24,32 +24,7 @@ import ru.myproevent.ui.presenters.main.Tab
 import javax.inject.Inject
 
 class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
-    private val navigator: Navigator = object : AppNavigator(this, R.id.container) {
-        override fun setupFragmentTransaction(
-            fragmentTransaction: FragmentTransaction,
-            currentFragment: Fragment?,
-            nextFragment: Fragment?
-        ) {
-            setVerticalTransitionAnimation(
-                currentFragment,
-                nextFragment,
-                fragmentTransaction
-            )
-        }
-    }
-
-    private fun setVerticalTransitionAnimation(
-        currFragment: Fragment?,
-        nextFragment: Fragment?,
-        fragmentTransaction: FragmentTransaction
-    ) {
-        fragmentTransaction.setCustomAnimations(
-            R.anim.enter_from_bottom,
-            R.anim.exit_to_bottom,
-            R.anim.enter_from_bottom,
-            R.anim.exit_to_bottom
-        )
-    }
+    private val navigator: Navigator = AppNavigator(this, R.id.container)
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
@@ -133,6 +108,12 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
         val newFragment = fm.findFragmentByTag(tab.name)
         if (currentFragment != null && newFragment != null && currentFragment === newFragment) return
         val transaction = fm.beginTransaction()
+        transaction.setCustomAnimations(
+            R.anim.fade_in,
+            R.anim.fade_out,
+            R.anim.fade_in,
+            R.anim.fade_out
+        )
         if (newFragment == null) {
             val tabContainer = when (tab) {
                 Tab.AUTHORIZATION -> TabContainerFragment.newInstance(Tab.AUTHORIZATION)
