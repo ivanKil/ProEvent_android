@@ -24,6 +24,10 @@ import ru.myproevent.ui.presenters.main.RouterProvider
 import ru.myproevent.ui.presenters.authorization.registration.RegistrationPresenter
 import ru.myproevent.ui.presenters.authorization.registration.RegistrationView
 import java.lang.reflect.Field
+import androidx.core.view.ViewCompat
+
+
+
 
 class RegistrationFragment : BaseMvpFragment(), RegistrationView, BackButtonListener {
     // TODO: вынести в кастомную вьюху
@@ -163,6 +167,12 @@ class RegistrationFragment : BaseMvpFragment(), RegistrationView, BackButtonList
             licenseText.append(licenseTextConditionTwo)
         }
         return view.root
+    }
+
+    // https://stackoverflow.com/a/33816251
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        ViewCompat.setTranslationZ(requireView(), 100f)
     }
 
     override fun onDestroyView() {
