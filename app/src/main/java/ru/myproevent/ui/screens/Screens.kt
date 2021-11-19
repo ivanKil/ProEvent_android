@@ -8,6 +8,7 @@ import ru.myproevent.ui.fragments.authorization.*
 import ru.myproevent.ui.fragments.contacts.ContactAddFragment
 import ru.myproevent.ui.fragments.contacts.ContactFragment
 import ru.myproevent.ui.fragments.contacts.ContactsFragment
+import ru.myproevent.ui.fragments.events.EventsFragment
 import ru.myproevent.ui.fragments.settings.AccountFragment
 import ru.myproevent.ui.fragments.settings.SecurityFragment
 import ru.myproevent.ui.fragments.settings.SettingsFragment
@@ -26,5 +27,5 @@ class Screens : IScreens {
     override fun contact(contact: Contact): Screen = FragmentScreen { ContactFragment.newInstance(contact) }
     override fun contactAdd(): Screen = FragmentScreen { ContactAddFragment.newInstance() }
     override fun chat() = FragmentScreen { HomeFragment.newInstance() }
-    override fun events() = FragmentScreen { HomeFragment.newInstance() }
+    override fun events() = FragmentScreen { EventsFragment.newInstance() }
 }

@@ -48,6 +48,21 @@ interface IProEventDataSource {
 
     @PUT("contacts/decline/{id}")
     fun declineContact(@Path("id") id: Long): Completable
+
+    @POST("events")
+    fun saveEvent(@Body event: EventDto): Single<EventDto>
+
+    @PUT("events")
+    fun editEvent(@Body event: EventDto): Single<EventDto>
+
+    @DELETE("events")
+    fun deleteEvent(@Body event: EventDto): Completable
+
+    @GET("events/{eventId}")
+    fun getEvent(@Path("eventId") eventId: Long): Single<EventDto>
+
+    @GET("events/user/{userId}")
+    fun getEventsForUser(@Path("userId") userId: Long): Single<List<EventDto>>
 }
 
 data class LoginBody(val email: String, val password: String)
@@ -95,3 +110,19 @@ data class Pageable(
 )
 
 data class Sort(val empty: Boolean, val sorted: Boolean, val unsorted: Boolean)
+
+data class EventDto(
+    val id: Long,
+    val name: String,
+    val ownerUserId: Long,
+    val eventStatus: String,
+    val startDate: String,
+    val endDate: String,
+    val description: String?,
+    val participantsUserIds: LongArray?,
+    val city: String?,
+    val address: String?,
+    val mapsFileIds: LongArray?,
+    val pointsPointIds: LongArray?,
+    val imageFile: String?,
+)
