@@ -164,7 +164,7 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
                     roleEdit.text.toString()
                 )
             }
-            titleButton.setOnClickListener { presenter.backPressed() }
+            titleButton.setOnClickListener { presenter.onBackPressed() }
             phoneEdit.addTextChangedListener(PhoneTextWatcher())
         }
         presenter.getProfile()
