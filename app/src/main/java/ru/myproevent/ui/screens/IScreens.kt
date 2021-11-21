@@ -18,4 +18,5 @@ interface IScreens {
     fun contactAdd(): Screen
     fun chat(): Screen
     fun events(): Screen
+    fun event(): Screen
 }

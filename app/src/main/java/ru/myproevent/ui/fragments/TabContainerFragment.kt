@@ -113,7 +113,7 @@ class TabContainerFragment : Fragment(), RouterProvider, BackButtonListener {
                 }
                 Tab.CONTACTS -> cicerone.router.replaceScreen(screens.contacts())
                 Tab.CHAT -> cicerone.router.replaceScreen(screens.chat())
-                Tab.EVENTS -> cicerone.router.replaceScreen(screens.events())
+                Tab.EVENTS -> cicerone.router.replaceScreen(screens.event())
                 Tab.SETTINGS -> cicerone.router.replaceScreen(screens.settings())
             }
         }
