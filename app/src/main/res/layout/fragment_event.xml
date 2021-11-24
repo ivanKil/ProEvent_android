@@ -11,10 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        android:animateLayoutChanges="true"
         android:background="@color/ProEvent_white">
 
-        <ru.myproevent.ui.views.LockableNestedScrollView
+        <ScrollView
             android:id="@+id/scroll"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -211,24 +210,19 @@
                         app:layout_constraintTop_toTopOf="@id/description_bar"
                         app:tint="@color/ProEvent_blue_800" />
 
-                    <ru.myproevent.ui.views.LockableNestedScrollView
+                    <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                         android:id="@+id/description_container"
                         android:layout_width="match_parent"
-                        android:layout_height="800dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:background="@color/ProEvent_white"
+                        android:text="@string/lorem_ipsum"
+                        android:textColor="@color/ProEvent_blue_800"
+                        android:textSize="16sp"
                         android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/description_bar">
-
-                        <TextView
-                            android:id="@+id/description"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="20dp"
-                            android:text="@string/lorem_ipsum"
-                            android:textColor="@color/ProEvent_blue_800"
-                            android:textSize="16sp" />
-                    </ru.myproevent.ui.views.LockableNestedScrollView>
+                        app:layout_constraintTop_toBottomOf="@id/description_bar" />
 
                     <TextView
                         android:id="@+id/maps_bar"
@@ -276,21 +270,27 @@
                         app:layout_constraintTop_toTopOf="@id/maps_bar"
                         app:tint="@color/ProEvent_blue_800" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/add_map_alt"
-                        style="@style/ProEventConfirmButton"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_marginHorizontal="60dp"
-                        android:layout_marginTop="20dp"
-                        android:backgroundTint="@color/ProEvent_blue_600"
-                        android:text="@string/add_map"
-                        android:textColor="@color/ProEvent_white"
-                        android:textSize="16sp"
+                    <FrameLayout
+                        android:id="@+id/maps_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/maps_bar" />
+                        app:layout_constraintTop_toBottomOf="@id/maps_bar">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/add_map_alt"
+                            style="@style/ProEventConfirmButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginHorizontal="60dp"
+                            android:layout_marginTop="20dp"
+                            android:backgroundTint="@color/ProEvent_blue_600"
+                            android:text="@string/add_map"
+                            android:textColor="@color/ProEvent_white"
+                            android:textSize="16sp" />
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/points_bar"
@@ -304,7 +304,7 @@
                         android:textSize="20sp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/add_map_alt" />
+                        app:layout_constraintTop_toBottomOf="@id/maps_container" />
 
                     <View
                         android:id="@+id/points_bar_hit_area"
@@ -338,10 +338,12 @@
                         app:layout_constraintTop_toTopOf="@id/points_bar"
                         app:tint="@color/ProEvent_blue_800" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/points_list"
+                    <LinearLayout
+                        android:id="@+id/points_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/points_bar" />
@@ -358,7 +360,7 @@
                         android:textSize="20sp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/points_list" />
+                        app:layout_constraintTop_toBottomOf="@id/points_container" />
 
                     <View
                         android:id="@+id/participants_bar_hit_area"
@@ -392,16 +394,67 @@
                         app:layout_constraintTop_toTopOf="@id/participants_bar"
                         app:tint="@color/ProEvent_blue_800" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/participants_list"
+                    <LinearLayout
+                        android:id="@+id/participants_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/participants_bar" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
-        </ru.myproevent.ui.views.LockableNestedScrollView>
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/absolute_bar"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/ProEvent_blue_300"
+            android:gravity="center"
+            android:text="Описание"
+            android:textColor="@color/ProEvent_blue_800"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/event_bar" />
+
+        <View
+            android:id="@+id/absolute_bar_hit_area"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/absolute_bar"
+            app:layout_constraintLeft_toLeftOf="@id/absolute_bar"
+            app:layout_constraintRight_toRightOf="@id/absolute_bar"
+            app:layout_constraintTop_toTopOf="@id/absolute_bar" />
+
+        <ImageView
+            android:id="@+id/absolute_bar_edit"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="7dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_add"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/absolute_bar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/absolute_bar" />
+
+        <ImageView
+            android:id="@+id/absolute_bar_expand"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="7dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_expand"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/absolute_bar"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/absolute_bar"
+            app:tint="@color/ProEvent_bright_orange_300" />
 
         <View
             android:id="@+id/shadow"

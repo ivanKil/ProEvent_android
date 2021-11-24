@@ -2,7 +2,6 @@ package ru.myproevent.ui.fragments.events
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -21,6 +20,9 @@ import ru.myproevent.ui.presenters.main.RouterProvider
 import ru.myproevent.ui.presenters.main.Tab
 import kotlin.properties.Delegates
 import android.graphics.RectF
+import ru.myproevent.databinding.ItemPointBinding
+
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 
 
 class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
@@ -66,7 +68,10 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
 
     private var statusBarHeight by Delegates.notNull<Int>()
 
-    private var descriptionBarDistance: Int? = null
+    private var descriptionBarDistance by Delegates.notNull<Int>()
+    private var mapsBarDistance by Delegates.notNull<Int>()
+    private var pointsBarDistance by Delegates.notNull<Int>()
+    private var participantsBarDistance by Delegates.notNull<Int>()
 
     private fun extractStatusBarHeight(): Int {
         val rectangle = Rect()
@@ -94,6 +99,51 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
             (location[0] + view.measuredWidth).toFloat(),
             (location[1] + view.measuredHeight).toFloat()
         )
+    }
+
+    private fun showAbsoluteBar(
+        title: String,
+        iconResource: Int,
+        iconTintResource: Int?,
+        onCollapseScroll: Int,
+        onCollapse: () -> Unit
+    ) =
+        with(vb) {
+            absoluteBarEdit.setImageResource(iconResource)
+            if (iconTintResource == null) {
+                absoluteBarEdit.clearColorFilter()
+            } else {
+                absoluteBarEdit.setColorFilter(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        iconTintResource
+                    ), android.graphics.PorterDuff.Mode.SRC_IN
+                )
+            }
+            absoluteBarExpand.setOnClickListener {
+                vb.scroll.scrollTo(0, onCollapseScroll)
+                vb.scroll.fling(0)
+                isAbsoluteBarBarHidden = true
+                onCollapse()
+                hideAbsoluteBar()
+            }
+            absoluteBar.setOnClickListener { absoluteBarExpand.performClick() }
+            absoluteBarHitArea.setOnClickListener { absoluteBar.performClick() }
+
+            absoluteBar.text = title
+
+            absoluteBar.visibility = VISIBLE
+            absoluteBarHitArea.visibility = VISIBLE
+            absoluteBarEdit.visibility = VISIBLE
+            absoluteBarExpand.visibility = VISIBLE
+        }
+
+    private var isAbsoluteBarBarHidden = true
+    private fun hideAbsoluteBar() = with(vb) {
+        absoluteBar.visibility = GONE
+        absoluteBarHitArea.visibility = GONE
+        absoluteBarEdit.visibility = GONE
+        absoluteBarExpand.visibility = GONE
     }
 
     override fun onCreateView(
@@ -127,8 +177,6 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
             expandDescription.setOnClickListener {
                 fun isDescriptionExpanded() = descriptionContainer.visibility == VISIBLE
                 if (!isDescriptionExpanded()) {
-                    descriptionBarDistance =
-                        (calculateRectOnScreen(vb.descriptionBar).top - calculateRectOnScreen(vb.scrollChild).top).toInt()
                     expandDescription.setColorFilter(
                         ContextCompat.getColor(
                             requireContext(),
@@ -146,64 +194,10 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                     descriptionContainer.visibility = GONE
                 }
             }
-            scroll.isScrollable = true
-//            scroll.touchEventCallback = { ev ->
-//                descriptionContainer.onTouchEvent(ev)
-//            }
-            scroll.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-
-                Log.d("[setOnScrollChangeListener]", "distance: $descriptionBarDistance")
-                Log.d(
-                    "[setOnScrollChangeListener]",
-                    "$scrollX, $scrollY, $oldScrollX, $oldScrollY"
-                )
-                if (descriptionBarDistance == null) {
-                    return@setOnScrollChangeListener
-                }
-
-                if (descriptionBarDistance!! in oldScrollY..scrollY || descriptionBarDistance!! in scrollY..oldScrollY) {
-                    scroll.isScrollable = false
-                    if (oldScrollY != descriptionBarDistance) {
-                        Log.d("[scrollTo]", "$oldScrollY vs $descriptionBarDistance")
-                        scroll.scrollTo(0, descriptionBarDistance!!)
-                    }
-                    descriptionContainer.isScrollable = true
-                } else {
-                    scroll.isScrollable = true
-                    descriptionContainer.isScrollable = false
-                }
-
-                Log.d(
-                    "[MYLOG]",
-                    "descriptionContainer.isScrollable: ${descriptionContainer.isScrollable}"
-                )
-//
-//                val bounds = Rect()
-//                descriptionBar.getGlobalVisibleRect(bounds) // now bounds has the visible drawing coordinates of the view
-//                //view.root.offsetDescendantRectToMyCoords(descriptionContainer, bounds) // now bounds has the view's coordinates according to the parentViewGroup
-//
-//                Log.d(
-//                    "[setOnScrollChangeListener]",
-//                    "bounds.top: ${bounds.centerY()}"
-//                )
-//
-//                val descriptionBarLocation = IntArray(2)
-//                descriptionBar.getLocationOnScreen(descriptionBarLocation)
-//                if (descriptionBarLocation[1] - eventBar.height - statusBarHeight == 0) {
-//                    scroll.smoothScrollBy(0,0)
-//                    descriptionContainer.isScrollable = true
-//                } else {
-//                    descriptionContainer.isScrollable = false
-//                }
-//                Log.d(
-//                    "[MYLOG]",
-//                    "descriptionContainer.isScrollable: ${descriptionContainer.isScrollable}"
-//                )
-            }
             descriptionBar.setOnClickListener { expandDescription.performClick() }
             descriptionBarHitArea.setOnClickListener { descriptionBar.performClick() }
             expandMaps.setOnClickListener {
-                fun isMapsExpanded() = addMapAlt.visibility == VISIBLE
+                fun isMapsExpanded() = mapsContainer.visibility == VISIBLE
                 if (!isMapsExpanded()) {
                     expandMaps.setColorFilter(
                         ContextCompat.getColor(
@@ -211,7 +205,7 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                             R.color.ProEvent_bright_orange_300
                         ), android.graphics.PorterDuff.Mode.SRC_IN
                     )
-                    addMapAlt.visibility = VISIBLE
+                    mapsContainer.visibility = VISIBLE
                 } else {
                     expandMaps.setColorFilter(
                         ContextCompat.getColor(
@@ -219,13 +213,139 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                             R.color.ProEvent_blue_800
                         ), android.graphics.PorterDuff.Mode.SRC_IN
                     )
-                    addMapAlt.visibility = GONE
+                    mapsContainer.visibility = GONE
                 }
             }
             mapsBar.setOnClickListener { expandMaps.performClick() }
             mapBarHitArea.setOnClickListener { mapsBar.performClick() }
+            expandPoints.setOnClickListener {
+                fun isPointsExpanded() = pointsContainer.visibility == VISIBLE
+                if (!isPointsExpanded()) {
+                    expandPoints.setColorFilter(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.ProEvent_bright_orange_300
+                        ), android.graphics.PorterDuff.Mode.SRC_IN
+                    )
+                    pointsContainer.visibility = VISIBLE
+                } else {
+                    expandPoints.setColorFilter(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.ProEvent_blue_800
+                        ), android.graphics.PorterDuff.Mode.SRC_IN
+                    )
+                    pointsContainer.visibility = GONE
+                }
+            }
+            pointsBar.setOnClickListener { expandPoints.performClick() }
+            pointsBarHitArea.setOnClickListener { pointsBar.performClick() }
+            expandParticipants.setOnClickListener {
+                fun isParticipantsExpanded() = participantsContainer.visibility == VISIBLE
+                if (!isParticipantsExpanded()) {
+                    expandParticipants.setColorFilter(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.ProEvent_bright_orange_300
+                        ), android.graphics.PorterDuff.Mode.SRC_IN
+                    )
+                    participantsContainer.visibility = VISIBLE
+                } else {
+                    expandParticipants.setColorFilter(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.ProEvent_blue_800
+                        ), android.graphics.PorterDuff.Mode.SRC_IN
+                    )
+                    participantsContainer.visibility = GONE
+                }
+            }
+            participantsBar.setOnClickListener { expandParticipants.performClick() }
+            participantsBarHitArea.setOnClickListener { participantsBar.performClick() }
+
+            scroll.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                if (descriptionContainer.visibility == VISIBLE && scrollY in descriptionBarDistance..(descriptionBarDistance + descriptionContainer.height)) {
+                    if (isAbsoluteBarBarHidden) {
+                        showAbsoluteBar(
+                            "Описание",
+                            R.drawable.ic_edit,
+                            R.color.ProEvent_blue_800,
+                            descriptionBarDistance
+                        ) { vb.expandDescription.performClick() }
+                        isAbsoluteBarBarHidden = false
+                    }
+                } else if (mapsContainer.visibility == VISIBLE && scrollY in mapsBarDistance..(mapsBarDistance + mapsContainer.height)) {
+                    if (isAbsoluteBarBarHidden) {
+                        showAbsoluteBar(
+                            "Карта мероприятия",
+                            R.drawable.ic_add,
+                            null,
+                            mapsBarDistance
+                        ) { vb.expandMaps.performClick() }
+                        isAbsoluteBarBarHidden = false
+                    }
+                } else if (pointsContainer.visibility == VISIBLE && scrollY in pointsBarDistance..(pointsBarDistance + pointsContainer.height)) {
+                    if (isAbsoluteBarBarHidden) {
+                        showAbsoluteBar(
+                            "Точки",
+                            R.drawable.ic_add,
+                            null,
+                            pointsBarDistance
+                        ) { vb.expandPoints.performClick() }
+                        isAbsoluteBarBarHidden = false
+                    }
+                } else if (participantsContainer.visibility == VISIBLE && scrollY in participantsBarDistance..(participantsBarDistance + participantsContainer.height)) {
+                    if (isAbsoluteBarBarHidden) {
+                        showAbsoluteBar(
+                            "Участники",
+                            R.drawable.ic_add,
+                            null,
+                            pointsBarDistance
+                        ) { vb.expandParticipants.performClick() }
+                        isAbsoluteBarBarHidden = false
+                    }
+                } else if (!isAbsoluteBarBarHidden) {
+                    hideAbsoluteBar()
+                    isAbsoluteBarBarHidden = true
+                }
+            }
+            for (i in 1..50) {
+                // TODO: делать это асинхронно, показывая progressBar
+                val pointItem = ItemPointBinding.inflate(inflater, container, false)
+                if (i != 1) {
+                    pointItem.name.text = "Новая точка $i"
+                }
+                pointsContainer.addView(pointItem.root)
+            }
+            for (i in 1..25) {
+                // TODO: делать это асинхронно, показывая progressBar
+                val pointItem = ItemPointBinding.inflate(inflater, container, false)
+                pointItem.name.text = if (i != 1) { "Новый участник $i" } else { "Новый участник" }
+                participantsContainer.addView(pointItem.root)
+            }
         }
         return vb.root
+    }
+
+    override fun onViewCreated(view: View, saved: Bundle?) {
+        super.onViewCreated(view, saved)
+        view.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                    view.viewTreeObserver.removeOnGlobalLayoutListener(this)
+//                } else {
+//                    view.viewTreeObserver.removeGlobalOnLayoutListener(this)
+//                }
+                descriptionBarDistance =
+                    (calculateRectOnScreen(vb.descriptionBar).top - calculateRectOnScreen(vb.scrollChild).top).toInt()
+                mapsBarDistance =
+                    (calculateRectOnScreen(vb.mapsBar).top - calculateRectOnScreen(vb.scrollChild).top).toInt()
+                pointsBarDistance =
+                    (calculateRectOnScreen(vb.pointsBar).top - calculateRectOnScreen(vb.scrollChild).top).toInt()
+                participantsBarDistance =
+                    (calculateRectOnScreen(vb.participantsBar).top - calculateRectOnScreen(vb.scrollChild).top).toInt()
+            }
+        })
     }
 
     override fun onDestroyView() {
