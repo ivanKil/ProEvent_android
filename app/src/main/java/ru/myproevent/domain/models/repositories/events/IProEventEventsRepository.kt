@@ -2,13 +2,13 @@ package ru.myproevent.domain.models.repositories.events
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.myproevent.domain.models.EventDto
+import ru.myproevent.domain.models.entities.Event
 
 interface IProEventEventsRepository {
-    fun saveEvent(event: EventDto): Completable
-    fun editEvent(event: EventDto): Completable
-    fun deleteEvent(event: EventDto): Completable
-    fun getEvent(id: Long): Single<EventDto>
-    fun getEventsForUser(userId: Long): Single<List<EventDto>>
+    fun saveEvent(event: Event): Completable
+    fun editEvent(event: Event): Completable
+    fun deleteEvent(event: Event): Completable
+    fun getEvent(id: Long): Single<Event>
+    fun getEvents(): Single<List<Event>>
 }
 

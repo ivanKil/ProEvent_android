@@ -9,7 +9,7 @@ import ru.myproevent.domain.models.ContactDto
 import ru.myproevent.domain.models.IProEventDataSource
 import ru.myproevent.domain.models.ProfileDto
 import ru.myproevent.domain.models.entities.Contact
-import ru.myproevent.domain.models.entities.Status
+import ru.myproevent.domain.models.entities.Contact.Status
 import ru.myproevent.domain.utils.toContact
 import java.util.*
 import javax.inject.Inject

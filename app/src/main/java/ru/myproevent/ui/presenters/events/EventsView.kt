@@ -7,8 +7,8 @@ import moxy.viewstate.strategy.alias.OneExecution
 @AddToEndSingle
 interface EventsView : MvpView {
     fun init()
+    fun updateList()
 
     @OneExecution
     fun showToast(text: String)
-    fun updateList()
 }

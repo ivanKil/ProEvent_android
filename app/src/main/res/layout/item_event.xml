@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profileContainer"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingVertical="8dp"
+    android:paddingHorizontal="@dimen/padding_horizontal"
+    tools:background="@color/ProEvent_white">
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_img"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center_vertical"
+        app:srcCompat="@drawable/ic_events_small" />
+
+    <TextView
+        android:id="@+id/tv_event_name"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="84dp"
+        android:singleLine="true"
+        android:textColor="@color/ProEvent_blue_800"
+        android:textSize="16sp"
+        tools:text="Иванова Анна" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="28dp"
+        android:singleLine="true"
+        android:textColor="@color/ProEvent_blue_600"
+        android:textSize="16sp"
+        tools:text="fdfdfdffdfdfdfdfdfdfdfdffdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfd" />
+
+    <ImageView
+        android:id="@+id/iv_edit_event"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_edit"
+        android:layout_gravity="end"/>
+</FrameLayout>

@@ -60,6 +60,7 @@
     <string name="confirm_new_password_hint">Повторите новый пароль</string>
     <string name="confirm_password_title">Повторите пароль</string>
     <string name="dateFormat">yyyy-MM-dd</string>
+    <string name="extendedDateFormat">yyyy-MM-dd\'T\'HH:mm:ss</string>
     <string name="contacts_title">Контакты</string>
     <string name="add_contact">Добавить контакт</string>
     <string name="no_contacts">Здесь пока ничего нет</string>
@@ -80,4 +81,9 @@
     <string name="incoming_contacts">Входящие заявки</string>
     <string name="events_title">Мероприятия</string>
     <string name="chat_title">Чат</string>
+    <string name="no_events">Здесь пока ничего нет</string>
+    <string name="add_event">Добавить мероприятие</string>
+    <string name="all_actual_events">Все актуальные мероприятия</string>
+    <string name="my_actual_events">Мои актуальные мероприятия</string>
+    <string name="my_completed_events">Мои завершенные мероприятия</string>
 </resources>

@@ -16,16 +16,13 @@ data class Contact(
     var description: String? = null
 ) : Parcelable {
     enum class Action{ ADD, ACCEPT, CANCEL, DECLINE, DELETE }
-}
 
-enum class Status(val value: String) {
-    ALL("ALL"),
-    ACCEPTED("ACCEPTED"),
-    DECLINED("DECLINED"),
-    PENDING("PENDING"),
-    REQUESTED("REQUESTED");
-
-    companion object {
-        fun fromString(status: String) = valueOf(status)
+    enum class Status(val value: String) {
+        ALL("ALL"),
+        ACCEPTED("ACCEPTED"),
+        DECLINED("DECLINED"),
+        PENDING("PENDING"),
+        REQUESTED("REQUESTED");
+        companion object { fun fromString(status: String) = valueOf(status) }
     }
 }

@@ -17,7 +17,7 @@ import ru.myproevent.ProEventApp
 import ru.myproevent.R
 import ru.myproevent.databinding.FragmentContactsBinding
 import ru.myproevent.domain.models.entities.Contact
-import ru.myproevent.domain.models.entities.Status
+import ru.myproevent.domain.models.entities.Contact.Status
 import ru.myproevent.ui.presenters.contacts.contacts_list.adapters.ContactsRVAdapter
 import ru.myproevent.ui.fragments.BaseMvpFragment
 import ru.myproevent.ui.presenters.contacts.contacts_list.ContactsPresenter

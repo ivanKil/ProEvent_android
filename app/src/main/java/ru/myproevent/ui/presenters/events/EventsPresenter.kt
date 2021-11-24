@@ -1,146 +1,65 @@
 package ru.myproevent.ui.presenters.events
 
-import android.util.Log
 import com.github.terrakok.cicerone.Router
-import ru.myproevent.domain.models.ContactDto
-import ru.myproevent.domain.models.entities.Contact
-import ru.myproevent.domain.models.entities.Status
-import ru.myproevent.domain.models.repositories.contacts.IProEventContactsRepository
-import ru.myproevent.domain.models.repositories.profiles.IProEventProfilesRepository
-import ru.myproevent.ui.presenters.contacts.contacts_list.adapters.IContactsListPresenter
+import ru.myproevent.domain.models.entities.Event
+import ru.myproevent.domain.models.repositories.events.IProEventEventsRepository
 import ru.myproevent.ui.presenters.BaseMvpPresenter
+import ru.myproevent.ui.presenters.events.adapter.IEventsListPresenter
 import javax.inject.Inject
 
-//class EventsPresenter(localRouter: Router) : BaseMvpPresenter<EventsView>(localRouter) {
+class EventsPresenter(localRouter: Router) : BaseMvpPresenter<EventsView>(localRouter) {
 
-//    @Inject
-//    lateinit var contactsRepository: IProEventContactsRepository
-//
-//    @Inject
-//    lateinit var profilesRepository: IProEventProfilesRepository
-//
-//    inner class ContactsListPresenter(
-//        private var itemClickListener: ((IEventItemView, Contact) -> Unit)? = null,
-//        private var statusClickListener: ((Contact) -> Unit)? = null
-//    ) : IContactsListPresenter {
-//
-//        private val contactDTOs = mutableListOf<ContactDto>()
-//
-//        private var size = 0
-//
-//        private var contacts = mutableListOf<Contact?>()
-//
-//        override fun getCount() = size
-//
-//        override fun bindView(view: IEventItemView) {
-//            val pos = view.pos
-//
-//            if (contacts[pos] != null) {
-//                fillItemView(view, contacts[pos]!!)
-//            } else {
-//                val contactDto = contactDTOs[pos]
-//                profilesRepository.getContact(contactDto)
-//                    .observeOn(uiScheduler)
-//                    .subscribe({ contact ->
-//                        contacts[pos] = contact
-//                        fillItemView(view, contact)
-//                    }, {
-//                        Log.d("[CONTACTS]", "Error: ${it.message}")
-//                        contacts[pos] = Contact(
-//                            contactDto.id,
-//                            fullName = "Заглушка",
-//                            description = "Профиля нет, или не загрузился",
-//                            status = Status.fromString(contactDto.status)
-//                        )
-//                        fillItemView(view, contacts[pos]!!)
-//                    }).disposeOnDestroy()
-//            }
-//        }
-//
-//        private fun fillItemView(view: IEventItemView, contact: Contact) {
-//            contact.apply {
-//                if (!fullName.isNullOrEmpty()) {
-//                    view.setName(fullName!!)
-//                } else if (!nickName.isNullOrEmpty()) {
-//                    view.setName(nickName!!)
-//                } else {
-//                    view.setName(userId.toString())
-//                }
-//                if (!description.isNullOrEmpty()) {
-//                    view.setDescription(description!!)
-//                } else if (!nickName.isNullOrEmpty()) {
-//                    view.setDescription(nickName!!)
-//                } else {
-//                    view.setDescription("id пользователя: $userId")
-//                }
-//                //imgUri?.let { view.loadImg(it) }
-//                status?.let { view.setStatus(it) }
-//            }
-//        }
-//
-//        override fun onItemClick(view: IEventItemView) {
-//            contacts[view.pos]?.let { itemClickListener?.invoke(view, it) }
-//        }
-//
-//        override fun onStatusClick(view: IEventItemView) {
-//            contacts[view.pos]?.let { statusClickListener?.invoke(it) }
-//        }
-//
-//        fun setData(data: List<ContactDto>, size: Int) {
-//            this.size = 0
-//            contactDTOs.clear()
-//            contactDTOs.addAll(data)
-//            contacts = MutableList(size) { null }
-//            this.size = size
-//            viewState.updateList()
-//        }
-//    }
-//
-//    val contactsListPresenter = ContactsListPresenter({ _, contact ->
-//        localRouter.navigateTo(screens.contact(contact))
-//    }, { contact ->
-//        val action = when (contact.status) {
-//            Status.DECLINED -> Contact.Action.DELETE
-//            Status.PENDING -> Contact.Action.CANCEL
-//            Status.REQUESTED -> Contact.Action.ACCEPT
-//            else -> return@ContactsListPresenter
-//        }
-//
-//        viewState.showConfirmationScreen(action) { confirmed ->
-//            viewState.hideConfirmationScreen()
-//            if (!confirmed) return@showConfirmationScreen
-//            performActionOnContact(contact, action)
-//        }
-//    })
-//
-//    private fun performActionOnContact(contact: Contact, action: Contact.Action) {
-//        when (action) {
-//            Contact.Action.ACCEPT -> contactsRepository.acceptContact(contact.userId)
-//            Contact.Action.CANCEL, Contact.Action.DELETE -> contactsRepository.deleteContact(contact.userId)
-//            Contact.Action.DECLINE -> contactsRepository.declineContact(contact.userId)
-//            else -> return
-//        }.observeOn(uiScheduler)
-//            .subscribe({ loadData() }, { viewState.showToast("Не удалось выполнить действие") })
-//            .disposeOnDestroy()
-//    }
-//
-//    fun init() {
-//        viewState.init()
-//        loadData()
-//    }
-//
-//    fun addContact() {
-//        localRouter.navigateTo(screens.contactAdd())
-//    }
-//
-//    fun loadData(status: Status = Status.ALL) {
-//        contactsRepository.getContacts(1, Int.MAX_VALUE, status)
-//            .observeOn(uiScheduler)
-//            .subscribe({ data ->
-//                contactsListPresenter.setData(data.content, data.totalElements.toInt())
-//            }, {
-//                viewState.showToast("ПРОИЗОШЛА ОШИБКА: ${it.message}")
-//            }).disposeOnDestroy()
-//    }
+    @Inject
+    lateinit var eventsRepository: IProEventEventsRepository
 
-//}
+    inner class EventsListPresenter(
+        private val itemClickListener: ((Event) -> Unit)? = null,
+        private val editIconClickListener: ((Event) -> Unit)? = null
+    ) : IEventsListPresenter {
+
+        private var events = listOf<Event>()
+
+        override fun getCount() = events.size
+
+        override fun bindView(view: IEventItemView) {
+            val event = events[view.pos]
+            view.setName(event.name)
+            view.setTime(event.startDate.toString())
+        }
+
+        override fun onEditButtonClick(view: IEventItemView) {
+            editIconClickListener?.invoke(events[view.pos])
+        }
+
+        override fun onItemClick(view: IEventItemView) {
+            itemClickListener?.invoke(events[view.pos])
+        }
+
+        fun setData(data: List<Event>) {
+            events = data
+            viewState.updateList()
+        }
+    }
+
+    val eventsListPresenter = EventsListPresenter({
+        //localRouter.navigateTo(screens.event(it))
+    }, {
+        //localRouter.navigateTo(screens.event(it))
+    })
+
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        viewState.init()
+        loadData()
+    }
+
+    fun loadData() {
+        eventsRepository.getEvents()
+            .observeOn(uiScheduler)
+            .subscribe({ data ->
+                eventsListPresenter.setData(data)
+            }, {
+                viewState.showToast("ПРОИЗОШЛА ОШИБКА: ${it.message}")
+            }).disposeOnDestroy()
+    }
+}

@@ -1,19 +1,24 @@
 package ru.myproevent.ui.fragments.events
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import moxy.MvpAppCompatFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import moxy.ktx.moxyPresenter
+import ru.myproevent.ProEventApp
 import ru.myproevent.databinding.FragmentEventsBinding
+import ru.myproevent.ui.fragments.BaseMvpFragment
+import ru.myproevent.ui.presenters.events.EventsPresenter
 import ru.myproevent.ui.presenters.events.EventsView
+import ru.myproevent.ui.presenters.events.adapter.EventsRVAdapter
 import ru.myproevent.ui.presenters.main.BottomNavigationView
+import ru.myproevent.ui.presenters.main.RouterProvider
 import ru.myproevent.ui.presenters.main.Tab
 
 
-class EventsFragment : MvpAppCompatFragment(), EventsView {
+class EventsFragment : BaseMvpFragment(), EventsView {
 
     companion object {
         fun newInstance() = EventsFragment()
@@ -22,15 +27,14 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
     private var _vb: FragmentEventsBinding? = null
     private val vb get() = _vb!!
 
+    override val presenter by moxyPresenter {
+        EventsPresenter((parentFragment as RouterProvider).router).apply {
+            ProEventApp.instance.appComponent.inject(this)
+        }
+    }
 
-//    override val presenter by moxyPresenter {
-//        ContactsPresenter((parentFragment as RouterProvider).router).apply {
-//            ProEventApp.instance.appComponent.inject(this)
-//        }
-//    }
+    var adapter: EventsRVAdapter? = null
 
-
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,18 +45,17 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
         return vb.root
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun init() = with(vb) {
+        rvEvents.layoutManager = LinearLayoutManager(context)
+        adapter = EventsRVAdapter(presenter.eventsListPresenter)
+        rvEvents.adapter = adapter
     }
 
-    override fun init() = with(vb) {
+    override fun updateList() {
+        adapter?.notifyDataSetChanged()
     }
 
     override fun showToast(text: String) = Toast.makeText(context, text, Toast.LENGTH_LONG).show()
-
-    override fun updateList() {
-
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

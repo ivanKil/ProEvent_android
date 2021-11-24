@@ -4,11 +4,11 @@ import android.util.Log
 import com.github.terrakok.cicerone.Router
 import ru.myproevent.domain.models.ContactDto
 import ru.myproevent.domain.models.entities.Contact
-import ru.myproevent.domain.models.entities.Status
+import ru.myproevent.domain.models.entities.Contact.Status
 import ru.myproevent.domain.models.repositories.contacts.IProEventContactsRepository
 import ru.myproevent.domain.models.repositories.profiles.IProEventProfilesRepository
-import ru.myproevent.ui.presenters.contacts.contacts_list.adapters.IContactsListPresenter
 import ru.myproevent.ui.presenters.BaseMvpPresenter
+import ru.myproevent.ui.presenters.contacts.contacts_list.adapters.IContactsListPresenter
 import javax.inject.Inject
 
 class ContactsPresenter(localRouter: Router) : BaseMvpPresenter<ContactsView>(localRouter) {
