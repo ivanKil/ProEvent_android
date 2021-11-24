@@ -8,6 +8,7 @@ interface IProEventEventsRepository {
     fun saveEvent(event: Event): Completable
     fun editEvent(event: Event): Completable
     fun deleteEvent(event: Event): Completable
+    fun deleteEvent(id: Long): Completable
     fun getEvent(id: Long): Single<Event>
     fun getEvents(): Single<List<Event>>
 }

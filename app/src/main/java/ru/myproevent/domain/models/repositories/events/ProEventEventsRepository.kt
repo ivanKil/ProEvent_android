@@ -3,6 +3,7 @@ package ru.myproevent.domain.models.repositories.events
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import ru.myproevent.domain.models.EventDto
 import ru.myproevent.domain.models.IProEventDataSource
 import ru.myproevent.domain.models.entities.Event
 import ru.myproevent.domain.models.repositories.proevent_login.IProEventLoginRepository
@@ -29,6 +30,25 @@ class ProEventEventsRepository @Inject constructor(
 
     override fun deleteEvent(event: Event): Completable {
         return api.deleteEvent(event.toEventDto()).subscribeOn(Schedulers.io())
+    }
+
+    override fun deleteEvent(id: Long): Completable {
+        val eventDto = EventDto(
+            id,
+            "",
+            loginRepository.getLocalId()!!,
+            "",
+            "",
+            "",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+        return api.deleteEvent(eventDto).subscribeOn(Schedulers.io())
     }
 
     override fun getEvent(id: Long): Single<Event> {
