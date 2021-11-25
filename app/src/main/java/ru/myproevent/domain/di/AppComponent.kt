@@ -17,6 +17,7 @@ import ru.myproevent.ui.presenters.authorization.recovery.RecoveryPresenter
 import ru.myproevent.ui.presenters.authorization.registration.RegistrationPresenter
 import ru.myproevent.ui.presenters.events.event.EventPresenter
 import ru.myproevent.ui.presenters.events.EventsPresenter
+import ru.myproevent.ui.presenters.events.confirmation.EventActionConfirmPresenter
 import ru.myproevent.ui.presenters.settings.security.SecurityPresenter
 import ru.myproevent.ui.presenters.settings.settings_list.SettingsPresenter
 import javax.inject.Singleton
@@ -51,4 +52,5 @@ interface AppComponent {
     fun inject(contactAddPresenter: ContactAddPresenter)
     fun inject(eventsPresenter: EventsPresenter)
     fun inject(eventPresenter: EventPresenter)
+    fun inject(eventActionConfirmPresenter: EventActionConfirmPresenter)
 }

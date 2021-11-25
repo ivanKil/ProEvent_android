@@ -16,10 +16,8 @@ class ProEventEventsRepository @Inject constructor(
     private val loginRepository: IProEventLoginRepository
 ) : IProEventEventsRepository {
 
-    override fun saveEvent(event: Event): Completable {
-        return Completable.fromSingle(
-            api.saveEvent(event.toEventDto()).subscribeOn(Schedulers.io())
-        )
+    override fun saveEvent(event: Event): Single<Event> {
+        return api.saveEvent(event.toEventDto()).map { it.toEvent() }.subscribeOn(Schedulers.io())
     }
 
     override fun editEvent(event: Event): Completable {

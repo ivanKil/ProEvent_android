@@ -2,6 +2,7 @@ package ru.myproevent.ui.screens
 
 import com.github.terrakok.cicerone.Screen
 import ru.myproevent.domain.models.entities.Contact
+import ru.myproevent.domain.models.entities.Event
 
 interface IScreens {
     fun authorization(): Screen
@@ -19,4 +20,6 @@ interface IScreens {
     fun chat(): Screen
     fun events(): Screen
     fun event(): Screen
+    fun event(event: Event): Screen
+    fun eventActionConfirmation(event: Event, status: Event.Status?): Screen
 }

@@ -6,8 +6,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.Toast
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.R
@@ -161,4 +160,6 @@ class EventsFragment : BaseMvpFragment<FragmentEventsBinding>(FragmentEventsBind
         binding.noEventsLayout.visibility = if (visible) VISIBLE
         else GONE
     }
+
+    override fun showToast(text: String) = Toast.makeText(context, text, Toast.LENGTH_LONG).show()
 }

@@ -3,11 +3,13 @@ package ru.myproevent.ui.screens
 import com.github.terrakok.cicerone.Screen
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import ru.myproevent.domain.models.entities.Contact
+import ru.myproevent.domain.models.entities.Event
 import ru.myproevent.ui.fragments.*
 import ru.myproevent.ui.fragments.authorization.*
 import ru.myproevent.ui.fragments.contacts.ContactAddFragment
 import ru.myproevent.ui.fragments.contacts.ContactFragment
 import ru.myproevent.ui.fragments.contacts.ContactsFragment
+import ru.myproevent.ui.fragments.events.EventActionConfirmationFragment
 import ru.myproevent.ui.fragments.events.EventsFragment
 import ru.myproevent.ui.fragments.events.EventFragment
 import ru.myproevent.ui.fragments.settings.AccountFragment
@@ -30,4 +32,6 @@ class Screens : IScreens {
     override fun chat() = FragmentScreen { HomeFragment.newInstance() }
     override fun events() = FragmentScreen { EventsFragment.newInstance() }
     override fun event() = FragmentScreen { EventFragment.newInstance() }
+    override fun event(event: Event) = FragmentScreen { EventFragment.newInstance(event) }
+    override fun eventActionConfirmation(event: Event, status: Event.Status?) = FragmentScreen { EventActionConfirmationFragment.newInstance(event, status) }
 }

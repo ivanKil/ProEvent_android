@@ -55,7 +55,7 @@ interface IProEventDataSource {
     @PUT("events")
     fun editEvent(@Body event: EventDto): Single<EventDto>
 
-    @DELETE("events")
+    @HTTP(method = "DELETE", path = "events", hasBody = true)
     fun deleteEvent(@Body event: EventDto): Completable
 
     @GET("events/{eventId}")
@@ -112,7 +112,7 @@ data class Pageable(
 data class Sort(val empty: Boolean, val sorted: Boolean, val unsorted: Boolean)
 
 data class EventDto(
-    val id: Long,
+    val id: Long?,
     val name: String,
     val ownerUserId: Long,
     val eventStatus: String,

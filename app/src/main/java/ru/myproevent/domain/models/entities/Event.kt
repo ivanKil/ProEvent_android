@@ -1,28 +1,31 @@
 package ru.myproevent.domain.models.entities
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
-
+@Parcelize
 data class Event(
-    val id: Long,
-    val name: String,
-    val ownerUserId: Long,
-    val status: Status,
-    val startDate: Date,
-    val endDate: Date,
-    val description: String?,
-    val participantsUserIds: LongArray?,
-    val city: String?,
-    val address: String?,
-    val mapsFileIds: LongArray?,
-    val pointsPointIds: LongArray?,
-    val imageFile: String?,
-){
-    enum class Status(val value: String) {
+    var id: Long?,
+    var name: String,
+    var ownerUserId: Long,
+    var eventStatus: Status,
+    var startDate: Date,
+    var endDate: Date,
+    var description: String?,
+    var participantsUserIds: LongArray?,
+    var city: String?,
+    var address: String?,
+    var mapsFileIds: LongArray?,
+    var pointsPointIds: LongArray?,
+    var imageFile: String?,
+) : Parcelable {
+    @Parcelize
+    enum class Status(val value: String) : Parcelable {
         ALL("ALL"),
         ACTUAL("ACTUAL"),
         COMPLETED("COMPLETED"),
-        CANCELLED("CANCELLED");
+        CANCELED("CANCELED");
         companion object { fun fromString(status: String) = valueOf(status) }
     }
 }

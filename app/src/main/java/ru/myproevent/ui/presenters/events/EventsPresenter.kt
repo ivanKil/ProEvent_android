@@ -47,7 +47,7 @@ class EventsPresenter(localRouter: Router) : BaseMvpPresenter<EventsView>(localR
         fun filter(status: Event.Status) {
             eventFilter = status
             events = if (status == Event.Status.ALL) allEvents
-            else allEvents.filter { it.status == status }
+            else allEvents.filter { it.eventStatus == status }
             viewState.updateList()
         }
 
@@ -81,9 +81,9 @@ class EventsPresenter(localRouter: Router) : BaseMvpPresenter<EventsView>(localR
 
 
     val eventsListPresenter = EventsListPresenter({
-        //localRouter.navigateTo(screens.event(it))
+        localRouter.navigateTo(screens.event(it))
     }, {
-        //localRouter.navigateTo(screens.event(it))
+        localRouter.navigateTo(screens.event(it))
     })
 
     override fun onFirstViewAttach() {
@@ -92,7 +92,7 @@ class EventsPresenter(localRouter: Router) : BaseMvpPresenter<EventsView>(localR
         loadData()
     }
 
-    private fun loadData() {
+    fun loadData() {
         eventsRepository.getEvents()
             .observeOn(uiScheduler)
             .subscribe({ data ->
@@ -101,6 +101,10 @@ class EventsPresenter(localRouter: Router) : BaseMvpPresenter<EventsView>(localR
             }, {
                 viewState.showMessage("ПРОИЗОШЛА ОШИБКА: ${it.message}")
             }).disposeOnDestroy()
+    }
+
+    fun addEvent() {
+        localRouter.navigateTo(screens.event())
     }
 
     fun onFilterChosen(status: Event.Status) {

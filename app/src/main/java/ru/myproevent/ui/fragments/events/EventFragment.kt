@@ -20,16 +20,37 @@ import ru.myproevent.ui.presenters.main.RouterProvider
 import ru.myproevent.ui.presenters.main.Tab
 import kotlin.properties.Delegates
 import android.graphics.RectF
+import android.graphics.drawable.Drawable
+import android.text.SpannableStringBuilder
+import android.text.method.KeyListener
+import android.util.Log
 import ru.myproevent.databinding.ItemPointBinding
-
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
+import com.google.android.material.textfield.TextInputLayout
+import ru.myproevent.domain.models.entities.Event
+import ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+import java.util.*
+import android.text.Spannable
+import android.text.SpannableString
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import ru.myproevent.ui.fragments.ProEventMessageDialog
+import ru.myproevent.ui.views.CenteredImageSpan
 
-
+// TODO: отрефакторить - разбить этот класс на кастомные вьющки и утилиты
 class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
     private var _vb: FragmentEventBinding? = null
     private val vb get() = _vb!!
 
     private var isFilterOptionsExpanded = false
+
+    private var event: Event? = null
 
     // TODO: копирует поле licenceTouchListener из RegistrationFragment
     private val filterOptionTouchListener = View.OnTouchListener { v, event ->
@@ -48,12 +69,19 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
     }
 
     private fun showFilterOptions() {
+        Log.d("[MYLOG]", "eventStatus: ${event!!.eventStatus}")
         isFilterOptionsExpanded = true
         with(vb) {
             //searchEdit.hideKeyBoard() // TODO: нужно вынести это в вызов предществующий данному, чтобы тень при скрытии клавиатуры отображалась корректно
             shadow.visibility = VISIBLE
-            finishEvent.visibility = VISIBLE
             copyEvent.visibility = VISIBLE
+            if (event!!.eventStatus != Event.Status.CANCELED && event!!.eventStatus != Event.Status.COMPLETED) {
+                // TODO: появляется только если прошла последняя дата проведения, данные об этом получать с сервера
+                // finishEvent.visibility = VISIBLE
+                cancelEvent.visibility = VISIBLE
+            } else {
+                deleteEvent.visibility = VISIBLE
+            }
         }
     }
 
@@ -61,8 +89,10 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
         isFilterOptionsExpanded = false
         with(vb) {
             shadow.visibility = GONE
-            finishEvent.visibility = GONE
             copyEvent.visibility = GONE
+            finishEvent.visibility = GONE
+            cancelEvent.visibility = GONE
+            deleteEvent.visibility = GONE
         }
     }
 
@@ -87,7 +117,10 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
     }
 
     companion object {
-        fun newInstance() = EventFragment()
+        val EVENT_ARG = "EVENT"
+        fun newInstance(event: Event? = null) = EventFragment().apply {
+            arguments = Bundle().apply { putParcelable(EVENT_ARG, event) }
+        }
     }
 
     private fun calculateRectOnScreen(view: View): RectF {
@@ -103,13 +136,24 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
 
     private fun showAbsoluteBar(
         title: String,
-        iconResource: Int,
+        iconResource: Int?,
         iconTintResource: Int?,
         onCollapseScroll: Int,
-        onCollapse: () -> Unit
+        onCollapse: () -> Unit,
+        onEdit: () -> Unit
     ) =
         with(vb) {
-            absoluteBarEdit.setImageResource(iconResource)
+            absoluteBar.visibility = VISIBLE
+            absoluteBarHitArea.visibility = VISIBLE
+            absoluteBarEdit.visibility = VISIBLE
+            absoluteBarExpand.visibility = VISIBLE
+
+            iconResource?.let {
+                absoluteBarEdit.visibility = VISIBLE
+                absoluteBarEdit.setImageResource(it)
+            } ?: run {
+                absoluteBarEdit.visibility = GONE
+            }
             if (iconTintResource == null) {
                 absoluteBarEdit.clearColorFilter()
             } else {
@@ -120,6 +164,9 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                     ), android.graphics.PorterDuff.Mode.SRC_IN
                 )
             }
+            absoluteBar.setOnClickListener { absoluteBarExpand.performClick() }
+            absoluteBarHitArea.setOnClickListener { absoluteBar.performClick() }
+            absoluteBarEdit.setOnClickListener { onEdit() }
             absoluteBarExpand.setOnClickListener {
                 vb.scroll.scrollTo(0, onCollapseScroll)
                 vb.scroll.fling(0)
@@ -127,15 +174,7 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                 onCollapse()
                 hideAbsoluteBar()
             }
-            absoluteBar.setOnClickListener { absoluteBarExpand.performClick() }
-            absoluteBarHitArea.setOnClickListener { absoluteBar.performClick() }
-
             absoluteBar.text = title
-
-            absoluteBar.visibility = VISIBLE
-            absoluteBarHitArea.visibility = VISIBLE
-            absoluteBarEdit.visibility = VISIBLE
-            absoluteBarExpand.visibility = VISIBLE
         }
 
     private var isAbsoluteBarBarHidden = true
@@ -146,24 +185,175 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
         absoluteBarExpand.visibility = GONE
     }
 
+    private fun showEditOptions() = with(vb) {
+        save.visibility = VISIBLE
+        saveHitArea.visibility = VISIBLE
+        cancel.visibility = VISIBLE
+        cancelHitArea.visibility = VISIBLE
+    }
+
+    private fun hideEditOptions() = with(vb) {
+        save.visibility = GONE
+        saveHitArea.visibility = GONE
+        cancel.visibility = GONE
+        cancelHitArea.visibility = GONE
+    }
+
+    private fun showActionOptions() = with(vb) {
+        actionMenu.visibility = VISIBLE
+    }
+
+    private lateinit var defaultKeyListener: KeyListener
+
+
+    private fun showKeyBoard(view: View) {
+        val imm: InputMethodManager =
+            requireContext().getSystemService(InputMethodManager::class.java)
+        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    // TODO: отрефакторить - эта функция копирует функцию из AccountFragment. Вынести это в кастомную вьюху ProEventEditText
+    private fun setEditListeners(
+        textInput: TextInputLayout,
+        textEdit: KeyboardAwareTextInputEditText
+    ) {
+        textEdit.keyListener = null
+        textInput.setEndIconOnClickListener {
+            textEdit.keyListener = defaultKeyListener
+            textEdit.requestFocus()
+            showKeyBoard(textEdit)
+            textEdit.text?.let { it1 -> textEdit.setSelection(it1.length) }
+            textInput.endIconMode = TextInputLayout.END_ICON_NONE
+            showEditOptions()
+        }
+    }
+
+    private fun lockEdit(
+        textInput: TextInputLayout,
+        textEdit: KeyboardAwareTextInputEditText,
+        icon: Drawable = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_edit)!!
+    ) {
+        textEdit.clearFocus()
+        textEdit.hideKeyBoard()
+        textInput.endIconMode = TextInputLayout.END_ICON_CUSTOM
+        textInput.endIconDrawable = icon
+        setEditListeners(textInput, textEdit)
+    }
+
+    private fun lockDescriptionEdit() = with(vb) {
+        fun showAbsoluteBarEdit() {
+            isAbsoluteBarBarHidden = true
+            scroll.scrollBy(0, 1)
+            scroll.scrollBy(0, -1)
+        }
+        descriptionText.keyListener = null
+        descriptionText.clearFocus()
+        descriptionText.hideKeyBoard()
+        editDescription.visibility = VISIBLE
+        showAbsoluteBarEdit()
+        if (descriptionText.text.isNullOrBlank()) {
+            noDescription.visibility = VISIBLE
+        }
+    }
+
+    private fun setViewValues(event: Event, inflater: LayoutInflater) = with(vb) {
+        with(event) {
+            nameEdit.text = SpannableStringBuilder(name)
+            dateEdit.text = SpannableStringBuilder(startDate.toString())
+            address?.let { locationEdit.text = SpannableStringBuilder(it) }
+            if (!description.isNullOrBlank()) {
+                descriptionText.text = SpannableStringBuilder(description)
+                noDescription.visibility = GONE
+                descriptionText.visibility = VISIBLE
+            } else {
+                descriptionText.text = SpannableStringBuilder("")
+                noDescription.visibility = VISIBLE
+                descriptionText.visibility = GONE
+            }
+            pointsPointIds?.let {
+                for (pointId in it) {
+                    // TODO: делать это асинхронно, показывая progressBar
+                    val pointItem = ItemPointBinding.inflate(inflater, container, false)
+                    pointItem.name.text = "Точка $pointId"
+                    pointsContainer.addView(pointItem.root)
+                }
+            }
+            participantsUserIds?.let {
+                for (participantId in it) {
+                    // TODO: делать это асинхронно, показывая progressBar
+                    val pointItem = ItemPointBinding.inflate(inflater, container, false)
+                    pointItem.name.text = "Учатник $participantId"
+                    participantsContainer.addView(pointItem.root)
+                }
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.getParcelable<Event>(EVENT_ARG)?.let { event = it }
+    }
+
+    var isSaveAvailable = true
+
+    private fun setImageSpan(view: TextView, text: String, iconRes: Int) {
+        val span: Spannable = SpannableString(text)
+        val image = CenteredImageSpan(
+            requireContext(),
+            iconRes
+        ) //ImageSpan(icon, ImageSpan.ALIGN_CENTER)
+        span.setSpan(image, 21, 22, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        view.text = span
+    }
+
+    private fun saveCallback(successEvent: Event?) {
+        isSaveAvailable = true
+        vb.save.setTextColor(resources.getColor(R.color.ProEvent_bright_orange_500))
+        successEvent?.let {
+            event = it
+            vb.title.text = it.name
+        }
+    }
+
+    private fun isDescriptionExpanded() = vb.descriptionContainer.visibility == VISIBLE
+
+    private fun expandDescriptionContent() = with(vb) {
+        expandDescription.setColorFilter(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.ProEvent_bright_orange_300
+            ), android.graphics.PorterDuff.Mode.SRC_IN
+        )
+        descriptionContainer.visibility = VISIBLE
+        scroll.post {
+            scroll.smoothScrollTo(0, descriptionBarDistance)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d("[EventFragment]", "onCreateView")
         with(requireActivity() as BottomNavigationView) {
             checkTab(Tab.EVENTS)
         }
         statusBarHeight = extractStatusBarHeight()
-        _vb = FragmentEventBinding.inflate(inflater, container, false).apply {
-            finishEvent.setOnTouchListener(filterOptionTouchListener)
-            finishEvent.setOnClickListener {
-                presenter.finishEvent()
-                hideFilterOptions()
-            }
-            copyEvent.setOnTouchListener(filterOptionTouchListener)
-            copyEvent.setOnClickListener {
-                presenter.copyEvent()
-                hideFilterOptions()
+        _vb = FragmentEventBinding.inflate(inflater, container, false)
+        return vb.apply {
+            event?.let { title.text = it.name }
+            title.setOnClickListener {
+                // TODO: отрефакторить
+                // https://github.com/terrakok/Cicerone/issues/106
+                val ft: FragmentTransaction = parentFragmentManager.beginTransaction()
+                val prev: Fragment? = parentFragmentManager.findFragmentByTag("dialog")
+                if (prev != null) {
+                    ft.remove(prev)
+                }
+                ft.addToBackStack(null)
+                val newFragment: DialogFragment =
+                    ProEventMessageDialog.newInstance(title.text.toString())
+                newFragment.show(ft, "dialog")
             }
             actionMenu.setOnClickListener {
                 if (!isFilterOptionsExpanded) {
@@ -172,18 +362,15 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                     hideFilterOptions()
                 }
             }
-            actionMenuHitArea.setOnClickListener { actionMenu.performClick() }
+            actionMenuHitArea.setOnClickListener {
+                if (actionMenu.isVisible) {
+                    actionMenu.performClick()
+                }
+            }
             shadow.setOnClickListener { hideFilterOptions() }
             expandDescription.setOnClickListener {
-                fun isDescriptionExpanded() = descriptionContainer.visibility == VISIBLE
                 if (!isDescriptionExpanded()) {
-                    expandDescription.setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.ProEvent_bright_orange_300
-                        ), android.graphics.PorterDuff.Mode.SRC_IN
-                    )
-                    descriptionContainer.visibility = VISIBLE
+                    expandDescriptionContent()
                 } else {
                     expandDescription.setColorFilter(
                         ContextCompat.getColor(
@@ -264,14 +451,21 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
             participantsBarHitArea.setOnClickListener { participantsBar.performClick() }
 
             scroll.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                Log.d("[MYLOG]", "setOnScrollChangeListener")
                 if (descriptionContainer.visibility == VISIBLE && scrollY in descriptionBarDistance..(descriptionBarDistance + descriptionContainer.height)) {
                     if (isAbsoluteBarBarHidden) {
                         showAbsoluteBar(
                             "Описание",
-                            R.drawable.ic_edit,
+                            if (editDescription.visibility == VISIBLE) {
+                                R.drawable.ic_edit
+                            } else {
+                                null
+                            },
                             R.color.ProEvent_blue_800,
-                            descriptionBarDistance
-                        ) { vb.expandDescription.performClick() }
+                            descriptionBarDistance,
+                            { expandDescription.performClick() },
+                            { editDescription.performClick() }
+                        )
                         isAbsoluteBarBarHidden = false
                     }
                 } else if (mapsContainer.visibility == VISIBLE && scrollY in mapsBarDistance..(mapsBarDistance + mapsContainer.height)) {
@@ -280,8 +474,10 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                             "Карта мероприятия",
                             R.drawable.ic_add,
                             null,
-                            mapsBarDistance
-                        ) { vb.expandMaps.performClick() }
+                            mapsBarDistance,
+                            { expandMaps.performClick() },
+                            { addMap.performClick() }
+                        )
                         isAbsoluteBarBarHidden = false
                     }
                 } else if (pointsContainer.visibility == VISIBLE && scrollY in pointsBarDistance..(pointsBarDistance + pointsContainer.height)) {
@@ -290,8 +486,10 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                             "Точки",
                             R.drawable.ic_add,
                             null,
-                            pointsBarDistance
-                        ) { vb.expandPoints.performClick() }
+                            pointsBarDistance,
+                            { expandPoints.performClick() },
+                            { addPoint.performClick() }
+                        )
                         isAbsoluteBarBarHidden = false
                     }
                 } else if (participantsContainer.visibility == VISIBLE && scrollY in participantsBarDistance..(participantsBarDistance + participantsContainer.height)) {
@@ -300,8 +498,10 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                             "Участники",
                             R.drawable.ic_add,
                             null,
-                            pointsBarDistance
-                        ) { vb.expandParticipants.performClick() }
+                            pointsBarDistance,
+                            { expandParticipants.performClick() },
+                            { addParticipant.performClick() }
+                        )
                         isAbsoluteBarBarHidden = false
                     }
                 } else if (!isAbsoluteBarBarHidden) {
@@ -309,25 +509,142 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                     isAbsoluteBarBarHidden = true
                 }
             }
-            for (i in 1..50) {
-                // TODO: делать это асинхронно, показывая progressBar
-                val pointItem = ItemPointBinding.inflate(inflater, container, false)
-                if (i != 1) {
-                    pointItem.name.text = "Новая точка $i"
+            save.setOnClickListener {
+                if (!isSaveAvailable) {
+                    return@setOnClickListener
                 }
-                pointsContainer.addView(pointItem.root)
+                isSaveAvailable = false
+                save.setTextColor(resources.getColor(R.color.PE_blue_gray_03))
+                event?.let { it ->
+                    it.name = nameEdit.text.toString()
+                    it.startDate = Calendar.getInstance().time
+                    it.endDate = Calendar.getInstance().time
+                    it.description = descriptionText.text.toString()
+                    it.address = locationEdit.text.toString()
+                    presenter.editEvent(it, ::saveCallback)
+                } ?: run {
+                    presenter.addEvent(
+                        nameEdit.text.toString(),
+                        Calendar.getInstance().time,
+                        Calendar.getInstance().time,
+                        locationEdit.text.toString(),
+                        descriptionText.text.toString(),
+                        ::saveCallback
+                    )
+                }
             }
-            for (i in 1..25) {
-                // TODO: делать это асинхронно, показывая progressBar
-                val pointItem = ItemPointBinding.inflate(inflater, container, false)
-                pointItem.name.text = if (i != 1) { "Новый участник $i" } else { "Новый участник" }
-                participantsContainer.addView(pointItem.root)
+            saveHitArea.setOnClickListener { save.performClick() }
+            defaultKeyListener = nameEdit.keyListener
+            if (event != null) {
+                setViewValues(event!!, inflater)
+                lockEdit(nameInput, nameEdit)
+                nameEdit.addTextChangedListener {
+                    title.text = it
+                }
+                lockEdit(
+                    dateInput,
+                    dateEdit,
+                    AppCompatResources.getDrawable(requireContext(), R.drawable.ic_calendar)!!
+                )
+                lockEdit(locationInput, locationEdit)
+                lockDescriptionEdit()
+                showActionOptions()
+            } else {
+                showEditOptions()
             }
+            back.setOnClickListener { presenter.onBackPressed() }
+            backHitArea.setOnClickListener { back.performClick() }
+            cancel.setOnClickListener {
+                if (event == null) {
+                    back.performClick()
+                } else {
+                    showMessage("Изменения отменены")
+                    hideEditOptions()
+                    setViewValues(event!!, inflater)
+                    lockEdit(nameInput, nameEdit)
+                    lockEdit(
+                        dateInput,
+                        dateEdit,
+                        AppCompatResources.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_calendar
+                        )!!
+                    )
+                    lockEdit(locationInput, locationEdit)
+                    lockDescriptionEdit()
+                }
+            }
+            cancelHitArea.setOnClickListener { cancel.performClick() }
+            copyEvent.setOnTouchListener(filterOptionTouchListener)
+            copyEvent.setOnClickListener {
+                event?.let {
+                    presenter.copyEvent(it)
+                }
+                hideFilterOptions()
+            }
+            finishEvent.setOnTouchListener(filterOptionTouchListener)
+            finishEvent.setOnClickListener {
+                presenter.finishEvent(event!!)
+                hideFilterOptions()
+            }
+            cancelEvent.setOnTouchListener(filterOptionTouchListener)
+            cancelEvent.setOnClickListener {
+                presenter.cancelEvent(event!!)
+                hideFilterOptions()
+            }
+            deleteEvent.setOnTouchListener(filterOptionTouchListener)
+            deleteEvent.setOnClickListener {
+                presenter.deleteEvent(event!!)
+                hideFilterOptions()
+            }
+            setImageSpan(
+                noDescription,
+                "Отсутствует.\nНажмите / чтобы добавить.",
+                R.drawable.ic_edit_blue // TODO: отрефакорить нужно передавать tint, а не использовать отдельный drawable
+            )
+            setImageSpan(
+                noMaps,
+                "Отсутствует.\nНажмите + чтобы добавить.",
+                R.drawable.ic_add
+            )
+            setImageSpan(
+                noPoints,
+                "Отсутствуют.\nНажмите + чтобы добавить.",
+                R.drawable.ic_add
+            )
+            setImageSpan(
+                noParticipants,
+                "Отсутствуют.\nНажмите + чтобы добавить.",
+                R.drawable.ic_add
+            )
+            editDescription.setOnClickListener {
+                showEditOptions()
+                if (!isDescriptionExpanded()) {
+                    expandDescriptionContent()
+                }
+                editDescription.visibility = GONE
+                absoluteBarEdit.visibility = GONE
+                descriptionText.keyListener = defaultKeyListener
+                noDescription.visibility = GONE
+                descriptionText.visibility = VISIBLE
+                descriptionText.requestFocus()
+                descriptionText.text?.let { text -> descriptionText.setSelection(text.length) }
+                showKeyBoard(descriptionText)
+                editDescription.post {
+                    // TODO: разобраться как заставить это работать при первом нажатии
+                    scroll.scrollTo(0, descriptionBarDistance)
+                }
+            }
+            addMap.setOnClickListener { showMessage("addMap\nДанная возможность пока не доступна") }
+            addPoint.setOnClickListener { showMessage("addPoint\nДанная возможность пока не доступна") }
+            addParticipant.setOnClickListener { showMessage("addParticipant\nДанная возможность пока не доступна") }
+        }.root.also {
+            Log.d("[EventFragment]", "onCreateView _vb: $_vb")
         }
-        return vb.root
     }
 
     override fun onViewCreated(view: View, saved: Bundle?) {
+        Log.d("[EventFragment]", "onViewCreated")
         super.onViewCreated(view, saved)
         view.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
@@ -336,20 +653,43 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
 //                } else {
 //                    view.viewTreeObserver.removeGlobalOnLayoutListener(this)
 //                }
+
+                Log.d("[EventFragment]", "onGlobalLayout _vb: $_vb")
+
+                // TODO: здесь вместо viewBinding используется view.findViewById, потому что, если использовать viewBinding, то по непонятоной мне причине если
+                //              выйти их этого экрана (нажав кнопку back) и вновь его открыть, то _vb будет null - несмотря на то, что в конце onCreateView он имел значение.
+                //              Этого не происходит если предварительно вызвать view.viewTreeObserver.removeOnGlobalLayoutListener(this), но тогда также по непонятной мне прчине
+                //              calculateRectOnScreen возращает занчения не соответствующие значениям на конечной view,
+                //              то есть растояния barDistances не соответствуют тем, что отображаются на экране
+                //              Желательно разобраться почему это происходит и использовать здесь viewBinding
+
                 descriptionBarDistance =
-                    (calculateRectOnScreen(vb.descriptionBar).top - calculateRectOnScreen(vb.scrollChild).top).toInt()
+                    (calculateRectOnScreen(view.findViewById(R.id.description_bar)).top - calculateRectOnScreen(
+                        view.findViewById(R.id.scroll_child)
+                    ).top).toInt()
                 mapsBarDistance =
-                    (calculateRectOnScreen(vb.mapsBar).top - calculateRectOnScreen(vb.scrollChild).top).toInt()
+                    (calculateRectOnScreen(view.findViewById(R.id.maps_bar)).top - calculateRectOnScreen(
+                        view.findViewById(R.id.scroll_child)
+                    ).top).toInt()
                 pointsBarDistance =
-                    (calculateRectOnScreen(vb.pointsBar).top - calculateRectOnScreen(vb.scrollChild).top).toInt()
+                    (calculateRectOnScreen(view.findViewById(R.id.points_bar)).top - calculateRectOnScreen(
+                        view.findViewById(R.id.scroll_child)
+                    ).top).toInt()
                 participantsBarDistance =
-                    (calculateRectOnScreen(vb.participantsBar).top - calculateRectOnScreen(vb.scrollChild).top).toInt()
+                    (calculateRectOnScreen(view.findViewById(R.id.participants_bar)).top - calculateRectOnScreen(
+                        view.findViewById(R.id.scroll_child)
+                    ).top).toInt()
             }
         })
+    }
+
+    override fun showMessage(message: String) {
+        Toast.makeText(ProEventApp.instance, message, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _vb = null
+        Log.d("[EventFragment]", "onDestroyView")
     }
 }

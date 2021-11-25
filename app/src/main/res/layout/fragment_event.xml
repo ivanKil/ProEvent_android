@@ -73,7 +73,8 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/name_input"
                         style="@style/ProEventRWTextInputLayoutStyle"
-                        android:clickable="true">
+                        android:clickable="true"
+                        app:endIconMode="none">
 
                         <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                             android:id="@+id/name_edit"
@@ -109,7 +110,8 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/date_input"
                         style="@style/ProEventRWTextInputLayoutStyle"
-                        android:clickable="true">
+                        android:clickable="true"
+                        app:endIconMode="none">
 
                         <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                             android:id="@+id/date_edit"
@@ -145,7 +147,8 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/location_input"
                         style="@style/ProEventRWTextInputLayoutStyle"
-                        android:clickable="true">
+                        android:clickable="true"
+                        app:endIconMode="none">
 
                         <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
                             android:id="@+id/location_edit"
@@ -210,19 +213,42 @@
                         app:layout_constraintTop_toTopOf="@id/description_bar"
                         app:tint="@color/ProEvent_blue_800" />
 
-                    <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+
+                    <FrameLayout
                         android:id="@+id/description_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="20dp"
-                        android:background="@color/ProEvent_white"
-                        android:text="@string/lorem_ipsum"
-                        android:textColor="@color/ProEvent_blue_800"
-                        android:textSize="16sp"
+                        android:orientation="vertical"
                         android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/description_bar" />
+                        app:layout_constraintTop_toBottomOf="@id/description_bar">
+
+                        <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                            android:id="@+id/description_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="20dp"
+                            android:background="@color/ProEvent_white"
+                            android:textColor="@color/ProEvent_blue_800"
+                            android:textSize="16sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/no_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="60dp"
+                            android:backgroundTint="@color/ProEvent_blue_600"
+                            android:gravity="center"
+                            android:paddingTop="30dp"
+                            android:paddingBottom="10dp"
+                            android:text="Отсутствует.\nНажмите / чтобы добавить."
+                            android:textColor="@color/ProEvent_blue_800"
+                            android:textSize="16sp" />
+
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/maps_bar"
@@ -270,27 +296,32 @@
                         app:layout_constraintTop_toTopOf="@id/maps_bar"
                         app:tint="@color/ProEvent_blue_800" />
 
-                    <FrameLayout
+                    <LinearLayout
                         android:id="@+id/maps_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/maps_bar">
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/add_map_alt"
-                            style="@style/ProEventConfirmButton"
+                        <TextView
+                            android:id="@+id/no_maps"
                             android:layout_width="match_parent"
-                            android:layout_height="48dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginHorizontal="60dp"
-                            android:layout_marginTop="20dp"
                             android:backgroundTint="@color/ProEvent_blue_600"
-                            android:text="@string/add_map"
-                            android:textColor="@color/ProEvent_white"
-                            android:textSize="16sp" />
-                    </FrameLayout>
+                            android:gravity="center"
+                            android:paddingTop="30dp"
+                            android:paddingBottom="10dp"
+                            android:text="Отсутствует.\nНажмите + чтобы добавить."
+                            android:textColor="@color/ProEvent_blue_800"
+                            android:textSize="16sp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/points_bar"
@@ -346,7 +377,21 @@
                         android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/points_bar" />
+                        app:layout_constraintTop_toBottomOf="@id/points_bar">
+
+                        <TextView
+                            android:id="@+id/no_points"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="60dp"
+                            android:backgroundTint="@color/ProEvent_blue_600"
+                            android:gravity="center"
+                            android:paddingTop="30dp"
+                            android:paddingBottom="10dp"
+                            android:text="Отсутствуют.\nНажмите + чтобы добавить."
+                            android:textColor="@color/ProEvent_blue_800"
+                            android:textSize="16sp" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/participants_bar"
@@ -399,10 +444,25 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:paddingBottom="20dp"
                         android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/participants_bar" />
+                        app:layout_constraintTop_toBottomOf="@id/participants_bar">
+
+                        <TextView
+                            android:id="@+id/no_participants"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="60dp"
+                            android:backgroundTint="@color/ProEvent_blue_600"
+                            android:gravity="center"
+                            android:paddingTop="30dp"
+                            android:paddingBottom="10dp"
+                            android:text="Отсутствуют.\nНажмите + чтобы добавить."
+                            android:textColor="@color/ProEvent_blue_800"
+                            android:textSize="16sp" />
+                    </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </ScrollView>
@@ -467,7 +527,7 @@
             android:id="@+id/event_bar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/ProEvent_bright_orange_500"
+            android:background="@color/ProEvent_white"
             android:paddingTop="40dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -477,34 +537,90 @@
             <TextView
                 android:id="@+id/title"
                 fontPath="@string/default_font_bold_path"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:ellipsize="end"
                 android:includeFontPadding="false"
+                android:maxLines="2"
                 android:text="Новое мероприятие"
+                android:textAlignment="center"
                 android:textColor="@color/ProEvent_blue_800"
                 android:textSize="20sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/back_hit_area"
+                app:layout_constraintRight_toLeftOf="@id/action_menu_hit_area"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/save"
+                fontPath="@string/default_font_bold_path"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="20dp"
+                android:paddingHorizontal="20dp"
+                android:text="Сохранить"
+                android:textColor="@color/ProEvent_bright_orange_500"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title" />
+
+            <View
+                android:id="@+id/save_hit_area"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/save"
+                app:layout_constraintLeft_toLeftOf="@id/save"
+                app:layout_constraintRight_toRightOf="@id/save"
+                app:layout_constraintTop_toTopOf="@id/save" />
+
+            <TextView
+                android:id="@+id/cancel"
+                fontPath="@string/default_font_bold_path"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="20dp"
+                android:paddingHorizontal="20dp"
+                android:text="Отмена"
+                android:textColor="@color/ProEvent_bright_orange_500"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:layout_constraintRight_toLeftOf="@id/save"
+                app:layout_constraintTop_toBottomOf="@id/title" />
+
+            <View
+                android:id="@+id/cancel_hit_area"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/cancel"
+                app:layout_constraintLeft_toLeftOf="@id/cancel"
+                app:layout_constraintRight_toRightOf="@id/cancel"
+                app:layout_constraintTop_toTopOf="@id/cancel" />
 
             <ImageView
                 android:id="@+id/action_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
                 android:src="@drawable/ic_pie"
-                app:layout_constraintBottom_toBottomOf="@id/title"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/title" />
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/action_menu_hit_area"
+                app:layout_constraintLeft_toLeftOf="@+id/action_menu_hit_area"
+                app:layout_constraintRight_toRightOf="@id/action_menu_hit_area"
+                app:layout_constraintTop_toTopOf="@id/action_menu_hit_area" />
 
             <View
                 android:id="@+id/action_menu_hit_area"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                app:layout_constraintBottom_toBottomOf="@id/action_menu"
-                app:layout_constraintLeft_toLeftOf="@id/action_menu"
-                app:layout_constraintRight_toRightOf="@id/action_menu"
-                app:layout_constraintTop_toTopOf="@id/action_menu" />
+                android:layout_marginRight="7dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/title"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/title" />
 
             <ImageView
                 android:id="@+id/back"
@@ -525,32 +641,67 @@
                 app:layout_constraintRight_toRightOf="@id/back"
                 app:layout_constraintTop_toTopOf="@id/back" />
 
-            <TextView
-                android:id="@+id/finish_event"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:includeFontPadding="false"
-                android:paddingHorizontal="13dp"
-                android:paddingVertical="14dp"
-                android:text="@string/finish_event"
-                android:textColor="@color/ProEvent_blue_800"
-                android:textSize="16sp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/title">
 
-            <TextView
-                android:id="@+id/copy_event"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:paddingHorizontal="13dp"
-                android:paddingVertical="14dp"
-                android:text="@string/copy_event"
-                android:textColor="@color/ProEvent_blue_800"
-                android:textSize="16sp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/finish_event" />
+                <TextView
+                    android:id="@+id/copy_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/ProEvent_white"
+                    android:includeFontPadding="false"
+                    android:paddingHorizontal="13dp"
+                    android:paddingVertical="14dp"
+                    android:text="@string/copy_event"
+                    android:textColor="@color/ProEvent_blue_800"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/finish_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/ProEvent_white"
+                    android:includeFontPadding="false"
+                    android:paddingHorizontal="13dp"
+                    android:paddingVertical="14dp"
+                    android:text="@string/finish_event"
+                    android:textColor="@color/ProEvent_blue_800"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/cancel_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/ProEvent_white"
+                    android:includeFontPadding="false"
+                    android:paddingHorizontal="13dp"
+                    android:paddingVertical="14dp"
+                    android:text="Отменить мероприятие"
+                    android:textColor="@color/ProEvent_blue_800"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/finish_event" />
+
+                <TextView
+                    android:id="@+id/delete_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/ProEvent_white"
+                    android:includeFontPadding="false"
+                    android:paddingHorizontal="13dp"
+                    android:paddingVertical="14dp"
+                    android:text="Удалить мероприятие"
+                    android:textColor="@color/ProEvent_blue_800"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/finish_event" />
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

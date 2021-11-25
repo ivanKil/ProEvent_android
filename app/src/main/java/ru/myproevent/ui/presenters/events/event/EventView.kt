@@ -4,4 +4,6 @@ import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
 
 @AddToEndSingle
-interface EventView : MvpView
+interface EventView : MvpView{
+    fun showMessage(message: String)
+}
