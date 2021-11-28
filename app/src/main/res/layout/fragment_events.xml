@@ -1,156 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
-    android:animateLayoutChanges="true"
-    android:background="@color/ProEvent_white">
+    android:background="@color/ProEvent_white"
+    android:fitsSystemWindows="false">
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="100dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:indeterminateTint="@color/ProEvent_bright_orange_300"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/events_bar" />
-
-    <ScrollView
-        android:id="@+id/scroll"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingTop="30dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/events_bar">
+        android:layout_height="168dp"
+        android:background="@color/ProEvent_white"
+        android:paddingHorizontal="20dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ru.myproevent.ui.views.CollapsibleToolbar
+            android:id="@+id/motionLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
-
-            <ImageView
-                android:id="@+id/no_events"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:src="@drawable/ic_events_big"
-                android:visibility="gone"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"
+            android:minHeight="?actionBarSize"
+            android:paddingTop="48dp"
+            android:paddingBottom="16dp"
+            app:layoutDescription="@anim/events_fragment_header_anim"
+            app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed">
 
             <TextView
-                android:id="@+id/no_events_text"
+                android:id="@+id/title"
+                fontPath="@string/default_font_bold_path"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:includeFontPadding="false"
+                android:text="@string/events_title"
+                android:textColor="@color/ProEvent_blue_800"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/filter_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16sp"
-                android:text="@string/no_events"
-                android:textColor="@color/ProEvent_blue_600"
-                android:visibility="gone"
-                app:layout_constraintLeft_toLeftOf="@id/no_events"
-                app:layout_constraintRight_toRightOf="@id/no_events"
-                app:layout_constraintTop_toBottomOf="@id/no_events" />
+                android:layout_marginStart="12dp"
+                android:background="@color/ProEvent_white"
+                android:scaleType="center"
+                android:src="@drawable/ic_expand"
+                app:layout_constraintBottom_toBottomOf="@id/title"
+                app:layout_constraintStart_toEndOf="@id/title"
+                app:layout_constraintTop_toTopOf="@id/title" />
 
-            <ru.myproevent.ui.views.ProEventConfirmButton
-                android:id="@+id/add_first_event"
-                style="@style/ProEventConfirmButton"
+            <View
+                android:id="@+id/filter_icon_hit_area"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="@id/filter_btn"
+                app:layout_constraintLeft_toLeftOf="@id/filter_btn"
+                app:layout_constraintRight_toRightOf="@id/filter_btn"
+                app:layout_constraintTop_toTopOf="@id/filter_btn" />
+
+            <View
+                android:id="@+id/filter_hit_area"
                 android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_marginTop="44dp"
-                android:text="@string/add_event"
-                android:visibility="gone"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/no_events_text" />
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="@id/title"
+                app:layout_constraintEnd_toEndOf="@id/filter_icon_hit_area"
+                app:layout_constraintStart_toStartOf="@id/title"
+                app:layout_constraintTop_toTopOf="@id/title" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_events"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/add_event"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+                android:src="@drawable/ic_add"
+                app:layout_constraintBottom_toBottomOf="@id/title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/title" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/search_input"
+                style="@style/ProEventTextInputLayoutStyle"
+                android:layout_marginTop="28dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:startIconDrawable="@drawable/ic_search"
+                app:startIconTint="@null">
+
+                <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+                    android:id="@+id/search_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/search_edit_hint"
+                    android:textColorHint="@color/ProEvent_blue_600"
+                    android:textSize="@dimen/fixed_input_text_size" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </ru.myproevent.ui.views.CollapsibleToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_events"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:visibility="visible"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <FrameLayout
+        android:id="@+id/no_events_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="34dp"
+            android:src="@drawable/ic_events_big" />
+
+        <TextView
+            android:id="@+id/no_events_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="154dp"
+            android:text="@string/no_events"
+            android:textColor="@color/ProEvent_blue_600"
+            android:textSize="16sp" />
+
+        <ru.myproevent.ui.views.ProEventConfirmButton
+            android:id="@+id/add_first_event"
+            style="@style/ProEventConfirmButton"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="218dp"
+            android:text="@string/add_event" />
+    </FrameLayout>
 
     <View
         android:id="@+id/shadow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/ProEvent_blue_800_opacity_20"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/events_bar"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@id/filter"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
         android:background="@color/ProEvent_white"
-        android:paddingTop="40dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="360dp">
-
-        <TextView
-            android:id="@+id/title"
-            fontPath="@string/default_font_bold_path"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:includeFontPadding="false"
-            android:text="@string/events_title"
-            android:textColor="@color/ProEvent_blue_800"
-            android:textSize="20sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/filter"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="12dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_expand"
-            app:layout_constraintBottom_toBottomOf="@id/title"
-            app:layout_constraintLeft_toRightOf="@id/title"
-            app:layout_constraintTop_toTopOf="@id/title" />
-
-        <ImageView
-            android:id="@+id/add_event"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="7dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_add"
-            app:layout_constraintBottom_toBottomOf="@id/title"
-            app:layout_constraintLeft_toRightOf="@id/filter"
-            app:layout_constraintTop_toTopOf="@id/title" />
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/all_events"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:background="@color/ProEvent_blue_600"
             android:includeFontPadding="false"
             android:paddingHorizontal="13dp"
             android:paddingVertical="14dp"
             android:text="@string/all_actual_events"
-            android:textColor="@color/ProEvent_blue_800"
+            android:textColor="@color/ProEvent_white"
             android:textSize="16sp"
-            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
         <TextView
-            android:id="@+id/outgoing_events"
+            android:id="@+id/actual_events"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
@@ -159,11 +182,10 @@
             android:text="@string/my_actual_events"
             android:textColor="@color/ProEvent_blue_800"
             android:textSize="16sp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/all_events" />
+            app:layout_constraintTop_toBottomOf="@+id/title" />
 
         <TextView
-            android:id="@+id/incoming_events"
+            android:id="@+id/completed_events"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
@@ -172,30 +194,8 @@
             android:text="@string/my_completed_events"
             android:textColor="@color/ProEvent_blue_800"
             android:textSize="16sp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/outgoing_events" />
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+    </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/search_input"
-            style="@style/ProEventTextInputLayoutStyle"
-            android:layout_width="0dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="25dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            app:startIconDrawable="@drawable/ic_search"
-            app:startIconTint="@null">
 
-            <ru.myproevent.ui.views.KeyboardAwareTextInputEditText
-                android:id="@+id/search_edit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Поиск"
-                android:inputType="textEmailAddress"
-                android:maxLength="320"
-                android:textColorHint="@color/ProEvent_blue_600"
-                android:textSize="@dimen/fixed_input_text_size" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

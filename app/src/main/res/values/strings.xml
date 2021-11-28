@@ -86,4 +86,8 @@
     <string name="all_actual_events">Все актуальные мероприятия</string>
     <string name="my_actual_events">Мои актуальные мероприятия</string>
     <string name="my_completed_events">Мои завершенные мероприятия</string>
+    <string name="actual_events">Мероприятия: Актуальные</string>
+    <string name="completed_events">Мероприятия: Завершенные</string>
+    <string name="search_edit_hint">Поиск</string>
+    <string name="empty_string"></string>
 </resources>

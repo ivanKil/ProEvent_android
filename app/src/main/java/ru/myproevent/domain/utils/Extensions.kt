@@ -44,7 +44,7 @@ fun Event.toEventDto(datePattern: String = "yyyy-MM-dd'T'HH:mm:ss"): EventDto {
         id,
         name,
         ownerUserId,
-        eventStatus.value,
+        status.value,
         dateFormat.format(startDate),
         dateFormat.format(endDate),
         description,

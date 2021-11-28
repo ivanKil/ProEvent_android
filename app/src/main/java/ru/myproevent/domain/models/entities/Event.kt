@@ -7,7 +7,7 @@ data class Event(
     val id: Long,
     val name: String,
     val ownerUserId: Long,
-    val eventStatus: Status,
+    val status: Status,
     val startDate: Date,
     val endDate: Date,
     val description: String?,

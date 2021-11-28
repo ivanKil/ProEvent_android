@@ -26,7 +26,7 @@
         android:singleLine="true"
         android:textColor="@color/ProEvent_blue_800"
         android:textSize="16sp"
-        tools:text="Иванова Анна" />
+        tools:text="День молодежи" />
 
     <TextView
         android:id="@+id/tv_time"
@@ -37,7 +37,7 @@
         android:singleLine="true"
         android:textColor="@color/ProEvent_blue_600"
         android:textSize="16sp"
-        tools:text="fdfdfdffdfdfdfdfdfdfdfdffdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfd" />
+        tools:text="13.08.2021 с 16.00 до 21.00" />
 
     <ImageView
         android:id="@+id/iv_edit_event"
