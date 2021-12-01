@@ -64,6 +64,15 @@ class EventsFragment : BaseMvpFragment(), EventsView {
         allEvents.setOnClickListener { presenter.onFilterChosen(Event.Status.ALL) }
         actualEvents.setOnClickListener { presenter.onFilterChosen(Event.Status.ACTUAL) }
         completedEvents.setOnClickListener { presenter.onFilterChosen(Event.Status.COMPLETED) }
+        shadow.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    hideFilterOptions()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun initFilterButton() = with(vb) {
@@ -90,15 +99,15 @@ class EventsFragment : BaseMvpFragment(), EventsView {
         }
     }
 
-    override fun showFilterOptions() = with(vb) {
-        shadow.visibility = VISIBLE
-        filter.visibility = VISIBLE
+    override fun showFilterOptions() {
+        vb.shadow.visibility = VISIBLE
+        vb.filter.visibility = VISIBLE
 
     }
 
-    override fun hideFilterOptions() = with(vb) {
-        shadow.visibility = GONE
-        filter.visibility = GONE
+    override fun hideFilterOptions() {
+        vb.shadow.visibility = GONE
+        vb.filter.visibility = GONE
     }
 
     override fun init() = with(vb) {
@@ -164,7 +173,8 @@ class EventsFragment : BaseMvpFragment(), EventsView {
         else GONE
     }
 
-    override fun showToast(text: String) = Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+    override fun showToast(text: String) =
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
 
     override fun onDestroyView() {
         super.onDestroyView()

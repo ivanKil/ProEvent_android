@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="64dp"
     android:foreground="?attr/selectableItemBackground"
-    android:paddingVertical="8dp"
     android:paddingHorizontal="@dimen/padding_horizontal"
+    android:paddingVertical="8dp"
     tools:background="@color/ProEvent_white">
 
 
@@ -21,7 +21,7 @@
     <TextView
         android:id="@+id/tv_event_name"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="84dp"
         android:singleLine="true"
         android:textColor="@color/ProEvent_blue_800"
@@ -31,9 +31,9 @@
     <TextView
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_marginStart="84dp"
-        android:layout_marginTop="28dp"
         android:singleLine="true"
         android:textColor="@color/ProEvent_blue_600"
         android:textSize="16sp"
@@ -43,6 +43,6 @@
         android:id="@+id/iv_edit_event"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@drawable/ic_edit"
-        android:layout_gravity="end"/>
+        android:layout_gravity="end"
+        android:src="@drawable/ic_edit" />
 </FrameLayout>
