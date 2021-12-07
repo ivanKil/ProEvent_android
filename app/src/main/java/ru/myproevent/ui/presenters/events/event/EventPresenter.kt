@@ -1,9 +1,14 @@
 package ru.myproevent.ui.presenters.events.event
 
+import android.util.Log
 import com.github.terrakok.cicerone.Router
+import ru.myproevent.domain.models.ContactDto
+import ru.myproevent.domain.models.ProfileDto
+import ru.myproevent.domain.models.entities.Contact
 import ru.myproevent.domain.models.entities.Event
 import ru.myproevent.domain.models.repositories.events.IProEventEventsRepository
 import ru.myproevent.domain.models.repositories.proevent_login.IProEventLoginRepository
+import ru.myproevent.domain.models.repositories.profiles.IProEventProfilesRepository
 import ru.myproevent.ui.presenters.BaseMvpPresenter
 import java.util.*
 import javax.inject.Inject
@@ -15,12 +20,18 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
     @Inject
     lateinit var loginRepository: IProEventLoginRepository
 
+    @Inject
+    lateinit var profilesRepository: IProEventProfilesRepository
+
+    private var isParticipantsProfilesInitialized = false
+
     fun addEvent(
         name: String,
         startDate: Date,
         endDate: Date,
         location: String,
         description: String,
+        participantsIds: LongArray,
         callback: ((Event?) -> Unit)? = null
     ) {
         eventsRepository
@@ -33,7 +44,7 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
                     startDate = startDate,
                     endDate = endDate,
                     description = description,
-                    participantsUserIds = null,
+                    participantsUserIds = participantsIds,
                     city = null,
                     address = location,
                     mapsFileIds = null,
@@ -83,5 +94,42 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
             }, {
                 viewState.showMessage("ПРОИЗОШЛА ОШИБКА: ${it.message}")
             }).disposeOnDestroy()
+    }
+
+    fun pickParticipants() {
+        localRouter.navigateTo(screens.participantPickerTypeSelection())
+    }
+
+    fun initParticipantsProfiles(participantsIds: LongArray) {
+        if(isParticipantsProfilesInitialized){
+            return
+        }
+        isParticipantsProfilesInitialized = true
+        for (id in participantsIds) {
+            profilesRepository.getProfile(id)
+                .observeOn(uiScheduler)
+                .subscribe({ profileDto ->
+                    viewState.addParticipantItemView(profileDto!!)
+                }, {
+                    Log.d("[FUCK]", "error: $it")
+                    val profileDto = ProfileDto(
+                        userId = id,
+                        fullName = "Заглушка",
+                        description = "Профиля нет, или не загрузился",
+                    )
+                    viewState.addParticipantItemView(profileDto)
+                }).disposeOnDestroy()
+        }
+    }
+
+    fun loadParticipantsProfiles(participants: Array<ProfileDto>) {
+        for(participant in participants){
+            viewState.addParticipantItemView(participant)
+        }
+    }
+
+    fun clearParticipants() {
+        viewState.clearParticipants()
+        isParticipantsProfilesInitialized = false
     }
 }

@@ -203,7 +203,7 @@ class ContactsFragment : BaseMvpFragment<FragmentContactsBinding>(FragmentContac
         binding.confirmScreen.visibility = VISIBLE
     }
 
-    override fun updateList() {
+    override fun updateContactsList() {
         if (adapter != null) {
             adapter!!.notifyDataSetChanged()
             with(binding) {

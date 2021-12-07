@@ -1,4 +1,4 @@
-package ru.myproevent.ui.fragments.events
+package ru.myproevent.ui.fragments.events.event
 
 import android.graphics.Rect
 import android.os.Bundle
@@ -24,7 +24,6 @@ import android.graphics.drawable.Drawable
 import android.text.SpannableStringBuilder
 import android.text.method.KeyListener
 import android.util.Log
-import ru.myproevent.databinding.ItemPointBinding
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -35,11 +34,17 @@ import ru.myproevent.ui.views.KeyboardAwareTextInputEditText
 import java.util.*
 import android.text.Spannable
 import android.text.SpannableString
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import ru.myproevent.databinding.ItemContactBinding
+import ru.myproevent.domain.models.ProfileDto
+import ru.myproevent.domain.models.entities.Contact
+import ru.myproevent.domain.utils.PARTICIPANTS_PICKER_RESULT_KEY
+import ru.myproevent.domain.utils.CONTACTS_KEY
 import ru.myproevent.ui.fragments.ProEventMessageDialog
 import ru.myproevent.ui.views.CenteredImageSpan
 
@@ -270,38 +275,74 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                 noDescription.visibility = VISIBLE
                 descriptionText.visibility = GONE
             }
-            pointsPointIds?.let {
-                for (pointId in it) {
-                    // TODO: делать это асинхронно, показывая progressBar
-                    val pointItem = ItemPointBinding.inflate(inflater, container, false)
-                    pointItem.name.text = "Точка $pointId"
-                    pointsContainer.addView(pointItem.root)
-                }
+            if (participantsUserIds != null && participantsUserIds!!.isNotEmpty()) {
+                Log.d("[VIEWSTATE]", "setViewValues presenter.initParticipantsProfiles")
+                vb.noParticipants.isVisible = false
+                presenter.initParticipantsProfiles(participantsUserIds!!)
             }
-            participantsUserIds?.let {
-                for (participantId in it) {
-                    // TODO: делать это асинхронно, показывая progressBar
-                    val pointItem = ItemPointBinding.inflate(inflater, container, false)
-                    pointItem.name.text = "Учатник $participantId"
-                    participantsContainer.addView(pointItem.root)
-                }
-            }
+        }
+    }
+
+    override fun clearParticipants() = with(vb) {
+        Log.d("[VIEWSTATE]", "clearParticipants")
+        if (participantsContainer.childCount > 1) {
+            participantsContainer.removeViews(1, participantsContainer.childCount - 1)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        parentFragmentManager.setFragmentResultListener(
+            PARTICIPANTS_PICKER_RESULT_KEY,
+            this
+        ) { key, bundle ->
+            vb.noParticipants.isVisible = false
+            showEditOptions()
+            vb.participantsContainer.isVisible = true
+            val participantsContacts = bundle.getParcelableArray(CONTACTS_KEY)!! as Array<Contact>
+            presenter.loadParticipantsProfiles(Array(participantsContacts.size) { index ->
+                return@Array with(participantsContacts[index]) {
+                    ProfileDto(
+                        userId = userId,
+                        fullName = fullName,
+                        nickName = nickName,
+                        msisdn = msisdn,
+                        position = position,
+                        birthdate = birthdate,
+                        imgUri = imgUri,
+                        description = description
+                    )
+                }
+            })
+        }
         arguments?.getParcelable<Event>(EVENT_ARG)?.let { event = it }
     }
 
-    var isSaveAvailable = true
+    private var isSaveAvailable = true
+
+    private val participantsIds = arrayListOf<Long>()
+
+    override fun addParticipantItemView(profileDto: ProfileDto) {
+        Log.d("[VIEWSTATE]", "addParticipantItemView")
+        val view = ItemContactBinding.inflate(layoutInflater)
+        profileDto.fullName?.let {
+            view.tvName.text = "#${profileDto.userId} $it"
+        } ?: profileDto.nickName?.let {
+            view.tvName.text = "#${profileDto.userId} $it"
+        } ?: run {
+            view.tvName.text = "#${profileDto.userId}"
+        }
+        view.tvDescription.text = profileDto.description
+        vb.participantsContainer.addView(view.root)
+        participantsIds.add(profileDto.userId)
+    }
 
     private fun setImageSpan(view: TextView, text: String, iconRes: Int) {
         val span: Spannable = SpannableString(text)
         val image = CenteredImageSpan(
             requireContext(),
             iconRes
-        ) //ImageSpan(icon, ImageSpan.ALIGN_CENTER)
+        )
         span.setSpan(image, 21, 22, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
         view.text = span
     }
@@ -515,12 +556,14 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                 }
                 isSaveAvailable = false
                 save.setTextColor(resources.getColor(R.color.PE_blue_gray_03))
+                val participantsItems = participantsContainer.children.iterator().apply { next() }
                 event?.let { it ->
                     it.name = nameEdit.text.toString()
                     it.startDate = Calendar.getInstance().time
                     it.endDate = Calendar.getInstance().time
                     it.description = descriptionText.text.toString()
                     it.address = locationEdit.text.toString()
+                    it.participantsUserIds = participantsIds.toLongArray()
                     presenter.editEvent(it, ::saveCallback)
                 } ?: run {
                     presenter.addEvent(
@@ -529,6 +572,7 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                         Calendar.getInstance().time,
                         locationEdit.text.toString(),
                         descriptionText.text.toString(),
+                        participantsIds.toLongArray(),
                         ::saveCallback
                     )
                 }
@@ -560,6 +604,8 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                 } else {
                     showMessage("Изменения отменены")
                     hideEditOptions()
+                    noParticipants.isVisible = true
+                    presenter.clearParticipants()
                     setViewValues(event!!, inflater)
                     lockEdit(nameInput, nameEdit)
                     lockEdit(
@@ -637,7 +683,7 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
             }
             addMap.setOnClickListener { showMessage("addMap\nДанная возможность пока не доступна") }
             addPoint.setOnClickListener { showMessage("addPoint\nДанная возможность пока не доступна") }
-            addParticipant.setOnClickListener { showMessage("addParticipant\nДанная возможность пока не доступна") }
+            addParticipant.setOnClickListener { presenter.pickParticipants() }
         }.root.also {
             Log.d("[EventFragment]", "onCreateView _vb: $_vb")
         }

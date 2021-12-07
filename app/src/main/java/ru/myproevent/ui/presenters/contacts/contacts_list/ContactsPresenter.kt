@@ -92,7 +92,7 @@ class ContactsPresenter(localRouter: Router) : BaseMvpPresenter<ContactsView>(lo
             contactDTOs.addAll(data)
             contacts = MutableList(size) { null }
             this.size = size
-            viewState.updateList()
+            viewState.updateContactsList()
         }
     }
 

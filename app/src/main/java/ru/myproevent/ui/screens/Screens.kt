@@ -9,9 +9,11 @@ import ru.myproevent.ui.fragments.authorization.*
 import ru.myproevent.ui.fragments.contacts.ContactAddFragment
 import ru.myproevent.ui.fragments.contacts.ContactFragment
 import ru.myproevent.ui.fragments.contacts.ContactsFragment
-import ru.myproevent.ui.fragments.events.EventActionConfirmationFragment
+import ru.myproevent.ui.fragments.events.event.EventActionConfirmationFragment
 import ru.myproevent.ui.fragments.events.EventsFragment
-import ru.myproevent.ui.fragments.events.EventFragment
+import ru.myproevent.ui.fragments.events.event.EventFragment
+import ru.myproevent.ui.fragments.events.event.ParticipantFromContactsPickerFragment
+import ru.myproevent.ui.fragments.events.event.ParticipantPickerTypeSelectionFragment
 import ru.myproevent.ui.fragments.settings.AccountFragment
 import ru.myproevent.ui.fragments.settings.SecurityFragment
 import ru.myproevent.ui.fragments.settings.SettingsFragment
@@ -31,7 +33,10 @@ class Screens : IScreens {
     override fun contactAdd(): Screen = FragmentScreen { ContactAddFragment.newInstance() }
     override fun chat() = FragmentScreen { HomeFragment.newInstance() }
     override fun events() = FragmentScreen { EventsFragment.newInstance() }
-    override fun event() = FragmentScreen { EventFragment.newInstance() }
-    override fun event(event: Event) = FragmentScreen { EventFragment.newInstance(event) }
+    override fun event() = FragmentScreen("EVENT") { EventFragment.newInstance() }
+    override fun event(event: Event) = FragmentScreen("EVENT") { EventFragment.newInstance(event) }
+    override fun currentlyOpenEventScreen() = FragmentScreen("EVENT") { throw RuntimeException("В текущем стеке нет экрана Screens.event") }
     override fun eventActionConfirmation(event: Event, status: Event.Status?) = FragmentScreen { EventActionConfirmationFragment.newInstance(event, status) }
+    override fun participantPickerTypeSelection() = FragmentScreen { ParticipantPickerTypeSelectionFragment.newInstance() }
+    override fun participantFromContactsPicker() = FragmentScreen { ParticipantFromContactsPickerFragment.newInstance() }
 }

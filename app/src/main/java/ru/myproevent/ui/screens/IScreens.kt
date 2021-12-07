@@ -21,5 +21,8 @@ interface IScreens {
     fun events(): Screen
     fun event(): Screen
     fun event(event: Event): Screen
+    fun currentlyOpenEventScreen(): Screen
     fun eventActionConfirmation(event: Event, status: Event.Status?): Screen
+    fun participantPickerTypeSelection(): Screen
+    fun participantFromContactsPicker(): Screen
 }

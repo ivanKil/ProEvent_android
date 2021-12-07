@@ -1,4 +1,4 @@
-package ru.myproevent.ui.fragments.events
+package ru.myproevent.ui.fragments.events.event
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +11,8 @@ import ru.myproevent.databinding.FragmentEventActionConfirmationBinding
 import ru.myproevent.domain.models.entities.Event
 import ru.myproevent.ui.BackButtonListener
 import ru.myproevent.ui.fragments.BaseMvpFragment
-import ru.myproevent.ui.presenters.events.confirmation.EventActionConfirmPresenter
-import ru.myproevent.ui.presenters.events.confirmation.EventActionConfirmView
+import ru.myproevent.ui.presenters.events.event.confirmation.EventActionConfirmPresenter
+import ru.myproevent.ui.presenters.events.event.confirmation.EventActionConfirmView
 import ru.myproevent.ui.presenters.main.RouterProvider
 
 class EventActionConfirmationFragment : BaseMvpFragment(), EventActionConfirmView,
@@ -55,6 +55,7 @@ class EventActionConfirmationFragment : BaseMvpFragment(), EventActionConfirmVie
         return view.apply {
             title.text = event.name
             back.setOnClickListener { presenter.onBackPressed() }
+            backHitArea.setOnClickListener { back.performClick() }
             when (status) {
                 Event.Status.COMPLETED -> {
                     confirmTitle.text = "Уверены, что хотите звершить мероприятие?"
@@ -80,7 +81,6 @@ class EventActionConfirmationFragment : BaseMvpFragment(), EventActionConfirmVie
                     }
                 }
             }
-
             cancel.setOnClickListener { presenter.onBackPressed() }
         }.root
     }

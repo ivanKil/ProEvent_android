@@ -1,4 +1,4 @@
-package ru.myproevent.ui.presenters.events.confirmation
+package ru.myproevent.ui.presenters.events.event.confirmation
 
 import com.github.terrakok.cicerone.Router
 import ru.myproevent.domain.models.entities.Event
