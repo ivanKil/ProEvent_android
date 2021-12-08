@@ -67,10 +67,6 @@ class ContactsRVAdapter(val presenter: IContactsListPresenter) :
 
         override var pos = -1
 
-        fun unbind() = with(vb) {
-            // TODO: не понял зачем это
-//            ivImg.setImageDrawable(null)
-//            requestStatus.setImageDrawable(null)
-        }
+        fun unbind() = Unit
     }
 }
