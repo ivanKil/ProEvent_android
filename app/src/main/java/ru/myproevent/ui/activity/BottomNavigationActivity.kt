@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
@@ -29,8 +28,8 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
 
-    private var _view: ActivityMainBinding? = null
-    private val view get() = _view!!
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
 
     @Inject
     lateinit var router: Router
@@ -50,8 +49,8 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
         ProEventApp.instance.appComponent.inject(this)
         setTheme(R.style.Theme_Proevent_NoActionBar)
         super.onCreate(savedInstanceState)
-        _view = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(view.root)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initViews()
     }
 
@@ -63,26 +62,26 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
             Tab.EVENTS -> R.id.events_tab
             Tab.SETTINGS -> R.id.settings_tab
             else -> null
-        }?.let { view.bottomNavigationBar.menu.findItem(it).isChecked = true }
+        }?.let { binding.bottomNavigationBar.menu.findItem(it).isChecked = true }
     }
 
     override fun hideBottomNavigation() {
-        if (view.bottomNavigationBar.visibility == View.GONE) {
+        if (binding.bottomNavigationBar.visibility == View.GONE) {
             return
         }
-        view.bottomNavigationBar.visibility = View.GONE
+        binding.bottomNavigationBar.visibility = View.GONE
     }
 
     override fun showBottomNavigation() {
-        if (view.bottomNavigationBar.visibility == View.VISIBLE) {
+        if (binding.bottomNavigationBar.visibility == View.VISIBLE) {
             return
         }
-        view.bottomNavigationBar.visibility = View.VISIBLE
+        binding.bottomNavigationBar.visibility = View.VISIBLE
     }
 
     private fun initViews() {
-        with(view) {
-            view.bottomNavigationBar.setOnItemSelectedListener { item ->
+        with(binding) {
+            bottomNavigationBar.setOnItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.home_tab -> openTab(Tab.HOME)
                     R.id.contacts_tab -> openTab(Tab.CONTACTS)
@@ -168,6 +167,6 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
 
     override fun onDestroy() {
         super.onDestroy()
-        _view = null
+        _binding = null
     }
 }

@@ -1,7 +1,7 @@
 package ru.myproevent.ui.presenters.authorization.recovery
 
-import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
+import ru.myproevent.ui.presenters.BaseMvpView
 
 @AddToEndSingle
-interface RecoveryView : MvpView
+interface RecoveryView : BaseMvpView

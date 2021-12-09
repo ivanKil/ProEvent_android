@@ -15,9 +15,12 @@ import ru.myproevent.ProEventApp
 import ru.myproevent.R
 import ru.myproevent.domain.models.LocalCiceroneHolder
 import ru.myproevent.ui.BackButtonListener
-import ru.myproevent.ui.fragments.authorization.*
-import ru.myproevent.ui.presenters.main.Tab
+import ru.myproevent.ui.fragments.authorization.AuthorizationFragment
+import ru.myproevent.ui.fragments.authorization.LoginFragment
+import ru.myproevent.ui.fragments.authorization.RecoveryFragment
+import ru.myproevent.ui.fragments.authorization.RegistrationFragment
 import ru.myproevent.ui.presenters.main.RouterProvider
+import ru.myproevent.ui.presenters.main.Tab
 import ru.myproevent.ui.screens.IScreens
 import javax.inject.Inject
 

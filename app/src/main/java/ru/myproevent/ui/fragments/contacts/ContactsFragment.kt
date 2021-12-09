@@ -3,14 +3,11 @@ package ru.myproevent.ui.fragments.contacts
 import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.*
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
@@ -18,23 +15,20 @@ import ru.myproevent.R
 import ru.myproevent.databinding.FragmentContactsBinding
 import ru.myproevent.domain.models.entities.Contact
 import ru.myproevent.domain.models.entities.Contact.Status
-import ru.myproevent.ui.presenters.contacts.contacts_list.adapters.ContactsRVAdapter
 import ru.myproevent.ui.fragments.BaseMvpFragment
 import ru.myproevent.ui.presenters.contacts.contacts_list.ContactsPresenter
 import ru.myproevent.ui.presenters.contacts.contacts_list.ContactsView
+import ru.myproevent.ui.presenters.contacts.contacts_list.adapters.ContactsRVAdapter
 import ru.myproevent.ui.presenters.main.BottomNavigationView
-import ru.myproevent.ui.presenters.main.Tab
 import ru.myproevent.ui.presenters.main.RouterProvider
+import ru.myproevent.ui.presenters.main.Tab
 
-
-class ContactsFragment : BaseMvpFragment(), ContactsView {
+class ContactsFragment : BaseMvpFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate),
+    ContactsView {
 
     companion object {
         fun newInstance() = ContactsFragment()
     }
-
-    private var _vb: FragmentContactsBinding? = null
-    private val vb get() = _vb!!
 
     private var isFilterOptionsExpanded = false
 
@@ -55,7 +49,7 @@ class ContactsFragment : BaseMvpFragment(), ContactsView {
     }
 
     private fun selectFilterOption(option: TextView) {
-        with(vb) {
+        with(binding) {
             allContacts.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
             allContacts.setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_800))
             outgoingContacts.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
@@ -97,7 +91,7 @@ class ContactsFragment : BaseMvpFragment(), ContactsView {
 
     private fun showFilterOptions() {
         isFilterOptionsExpanded = true
-        with(vb) {
+        with(binding) {
             filter.setColorFilter(
                 ContextCompat.getColor(
                     requireContext(),
@@ -115,7 +109,7 @@ class ContactsFragment : BaseMvpFragment(), ContactsView {
 
     private fun hideFilterOptions() {
         isFilterOptionsExpanded = false
-        with(vb) {
+        with(binding) {
             filter.setColorFilter(
                 ContextCompat.getColor(
                     requireContext(),
@@ -131,49 +125,44 @@ class ContactsFragment : BaseMvpFragment(), ContactsView {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
+        super.onViewCreated(view, savedInstanceState)
+
         (requireActivity() as BottomNavigationView).checkTab(Tab.CONTACTS)
-        _vb = FragmentContactsBinding.inflate(inflater, container, false)
-        return vb.apply {
-            allContacts.setOnTouchListener(filterOptionTouchListener)
-            allContacts.setOnClickListener {
-                selectFilterOption(allContacts)
-                presenter.loadData(Status.ALL)
-                hideFilterOptions()
-            }
-            outgoingContacts.setOnTouchListener(filterOptionTouchListener)
-            outgoingContacts.setOnClickListener {
-                selectFilterOption(outgoingContacts)
-                presenter.loadData(Status.PENDING)
-                hideFilterOptions()
-            }
-            incomingContacts.setOnTouchListener(filterOptionTouchListener)
-            incomingContacts.setOnClickListener {
-                selectFilterOption(incomingContacts)
-                presenter.loadData(Status.REQUESTED)
-                hideFilterOptions()
-            }
-            addContact.setOnClickListener { presenter.addContact() }
-            addFirstContact.setOnClickListener { presenter.addContact() }
-            filter.setOnClickListener {
-                if (!isFilterOptionsExpanded) {
-                    showFilterOptions()
-                } else {
-                    hideFilterOptions()
-                }
-            }
-            filterHitArea.setOnClickListener { filter.performClick() }
-            shadow.setOnClickListener { hideFilterOptions() }
-            btnYes.setOnClickListener { confirmScreenCallBack?.invoke(true) }
-            btnNo.setOnClickListener { confirmScreenCallBack?.invoke(false) }
-        }.root.apply {
-            // https://stackoverflow.com/questions/20103888/animatelayoutchanges-does-not-work-well-with-nested-layout
-            vb.container.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        allContacts.setOnTouchListener(filterOptionTouchListener)
+        allContacts.setOnClickListener {
+            selectFilterOption(allContacts)
+            presenter.loadData(Status.ALL)
+            hideFilterOptions()
         }
+        outgoingContacts.setOnTouchListener(filterOptionTouchListener)
+        outgoingContacts.setOnClickListener {
+            selectFilterOption(outgoingContacts)
+            presenter.loadData(Status.PENDING)
+            hideFilterOptions()
+        }
+        incomingContacts.setOnTouchListener(filterOptionTouchListener)
+        incomingContacts.setOnClickListener {
+            selectFilterOption(incomingContacts)
+            presenter.loadData(Status.REQUESTED)
+            hideFilterOptions()
+        }
+        addContact.setOnClickListener { presenter.addContact() }
+        addFirstContact.setOnClickListener { presenter.addContact() }
+        filter.setOnClickListener {
+            if (!isFilterOptionsExpanded) {
+                showFilterOptions()
+            } else {
+                hideFilterOptions()
+            }
+        }
+        filterHitArea.setOnClickListener { filter.performClick() }
+        shadow.setOnClickListener { hideFilterOptions() }
+        btnYes.setOnClickListener { confirmScreenCallBack?.invoke(true) }
+        btnNo.setOnClickListener { confirmScreenCallBack?.invoke(false) }
+
+        // https://stackoverflow.com/questions/20103888/animatelayoutchanges-does-not-work-well-with-nested-layout
+        container.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
     }
 
     override fun onResume() {
@@ -181,22 +170,22 @@ class ContactsFragment : BaseMvpFragment(), ContactsView {
         presenter.init()
     }
 
-    override fun init() = with(vb) {
+    override fun init() = with(binding) {
         rvContacts.layoutManager = LinearLayoutManager(context)
         adapter = ContactsRVAdapter(presenter.contactsListPresenter)
         rvContacts.adapter = adapter
     }
 
     override fun hideConfirmationScreen() {
-        vb.container.visibility = VISIBLE
-        vb.confirmScreen.visibility = GONE
+        binding.container.visibility = VISIBLE
+        binding.confirmScreen.visibility = GONE
     }
 
     override fun showConfirmationScreen(
         action: Contact.Action,
         callBack: ((confirmed: Boolean) -> Unit)?
     ) {
-        vb.tvConfirmMsg.text = when (action) {
+        binding.tvConfirmMsg.text = when (action) {
             Contact.Action.ACCEPT ->
                 getString(R.string.accept_contact_request_question)
             Contact.Action.CANCEL ->
@@ -210,14 +199,14 @@ class ContactsFragment : BaseMvpFragment(), ContactsView {
 
         confirmScreenCallBack = callBack
 
-        vb.container.visibility = INVISIBLE
-        vb.confirmScreen.visibility = VISIBLE
+        binding.container.visibility = INVISIBLE
+        binding.confirmScreen.visibility = VISIBLE
     }
 
     override fun updateList() {
         if (adapter != null) {
             adapter!!.notifyDataSetChanged()
-            with(vb) {
+            with(binding) {
                 if (adapter!!.itemCount == 0) {
                     progressBar.visibility = GONE
                     scroll.visibility = VISIBLE
@@ -235,12 +224,4 @@ class ContactsFragment : BaseMvpFragment(), ContactsView {
             }
         }
     }
-
-    override fun showToast(text: String) = Toast.makeText(context, text, Toast.LENGTH_LONG).show()
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _vb = null
-    }
-
 }

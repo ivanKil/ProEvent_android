@@ -120,7 +120,7 @@ class ContactsPresenter(localRouter: Router) : BaseMvpPresenter<ContactsView>(lo
             Contact.Action.DECLINE -> contactsRepository.declineContact(contact.userId)
             else -> return
         }.observeOn(uiScheduler)
-            .subscribe({ loadData() }, { viewState.showToast("Не удалось выполнить действие") })
+            .subscribe({ loadData() }, { viewState.showMessage("Не удалось выполнить действие") })
             .disposeOnDestroy()
     }
 
@@ -139,7 +139,7 @@ class ContactsPresenter(localRouter: Router) : BaseMvpPresenter<ContactsView>(lo
             .subscribe({ data ->
                 contactsListPresenter.setData(data.content, data.totalElements.toInt())
             }, {
-                viewState.showToast("ПРОИЗОШЛА ОШИБКА: ${it.message}")
+                viewState.showMessage("ПРОИЗОШЛА ОШИБКА: ${it.message}")
             }).disposeOnDestroy()
     }
 

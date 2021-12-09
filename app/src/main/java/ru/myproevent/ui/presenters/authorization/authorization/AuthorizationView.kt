@@ -1,12 +1,10 @@
 package ru.myproevent.ui.presenters.authorization.authorization
 
-import moxy.MvpView
-import moxy.viewstate.strategy.AddToEndStrategy
-import moxy.viewstate.strategy.StateStrategyType
+import moxy.viewstate.strategy.alias.AddToEndSingle
+import ru.myproevent.ui.presenters.BaseMvpView
 
-// TODO: возможно стоит выбрать другую стратегию
-@StateStrategyType(AddToEndStrategy::class)
-interface AuthorizationView: MvpView{
+@AddToEndSingle
+interface AuthorizationView : BaseMvpView {
     fun authorizationDataInvalid()
     fun finishAuthorization()
 }

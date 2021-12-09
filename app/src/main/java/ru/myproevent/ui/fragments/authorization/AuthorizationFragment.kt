@@ -3,11 +3,9 @@ package ru.myproevent.ui.fragments.authorization
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.R
@@ -16,12 +14,12 @@ import ru.myproevent.ui.fragments.BaseMvpFragment
 import ru.myproevent.ui.presenters.authorization.authorization.AuthorizationPresenter
 import ru.myproevent.ui.presenters.authorization.authorization.AuthorizationView
 import ru.myproevent.ui.presenters.main.BottomNavigationView
-import ru.myproevent.ui.presenters.main.Tab
 import ru.myproevent.ui.presenters.main.RouterProvider
+import ru.myproevent.ui.presenters.main.Tab
 
-class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
-    private var _view: FragmentAuthorizationBinding? = null
-    private val view get() = _view!!
+class AuthorizationFragment :
+    BaseMvpFragment<FragmentAuthorizationBinding>(FragmentAuthorizationBinding::inflate),
+    AuthorizationView {
 
     private var emailInvalidError = false
     private var passwordInvalidError = false
@@ -36,12 +34,11 @@ class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
         fun newInstance() = AuthorizationFragment()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         (requireActivity() as BottomNavigationView).hideBottomNavigation()
-        _view = FragmentAuthorizationBinding.inflate(inflater, container, false).apply {
+        with(binding) {
             authorizationConfirm.setOnClickListener {
                 presenter.authorize(
                     emailEdit.text.toString(),
@@ -82,7 +79,7 @@ class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
                     emailInput.setBoxStrokeColorStateList(colorState)
 
                     if (!passwordInvalidError) {
-                        view.errorMessage.visibility = GONE
+                        errorMessage.visibility = GONE
                     }
                 }
             }
@@ -92,7 +89,7 @@ class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
                     passwordInput.setBoxStrokeColorStateList(colorState)
 
                     if (!emailInvalidError) {
-                        view.errorMessage.visibility = GONE
+                        errorMessage.visibility = GONE
                     }
 
                     passwordInput.setEndIconTintList(
@@ -111,12 +108,10 @@ class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
                 }
             }
         }
-        return view.root
     }
 
-
     override fun authorizationDataInvalid() {
-        with(view) {
+        with(binding) {
             val colorState = ColorStateList(
                 arrayOf(
                     intArrayOf(android.R.attr.state_active),
@@ -146,13 +141,10 @@ class AuthorizationFragment : BaseMvpFragment(), AuthorizationView {
     }
 
     override fun finishAuthorization() {
-
         (requireActivity() as BottomNavigationView).openTab(Tab.HOME)
-        Log.d("[MYLOG]", "AuthorizationFragment (requireActivity() as BottomNavigationView).openTab(Tab.HOME)")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _view = null
+        Log.d(
+            "[MYLOG]",
+            "AuthorizationFragment (requireActivity() as BottomNavigationView).openTab(Tab.HOME)"
+        )
     }
 }

@@ -1,15 +1,12 @@
 package ru.myproevent.ui.presenters.contacts.contacts_list
 
-import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
-import moxy.viewstate.strategy.alias.OneExecution
 import ru.myproevent.domain.models.entities.Contact
+import ru.myproevent.ui.presenters.BaseMvpView
 
 @AddToEndSingle
-interface ContactsView : MvpView {
+interface ContactsView : BaseMvpView {
     fun init()
-    @OneExecution
-    fun showToast(text: String)
     fun hideConfirmationScreen()
     fun showConfirmationScreen(action: Contact.Action, callBack: ((confirmed: Boolean) -> Unit)?)
     fun updateList()

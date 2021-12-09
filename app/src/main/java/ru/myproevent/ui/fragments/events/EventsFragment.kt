@@ -1,14 +1,11 @@
 package ru.myproevent.ui.fragments.events
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import moxy.ktx.moxyPresenter
@@ -25,14 +22,12 @@ import ru.myproevent.ui.presenters.main.RouterProvider
 import ru.myproevent.ui.presenters.main.Tab
 
 
-class EventsFragment : BaseMvpFragment(), EventsView {
+class EventsFragment : BaseMvpFragment<FragmentEventsBinding>(FragmentEventsBinding::inflate),
+    EventsView {
 
     companion object {
         fun newInstance() = EventsFragment()
     }
-
-    private var _vb: FragmentEventsBinding? = null
-    private val vb get() = _vb!!
 
     override val presenter by moxyPresenter {
         EventsPresenter((parentFragment as RouterProvider).router).apply {
@@ -42,19 +37,13 @@ class EventsFragment : BaseMvpFragment(), EventsView {
 
     var adapter: EventsRVAdapter? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         (requireActivity() as BottomNavigationView).checkTab(Tab.EVENTS)
-        _vb = FragmentEventsBinding.inflate(inflater, container, false)
-
         initFilter()
-        return vb.root
     }
 
-    private fun initFilter() = with(vb) {
+    private fun initFilter() = with(binding) {
         initFilterButton()
 
         allEvents.setOnTouchListener(filterOptionOnTouchListener)
@@ -75,7 +64,7 @@ class EventsFragment : BaseMvpFragment(), EventsView {
         }
     }
 
-    private fun initFilterButton() = with(vb) {
+    private fun initFilterButton() = with(binding) {
 
         filterHitArea.setOnClickListener {
             searchEdit.hideKeyBoard()
@@ -100,17 +89,17 @@ class EventsFragment : BaseMvpFragment(), EventsView {
     }
 
     override fun showFilterOptions() {
-        vb.shadow.visibility = VISIBLE
-        vb.filter.visibility = VISIBLE
+        binding.shadow.visibility = VISIBLE
+        binding.filter.visibility = VISIBLE
 
     }
 
     override fun hideFilterOptions() {
-        vb.shadow.visibility = GONE
-        vb.filter.visibility = GONE
+        binding.shadow.visibility = GONE
+        binding.filter.visibility = GONE
     }
 
-    override fun init() = with(vb) {
+    override fun init() = with(binding) {
         rvEvents.layoutManager = LinearLayoutManager(context)
         adapter = EventsRVAdapter(presenter.eventsListPresenter)
         rvEvents.adapter = adapter
@@ -135,7 +124,7 @@ class EventsFragment : BaseMvpFragment(), EventsView {
         true
     }
 
-    override fun selectFilterOption(option: Event.Status) = with(vb) {
+    override fun selectFilterOption(option: Event.Status) = with(binding) {
         allEvents.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
         allEvents.setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_800))
         actualEvents.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
@@ -169,16 +158,7 @@ class EventsFragment : BaseMvpFragment(), EventsView {
     }
 
     override fun setNoEventsLayoutVisibility(visible: Boolean) {
-        vb.noEventsLayout.visibility = if (visible) VISIBLE
+        binding.noEventsLayout.visibility = if (visible) VISIBLE
         else GONE
     }
-
-    override fun showToast(text: String) =
-        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _vb = null
-    }
-
 }

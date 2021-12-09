@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import ru.myproevent.databinding.DialogProEventDatePickerBinding
 
-
 class ProEventDatePickerDialog(var onDateSetListener: ((year: Int, month: Int, dayOfMonth: Int) -> Unit)? = null) :
     DialogFragment() {
     private var _view: DialogProEventDatePickerBinding? = null

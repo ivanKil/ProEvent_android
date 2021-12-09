@@ -99,7 +99,7 @@ class EventsPresenter(localRouter: Router) : BaseMvpPresenter<EventsView>(localR
                 viewState.setNoEventsLayoutVisibility(data.isEmpty())
                 eventsListPresenter.setData(data)
             }, {
-                viewState.showToast("ПРОИЗОШЛА ОШИБКА: ${it.message}")
+                viewState.showMessage("ПРОИЗОШЛА ОШИБКА: ${it.message}")
             }).disposeOnDestroy()
     }
 

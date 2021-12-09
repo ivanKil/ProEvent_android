@@ -1,7 +1,7 @@
 package ru.myproevent.ui.presenters.authorization.login
 
-import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
+import ru.myproevent.ui.presenters.BaseMvpView
 
 @AddToEndSingle
-interface LoginView : MvpView
+interface LoginView : BaseMvpView

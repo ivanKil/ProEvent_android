@@ -5,12 +5,9 @@ import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.SpannableStringBuilder
 import android.text.method.KeyListener
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -22,18 +19,16 @@ import ru.myproevent.ProEventApp
 import ru.myproevent.R
 import ru.myproevent.databinding.FragmentAccountBinding
 import ru.myproevent.domain.models.ProfileDto
-import ru.myproevent.ui.BackButtonListener
 import ru.myproevent.ui.fragments.BaseMvpFragment
+import ru.myproevent.ui.presenters.main.RouterProvider
 import ru.myproevent.ui.presenters.settings.account.AccountPresenter
 import ru.myproevent.ui.presenters.settings.account.AccountView
-import ru.myproevent.ui.presenters.main.RouterProvider
 import ru.myproevent.ui.views.KeyboardAwareTextInputEditText
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
-    private var _view: FragmentAccountBinding? = null
-    private val view get() = _view!!
+class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountBinding::inflate),
+    AccountView {
 
     val calendar: Calendar = Calendar.getInstance()
     var currYear: Int = calendar.get(Calendar.YEAR)
@@ -53,10 +48,10 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
         var pickerYear = currYear
         var pickerMonth = currMonth
         var pickerDay = currDay
-        if (!view.dateOfBirthEdit.text.isNullOrEmpty()) {
+        if (!binding.dateOfBirthEdit.text.isNullOrEmpty()) {
             val pickerDate = GregorianCalendar().apply {
                 time =
-                    SimpleDateFormat(getString(R.string.dateFormat)).parse(view.dateOfBirthEdit.text.toString())
+                    SimpleDateFormat(getString(R.string.dateFormat)).parse(binding.dateOfBirthEdit.text.toString())
             }
             pickerYear = pickerDate.get(Calendar.YEAR)
             pickerMonth = pickerDate.get(Calendar.MONTH)
@@ -68,7 +63,7 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
                     val gregorianCalendar = GregorianCalendar(
                         year, month, dayOfMonth
                     )
-                    this@AccountFragment.view.dateOfBirthEdit.text = SpannableStringBuilder(
+                    this@AccountFragment.binding.dateOfBirthEdit.text = SpannableStringBuilder(
                         // TODO: для вывода сделать local date format
                         SimpleDateFormat(getString(R.string.dateFormat)).apply {
                             calendar = gregorianCalendar
@@ -107,7 +102,7 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
             showKeyBoard(textEdit)
             textEdit.text?.let { it1 -> textEdit.setSelection(it1.length) }
             textInput.endIconMode = END_ICON_NONE
-            view.save.visibility = VISIBLE
+            binding.save.visibility = VISIBLE
         }
     }
 
@@ -122,7 +117,7 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
             showKeyBoard(textEdit)
             textEdit.text?.let { it1 -> textEdit.setSelection(it1.length) }
             textInput.endIconMode = END_ICON_NONE
-            view.save.visibility = VISIBLE
+            binding.save.visibility = VISIBLE
         }
     }
 
@@ -131,60 +126,52 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _view = FragmentAccountBinding.inflate(inflater, container, false).apply {
-            defaultKeyListener = nameEdit.keyListener
-            setEditListeners(nameInput, nameEdit)
-            phoneKeyListener = phoneEdit.keyListener
-            setPhoneListeners(phoneInput, phoneEdit)
-            dateOfBirthEdit.keyListener = null
-            dateOfBirthEdit.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus) {
-                    dateOfBirthEdit.performClick()
-                }
-            }
-            dateOfBirthInput.setEndIconOnClickListener {
-                dateOfBirthEdit.requestFocus()
-                dateOfBirthEdit.setOnClickListener(DateEditClickListener)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
+        super.onViewCreated(view, savedInstanceState)
+
+        defaultKeyListener = nameEdit.keyListener
+        setEditListeners(nameInput, nameEdit)
+        phoneKeyListener = phoneEdit.keyListener
+        setPhoneListeners(phoneInput, phoneEdit)
+        dateOfBirthEdit.keyListener = null
+        dateOfBirthEdit.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
                 dateOfBirthEdit.performClick()
-                dateOfBirthInput.endIconMode = END_ICON_NONE
-                view.save.visibility = VISIBLE
             }
-            setEditListeners(positionInput, positionEdit)
-            setEditListeners(roleInput, roleEdit)
-            save.setOnClickListener {
-                presenter.saveProfile(
-                    nameEdit.text.toString(),
-                    phoneEdit.text.toString(),
-                    dateOfBirthEdit.text.toString(),
-                    positionEdit.text.toString(),
-                    roleEdit.text.toString()
-                )
-            }
-            titleButton.setOnClickListener { presenter.onBackPressed() }
-            phoneEdit.addTextChangedListener(PhoneNumberFormattingTextWatcher())
-            phoneEdit.setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) {
-                    if (phoneEdit.text.isNullOrEmpty()) {
-                        phoneEdit.text = SpannableStringBuilder("+7")
-                    }
+        }
+        dateOfBirthInput.setEndIconOnClickListener {
+            dateOfBirthEdit.requestFocus()
+            dateOfBirthEdit.setOnClickListener(DateEditClickListener)
+            dateOfBirthEdit.performClick()
+            dateOfBirthInput.endIconMode = END_ICON_NONE
+            save.visibility = VISIBLE
+        }
+        setEditListeners(positionInput, positionEdit)
+        setEditListeners(roleInput, roleEdit)
+        save.setOnClickListener {
+            presenter.saveProfile(
+                nameEdit.text.toString(),
+                phoneEdit.text.toString(),
+                dateOfBirthEdit.text.toString(),
+                positionEdit.text.toString(),
+                roleEdit.text.toString()
+            )
+        }
+        titleButton.setOnClickListener { presenter.onBackPressed() }
+        phoneEdit.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+        phoneEdit.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                if (phoneEdit.text.isNullOrEmpty()) {
+                    phoneEdit.text = SpannableStringBuilder("+7")
                 }
             }
         }
-        presenter.getProfile()
-        return view.root
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _view = null
+        presenter.getProfile()
     }
 
     override fun showProfile(profileDto: ProfileDto) {
-        with(view) {
+        with(binding) {
             with(profileDto) {
                 fullName?.let { nameEdit.text = SpannableStringBuilder(it) }
                 msisdn?.let { phoneEdit.text = SpannableStringBuilder(it) }
@@ -197,10 +184,6 @@ class AccountFragment : BaseMvpFragment(), AccountView, BackButtonListener {
 
     override fun makeProfileEditable() {
         // TODO:
-        Toast.makeText(context, "makeProfileEditable()", Toast.LENGTH_LONG).show()
-    }
-
-    override fun showMessage(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        showMessage("makeProfileEditable()")
     }
 }
