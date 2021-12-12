@@ -1,4 +1,4 @@
-package ru.myproevent.ui.fragments.events.event
+package ru.myproevent.ui.fragments.events.event.participant_pickers
 
 import android.animation.LayoutTransition
 import android.annotation.SuppressLint

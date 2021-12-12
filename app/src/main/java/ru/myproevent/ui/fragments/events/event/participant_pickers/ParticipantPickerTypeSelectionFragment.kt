@@ -1,4 +1,4 @@
-package ru.myproevent.ui.fragments.events.event
+package ru.myproevent.ui.fragments.events.event.participant_pickers
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -40,6 +40,7 @@ class ParticipantPickerTypeSelectionFragment : BaseMvpFragment(),
             back.setOnClickListener { presenter.onBackPressed() }
             backHitArea.setOnClickListener { back.performClick() }
             pickFromContacts.setOnClickListener { presenter.pickFromContacts() }
+            pickByEmail.setOnClickListener { presenter.pickByEmail() }
         }.root
     }
 

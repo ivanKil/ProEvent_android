@@ -19,6 +19,7 @@ import ru.myproevent.ui.presenters.events.event.EventPresenter
 import ru.myproevent.ui.presenters.events.EventsPresenter
 import ru.myproevent.ui.presenters.events.event.confirmation.EventActionConfirmPresenter
 import ru.myproevent.ui.presenters.events.event.participant_pickers.ParticipantPickerTypeSelectionPresenter
+import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_by_email_picker.ParticipantByEmailPickerPresenter
 import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_from_contacts_picker.ParticipantFromContactsPickerPresenter
 import ru.myproevent.ui.presenters.settings.security.SecurityPresenter
 import ru.myproevent.ui.presenters.settings.settings_list.SettingsPresenter
@@ -57,4 +58,5 @@ interface AppComponent {
     fun inject(eventActionConfirmPresenter: EventActionConfirmPresenter)
     fun inject(participantPickerTypeSelectionPresenter: ParticipantPickerTypeSelectionPresenter)
     fun inject(participantFromContactsPickerPresenter: ParticipantFromContactsPickerPresenter)
+    fun inject(participantByEmailPickerPresenter: ParticipantByEmailPickerPresenter)
 }

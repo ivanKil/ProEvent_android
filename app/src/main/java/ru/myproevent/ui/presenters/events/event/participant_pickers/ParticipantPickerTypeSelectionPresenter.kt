@@ -8,4 +8,8 @@ class ParticipantPickerTypeSelectionPresenter(localRouter: Router) :
     fun pickFromContacts() {
         localRouter.navigateTo(screens.participantFromContactsPicker())
     }
+
+    fun pickByEmail() {
+        localRouter.navigateTo(screens.participantByEmailPicker())
+    }
 }

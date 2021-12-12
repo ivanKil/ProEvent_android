@@ -12,8 +12,9 @@ import ru.myproevent.ui.fragments.contacts.ContactsFragment
 import ru.myproevent.ui.fragments.events.event.EventActionConfirmationFragment
 import ru.myproevent.ui.fragments.events.EventsFragment
 import ru.myproevent.ui.fragments.events.event.EventFragment
-import ru.myproevent.ui.fragments.events.event.ParticipantFromContactsPickerFragment
-import ru.myproevent.ui.fragments.events.event.ParticipantPickerTypeSelectionFragment
+import ru.myproevent.ui.fragments.events.event.participant_pickers.ParticipantByEmailPickerFragment
+import ru.myproevent.ui.fragments.events.event.participant_pickers.ParticipantFromContactsPickerFragment
+import ru.myproevent.ui.fragments.events.event.participant_pickers.ParticipantPickerTypeSelectionFragment
 import ru.myproevent.ui.fragments.settings.AccountFragment
 import ru.myproevent.ui.fragments.settings.SecurityFragment
 import ru.myproevent.ui.fragments.settings.SettingsFragment
@@ -39,4 +40,5 @@ class Screens : IScreens {
     override fun eventActionConfirmation(event: Event, status: Event.Status?) = FragmentScreen { EventActionConfirmationFragment.newInstance(event, status) }
     override fun participantPickerTypeSelection() = FragmentScreen { ParticipantPickerTypeSelectionFragment.newInstance() }
     override fun participantFromContactsPicker() = FragmentScreen { ParticipantFromContactsPickerFragment.newInstance() }
+    override fun participantByEmailPicker() = FragmentScreen { ParticipantByEmailPickerFragment.newInstance() }
 }
