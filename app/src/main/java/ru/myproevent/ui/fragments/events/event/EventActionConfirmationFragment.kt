@@ -1,9 +1,7 @@
 package ru.myproevent.ui.fragments.events.event
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
@@ -15,11 +13,8 @@ import ru.myproevent.ui.presenters.events.event.confirmation.EventActionConfirmP
 import ru.myproevent.ui.presenters.events.event.confirmation.EventActionConfirmView
 import ru.myproevent.ui.presenters.main.RouterProvider
 
-class EventActionConfirmationFragment : BaseMvpFragment(), EventActionConfirmView,
+class EventActionConfirmationFragment : BaseMvpFragment<FragmentEventActionConfirmationBinding>(FragmentEventActionConfirmationBinding::inflate), EventActionConfirmView,
     BackButtonListener {
-    private var _view: FragmentEventActionConfirmationBinding? = null
-    private val view get() = _view!!
-
     private val event: Event by lazy {
         requireArguments().getParcelable(EVENT_ARG)!!
     }
@@ -46,13 +41,9 @@ class EventActionConfirmationFragment : BaseMvpFragment(), EventActionConfirmVie
             }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        _view = FragmentEventActionConfirmationBinding.inflate(inflater, container, false)
-        return view.apply {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        with(binding){
             title.text = event.name
             back.setOnClickListener { presenter.onBackPressed() }
             backHitArea.setOnClickListener { back.performClick() }
@@ -65,11 +56,11 @@ class EventActionConfirmationFragment : BaseMvpFragment(), EventActionConfirmVie
                     }
                 }
 
-                Event.Status.CANCELED -> {
+                Event.Status.CANCELLED -> {
                     confirmTitle.text = "Уверены, что хотите отменить мероприятие?"
                     confirm.text = "Отменить"
                     confirm.setOnClickListener {
-                        presenter.editStatus(event, Event.Status.CANCELED)
+                        presenter.editStatus(event, Event.Status.CANCELLED)
                     }
                 }
 
@@ -82,12 +73,7 @@ class EventActionConfirmationFragment : BaseMvpFragment(), EventActionConfirmVie
                 }
             }
             cancel.setOnClickListener { presenter.onBackPressed() }
-        }.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _view = null
+        }
     }
 
     override fun showMessage(message: String) {

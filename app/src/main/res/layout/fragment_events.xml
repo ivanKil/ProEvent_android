@@ -67,6 +67,15 @@
                 app:layout_constraintStart_toStartOf="@id/title"
                 app:layout_constraintTop_toTopOf="@id/title" />
 
+            <View
+                android:id="@+id/add_event_hit_area"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="@id/add_event"
+                app:layout_constraintLeft_toLeftOf="@id/add_event"
+                app:layout_constraintRight_toRightOf="@id/add_event"
+                app:layout_constraintTop_toTopOf="@id/add_event" />
+
             <ImageView
                 android:id="@+id/add_event"
                 android:layout_width="wrap_content"
@@ -135,8 +144,8 @@
             android:id="@+id/add_first_event"
             style="@style/ProEventConfirmButton"
             android:layout_width="match_parent"
-            android:layout_marginHorizontal="20dp"
             android:layout_height="56dp"
+            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="218dp"
             android:text="@string/add_event" />
     </FrameLayout>

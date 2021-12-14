@@ -2,9 +2,7 @@ package ru.myproevent.ui.presenters.events.event
 
 import android.util.Log
 import com.github.terrakok.cicerone.Router
-import ru.myproevent.domain.models.ContactDto
 import ru.myproevent.domain.models.ProfileDto
-import ru.myproevent.domain.models.entities.Contact
 import ru.myproevent.domain.models.entities.Event
 import ru.myproevent.domain.models.repositories.events.IProEventEventsRepository
 import ru.myproevent.domain.models.repositories.proevent_login.IProEventLoginRepository
@@ -80,7 +78,7 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
 
 
     fun cancelEvent(event: Event) =
-        localRouter.navigateTo(screens.eventActionConfirmation(event, Event.Status.CANCELED))
+        localRouter.navigateTo(screens.eventActionConfirmation(event, Event.Status.CANCELLED))
 
     fun deleteEvent(event: Event) =
         localRouter.navigateTo(screens.eventActionConfirmation(event, null))

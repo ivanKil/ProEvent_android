@@ -1,9 +1,7 @@
 package ru.myproevent.ui.fragments.events.event.participant_pickers
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
@@ -14,12 +12,11 @@ import ru.myproevent.ui.presenters.events.event.participant_pickers.ParticipantP
 import ru.myproevent.ui.presenters.events.event.participant_pickers.ParticipantPickerTypeSelectionView
 import ru.myproevent.ui.presenters.main.RouterProvider
 
-class ParticipantPickerTypeSelectionFragment : BaseMvpFragment(),
+class ParticipantPickerTypeSelectionFragment : BaseMvpFragment<FragmentParticipantPickerTypeSelectionBinding>(
+    FragmentParticipantPickerTypeSelectionBinding::inflate
+),
     ParticipantPickerTypeSelectionView,
     BackButtonListener {
-    private var _view: FragmentParticipantPickerTypeSelectionBinding? = null
-    private val view get() = _view!!
-
     override val presenter by moxyPresenter {
         ParticipantPickerTypeSelectionPresenter((parentFragment as RouterProvider).router).apply {
             ProEventApp.instance.appComponent.inject(this)
@@ -30,23 +27,14 @@ class ParticipantPickerTypeSelectionFragment : BaseMvpFragment(),
         fun newInstance() = ParticipantPickerTypeSelectionFragment()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        _view = FragmentParticipantPickerTypeSelectionBinding.inflate(inflater, container, false)
-        return view.apply {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        with(binding){
             back.setOnClickListener { presenter.onBackPressed() }
             backHitArea.setOnClickListener { back.performClick() }
             pickFromContacts.setOnClickListener { presenter.pickFromContacts() }
             pickByEmail.setOnClickListener { presenter.pickByEmail() }
-        }.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _view = null
+        }
     }
 
     override fun showMessage(message: String) {

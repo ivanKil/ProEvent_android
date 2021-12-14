@@ -25,7 +25,7 @@ data class Event(
         ALL("ALL"),
         ACTUAL("ACTUAL"),
         COMPLETED("COMPLETED"),
-        CANCELED("CANCELED");
+        CANCELLED("CANCELLED");
         companion object { fun fromString(status: String) = valueOf(status) }
     }
 }

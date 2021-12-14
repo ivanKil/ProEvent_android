@@ -11,4 +11,5 @@ interface ParticipantFromContactsPickerView : ContactsView{
     fun showPickedParticipants()
     fun hidePickedParticipants()
     fun setPickedParticipantsCount(curr: Int, all: Int)
+    fun showToast(text: String)
 }

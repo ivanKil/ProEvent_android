@@ -3,6 +3,7 @@ package ru.myproevent.ui.fragments.events.event.participant_pickers
 import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.R
+import ru.myproevent.databinding.FragmentContactAddBinding
 import ru.myproevent.databinding.FragmentParticipantPickerFromContactsBinding
 import ru.myproevent.domain.models.entities.Contact
 import ru.myproevent.ui.fragments.BaseMvpFragment
@@ -28,14 +30,14 @@ import ru.myproevent.ui.presenters.main.Tab
 
 
 // TODO: отрефаторить: этот фрагмент во многом копирует ContactsFragment
-class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFromContactsPickerView {
+class ParticipantFromContactsPickerFragment :
+    BaseMvpFragment<FragmentParticipantPickerFromContactsBinding>(
+        FragmentParticipantPickerFromContactsBinding::inflate
+    ), ParticipantFromContactsPickerView {
 
     companion object {
         fun newInstance() = ParticipantFromContactsPickerFragment()
     }
-
-    private var _vb: FragmentParticipantPickerFromContactsBinding? = null
-    private val vb get() = _vb!!
 
     private var isFilterOptionsExpanded = false
 
@@ -56,7 +58,7 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
     }
 
     private fun selectFilterOption(option: TextView) {
-        with(vb) {
+        with(binding) {
             allContacts.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
             allContacts.setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_800))
             outgoingContacts.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
@@ -100,7 +102,7 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
 
     private fun showFilterOptions() {
         isFilterOptionsExpanded = true
-        with(vb) {
+        with(binding) {
             filter.setColorFilter(
                 ContextCompat.getColor(
                     requireContext(),
@@ -110,7 +112,7 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
             searchEdit.hideKeyBoard() // TODO: нужно вынести это в вызов предществующий данному, чтобы тень при скрытии клавиатуры отображалась корректно
             searchInput.visibility = View.GONE
             rvPickedContacts.visibility = View.GONE
-            if(toShowPickedParticipants){
+            if (toShowPickedParticipants) {
                 pickedContactsCount.isVisible = false
                 separator.isVisible = false
             }
@@ -123,7 +125,7 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
 
     private fun hideFilterOptions() {
         isFilterOptionsExpanded = false
-        with(vb) {
+        with(binding) {
             filter.setColorFilter(
                 ContextCompat.getColor(
                     requireContext(),
@@ -132,7 +134,7 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
             )
             searchInput.visibility = View.VISIBLE
             rvPickedContacts.visibility = View.VISIBLE
-            if(toShowPickedParticipants){
+            if (toShowPickedParticipants) {
                 pickedContactsCount.isVisible = true
                 separator.isVisible = true
             }
@@ -144,14 +146,10 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         (requireActivity() as BottomNavigationView).checkTab(Tab.EVENTS)
-        _vb = FragmentParticipantPickerFromContactsBinding.inflate(inflater, container, false)
-        return vb.apply {
+        with(binding) {
             allContacts.setOnTouchListener(filterOptionTouchListener)
             allContacts.setOnClickListener {
                 selectFilterOption(allContacts)
@@ -181,10 +179,13 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
             shadow.setOnClickListener { hideFilterOptions() }
             btnYes.setOnClickListener { confirmScreenCallBack?.invoke(true) }
             btnNo.setOnClickListener { confirmScreenCallBack?.invoke(false) }
-            confirm.setOnClickListener { presenter.confirmPick() }
-        }.root.apply {
+            confirm.setOnClickListener {
+                Log.d("[MYLOG]", "confirm.setOnClickListener")
+                presenter.confirmPick()
+            }
+
             // https://stackoverflow.com/questions/20103888/animatelayoutchanges-does-not-work-well-with-nested-layout
-            vb.container.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+            container.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         }
     }
 
@@ -193,13 +194,13 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
         presenter.init()
     }
 
-    fun initRvContacts() = with(vb) {
+    fun initRvContacts() = with(binding) {
         rvContacts.layoutManager = LinearLayoutManager(context)
         contactsAdapter = ContactsPickerRVAdapter(presenter.contactsPickerListPresenter)
         rvContacts.adapter = contactsAdapter
     }
 
-    fun initRvPickedContacts() = with(vb) {
+    fun initRvPickedContacts() = with(binding) {
         rvPickedContacts.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         pickedContactsAdapter = PickedContactsRVAdapter(presenter.pickedContactsListPresenter)
@@ -212,15 +213,15 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
     }
 
     override fun hideConfirmationScreen() {
-        vb.container.visibility = View.VISIBLE
-        vb.confirmScreen.visibility = View.GONE
+        binding.container.visibility = View.VISIBLE
+        binding.confirmScreen.visibility = View.GONE
     }
 
     override fun showConfirmationScreen(
         action: Contact.Action,
         callBack: ((confirmed: Boolean) -> Unit)?
     ) {
-        vb.tvConfirmMsg.text = when (action) {
+        binding.tvConfirmMsg.text = when (action) {
             Contact.Action.ACCEPT ->
                 getString(R.string.accept_contact_request_question)
             Contact.Action.CANCEL ->
@@ -234,14 +235,14 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
 
         confirmScreenCallBack = callBack
 
-        vb.container.visibility = View.INVISIBLE
-        vb.confirmScreen.visibility = View.VISIBLE
+        binding.container.visibility = View.INVISIBLE
+        binding.confirmScreen.visibility = View.VISIBLE
     }
 
     override fun updateContactsList() {
         if (contactsAdapter != null) {
             contactsAdapter!!.notifyDataSetChanged()
-            with(vb) {
+            with(binding) {
                 if (contactsAdapter!!.itemCount == 0) {
                     progressBar.visibility = View.GONE
                     scroll.visibility = View.VISIBLE
@@ -264,8 +265,8 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
 
     private var toShowPickedParticipants = false
 
-    override fun showPickedParticipants() = with(vb){
-        if(pickedContactsCount.isVisible){
+    override fun showPickedParticipants() = with(binding) {
+        if (pickedContactsCount.isVisible) {
             return
         }
         toShowPickedParticipants = true
@@ -273,8 +274,8 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
         separator.isVisible = true
     }
 
-    override fun hidePickedParticipants() = with(vb){
-        if(!pickedContactsCount.isVisible){
+    override fun hidePickedParticipants() = with(binding) {
+        if (!pickedContactsCount.isVisible) {
             return
         }
         toShowPickedParticipants = false
@@ -283,17 +284,13 @@ class ParticipantFromContactsPickerFragment : BaseMvpFragment(), ParticipantFrom
     }
 
     override fun setPickedParticipantsCount(curr: Int, all: Int) {
-        vb.pickedContactsCount.text = String.format(getString(R.string.picked_contacts_count_format), curr, all)
+        binding.pickedContactsCount.text =
+            String.format(getString(R.string.picked_contacts_count_format), curr, all)
     }
 
     override fun showToast(text: String) = Toast.makeText(context, text, Toast.LENGTH_LONG).show()
 
     override fun setResult(requestKey: String, result: Bundle) {
         parentFragmentManager.setFragmentResult(requestKey, result)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _vb = null
     }
 }

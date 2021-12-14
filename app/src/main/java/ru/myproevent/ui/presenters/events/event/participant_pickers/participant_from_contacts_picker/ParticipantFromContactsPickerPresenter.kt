@@ -205,6 +205,7 @@ class ParticipantFromContactsPickerPresenter(localRouter: Router) :
     }
 
     fun confirmPick() {
+        Log.d("[MYLOG]", "presenter confirmPick")
         viewState.setResult(
             PARTICIPANTS_PICKER_RESULT_KEY,
             Bundle().apply {

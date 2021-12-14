@@ -49,10 +49,8 @@ import ru.myproevent.ui.fragments.ProEventMessageDialog
 import ru.myproevent.ui.views.CenteredImageSpan
 
 // TODO: отрефакторить - разбить этот класс на кастомные вьющки и утилиты
-class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
-    private var _vb: FragmentEventBinding? = null
-    private val vb get() = _vb!!
-
+class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding::inflate),
+    EventView, BackButtonListener {
     private var isFilterOptionsExpanded = false
 
     private var event: Event? = null
@@ -76,11 +74,11 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
     private fun showFilterOptions() {
         Log.d("[MYLOG]", "eventStatus: ${event!!.eventStatus}")
         isFilterOptionsExpanded = true
-        with(vb) {
+        with(binding) {
             //searchEdit.hideKeyBoard() // TODO: нужно вынести это в вызов предществующий данному, чтобы тень при скрытии клавиатуры отображалась корректно
             shadow.visibility = VISIBLE
             copyEvent.visibility = VISIBLE
-            if (event!!.eventStatus != Event.Status.CANCELED && event!!.eventStatus != Event.Status.COMPLETED) {
+            if (event!!.eventStatus != Event.Status.CANCELLED && event!!.eventStatus != Event.Status.COMPLETED) {
                 // TODO: появляется только если прошла последняя дата проведения, данные об этом получать с сервера
                 // finishEvent.visibility = VISIBLE
                 cancelEvent.visibility = VISIBLE
@@ -92,7 +90,7 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
 
     private fun hideFilterOptions() {
         isFilterOptionsExpanded = false
-        with(vb) {
+        with(binding) {
             shadow.visibility = GONE
             copyEvent.visibility = GONE
             finishEvent.visibility = GONE
@@ -147,7 +145,7 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
         onCollapse: () -> Unit,
         onEdit: () -> Unit
     ) =
-        with(vb) {
+        with(binding) {
             absoluteBar.visibility = VISIBLE
             absoluteBarHitArea.visibility = VISIBLE
             absoluteBarEdit.visibility = VISIBLE
@@ -173,8 +171,8 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
             absoluteBarHitArea.setOnClickListener { absoluteBar.performClick() }
             absoluteBarEdit.setOnClickListener { onEdit() }
             absoluteBarExpand.setOnClickListener {
-                vb.scroll.scrollTo(0, onCollapseScroll)
-                vb.scroll.fling(0)
+                binding.scroll.scrollTo(0, onCollapseScroll)
+                binding.scroll.fling(0)
                 isAbsoluteBarBarHidden = true
                 onCollapse()
                 hideAbsoluteBar()
@@ -183,28 +181,28 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
         }
 
     private var isAbsoluteBarBarHidden = true
-    private fun hideAbsoluteBar() = with(vb) {
+    private fun hideAbsoluteBar() = with(binding) {
         absoluteBar.visibility = GONE
         absoluteBarHitArea.visibility = GONE
         absoluteBarEdit.visibility = GONE
         absoluteBarExpand.visibility = GONE
     }
 
-    private fun showEditOptions() = with(vb) {
+    private fun showEditOptions() = with(binding) {
         save.visibility = VISIBLE
         saveHitArea.visibility = VISIBLE
         cancel.visibility = VISIBLE
         cancelHitArea.visibility = VISIBLE
     }
 
-    private fun hideEditOptions() = with(vb) {
+    private fun hideEditOptions() = with(binding) {
         save.visibility = GONE
         saveHitArea.visibility = GONE
         cancel.visibility = GONE
         cancelHitArea.visibility = GONE
     }
 
-    private fun showActionOptions() = with(vb) {
+    private fun showActionOptions() = with(binding) {
         actionMenu.visibility = VISIBLE
     }
 
@@ -245,7 +243,7 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
         setEditListeners(textInput, textEdit)
     }
 
-    private fun lockDescriptionEdit() = with(vb) {
+    private fun lockDescriptionEdit() = with(binding) {
         fun showAbsoluteBarEdit() {
             isAbsoluteBarBarHidden = true
             scroll.scrollBy(0, 1)
@@ -261,7 +259,7 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
         }
     }
 
-    private fun setViewValues(event: Event, inflater: LayoutInflater) = with(vb) {
+    private fun setViewValues(event: Event, inflater: LayoutInflater) = with(binding) {
         with(event) {
             nameEdit.text = SpannableStringBuilder(name)
             dateEdit.text = SpannableStringBuilder(startDate.toString())
@@ -277,13 +275,13 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
             }
             if (participantsUserIds != null && participantsUserIds!!.isNotEmpty()) {
                 Log.d("[VIEWSTATE]", "setViewValues presenter.initParticipantsProfiles")
-                vb.noParticipants.isVisible = false
+                binding.noParticipants.isVisible = false
                 presenter.initParticipantsProfiles(participantsUserIds!!)
             }
         }
     }
 
-    override fun clearParticipants() = with(vb) {
+    override fun clearParticipants() = with(binding) {
         Log.d("[VIEWSTATE]", "clearParticipants")
         if (participantsContainer.childCount > 1) {
             participantsContainer.removeViews(1, participantsContainer.childCount - 1)
@@ -296,9 +294,9 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
             PARTICIPANTS_PICKER_RESULT_KEY,
             this
         ) { key, bundle ->
-            vb.noParticipants.isVisible = false
+            binding.noParticipants.isVisible = false
             showEditOptions()
-            vb.participantsContainer.isVisible = true
+            binding.participantsContainer.isVisible = true
             val participantsContacts = bundle.getParcelableArray(CONTACTS_KEY)!! as Array<Contact>
             presenter.loadParticipantsProfiles(Array(participantsContacts.size) { index ->
                 return@Array with(participantsContacts[index]) {
@@ -333,7 +331,7 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
             view.tvName.text = "#${profileDto.userId}"
         }
         view.tvDescription.text = profileDto.description
-        vb.participantsContainer.addView(view.root)
+        binding.participantsContainer.addView(view.root)
         participantsIds.add(profileDto.userId)
     }
 
@@ -349,16 +347,16 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
 
     private fun saveCallback(successEvent: Event?) {
         isSaveAvailable = true
-        vb.save.setTextColor(resources.getColor(R.color.ProEvent_bright_orange_500))
+        binding.save.setTextColor(resources.getColor(R.color.ProEvent_bright_orange_500))
         successEvent?.let {
             event = it
-            vb.title.text = it.name
+            binding.title.text = it.name
         }
     }
 
-    private fun isDescriptionExpanded() = vb.descriptionContainer.visibility == VISIBLE
+    private fun isDescriptionExpanded() = binding.descriptionContainer.visibility == VISIBLE
 
-    private fun expandDescriptionContent() = with(vb) {
+    private fun expandDescriptionContent() = with(binding) {
         expandDescription.setColorFilter(
             ContextCompat.getColor(
                 requireContext(),
@@ -371,17 +369,15 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Log.d("[EventFragment]", "onCreateView")
+    override fun onViewCreated(view: View, saved: Bundle?) {
+        Log.d("[EventFragment]", "onViewCreated")
+        super.onViewCreated(view, saved)
         with(requireActivity() as BottomNavigationView) {
             checkTab(Tab.EVENTS)
         }
         statusBarHeight = extractStatusBarHeight()
-        _vb = FragmentEventBinding.inflate(inflater, container, false)
-        return vb.apply {
+
+        with(binding) {
             event?.let { title.text = it.name }
             title.setOnClickListener {
                 // TODO: отрефакторить
@@ -580,7 +576,7 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
             saveHitArea.setOnClickListener { save.performClick() }
             defaultKeyListener = nameEdit.keyListener
             if (event != null) {
-                setViewValues(event!!, inflater)
+                setViewValues(event!!, layoutInflater)
                 lockEdit(nameInput, nameEdit)
                 nameEdit.addTextChangedListener {
                     title.text = it
@@ -606,7 +602,7 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
                     hideEditOptions()
                     noParticipants.isVisible = true
                     presenter.clearParticipants()
-                    setViewValues(event!!, inflater)
+                    setViewValues(event!!, layoutInflater)
                     lockEdit(nameInput, nameEdit)
                     lockEdit(
                         dateInput,
@@ -684,14 +680,8 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
             addMap.setOnClickListener { showMessage("addMap\nДанная возможность пока не доступна") }
             addPoint.setOnClickListener { showMessage("addPoint\nДанная возможность пока не доступна") }
             addParticipant.setOnClickListener { presenter.pickParticipants() }
-        }.root.also {
-            Log.d("[EventFragment]", "onCreateView _vb: $_vb")
         }
-    }
 
-    override fun onViewCreated(view: View, saved: Bundle?) {
-        Log.d("[EventFragment]", "onViewCreated")
-        super.onViewCreated(view, saved)
         view.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -700,7 +690,7 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
 //                    view.viewTreeObserver.removeGlobalOnLayoutListener(this)
 //                }
 
-                Log.d("[EventFragment]", "onGlobalLayout _vb: $_vb")
+                //Log.d("[EventFragment]", "onGlobalLayout _vb: $_vb")
 
                 // TODO: здесь вместо viewBinding используется view.findViewById, потому что, если использовать viewBinding, то по непонятоной мне причине если
                 //              выйти их этого экрана (нажав кнопку back) и вновь его открыть, то _vb будет null - несмотря на то, что в конце onCreateView он имел значение.
@@ -731,11 +721,5 @@ class EventFragment : BaseMvpFragment(), EventView, BackButtonListener {
 
     override fun showMessage(message: String) {
         Toast.makeText(ProEventApp.instance, message, Toast.LENGTH_LONG).show()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _vb = null
-        Log.d("[EventFragment]", "onDestroyView")
     }
 }

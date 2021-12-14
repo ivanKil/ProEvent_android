@@ -20,7 +20,7 @@ class EventActionConfirmPresenter(localRouter: Router) :
             .subscribe({
                 when (status) {
                     Event.Status.COMPLETED -> viewState.showMessage("Мероприятие завершено")
-                    Event.Status.CANCELED -> viewState.showMessage("Мероприятие отменено")
+                    Event.Status.CANCELLED -> viewState.showMessage("Мероприятие отменено")
                 }
                 event.eventStatus = status
                 onBackPressed()
