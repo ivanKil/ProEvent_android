@@ -15,6 +15,7 @@ import ru.myproevent.ui.presenters.authorization.login.LoginPresenter
 import ru.myproevent.ui.presenters.main.BottomNavigationPresenter
 import ru.myproevent.ui.presenters.authorization.recovery.RecoveryPresenter
 import ru.myproevent.ui.presenters.authorization.registration.RegistrationPresenter
+import ru.myproevent.ui.presenters.chat.ChatPresenter
 import ru.myproevent.ui.presenters.events.event.EventPresenter
 import ru.myproevent.ui.presenters.events.EventsPresenter
 import ru.myproevent.ui.presenters.events.event.confirmation.EventActionConfirmPresenter
@@ -59,4 +60,5 @@ interface AppComponent {
     fun inject(participantPickerTypeSelectionPresenter: ParticipantPickerTypeSelectionPresenter)
     fun inject(participantFromContactsPickerPresenter: ParticipantFromContactsPickerPresenter)
     fun inject(participantByEmailPickerPresenter: ParticipantByEmailPickerPresenter)
+    fun inject(chatPresenter: ChatPresenter)
 }
