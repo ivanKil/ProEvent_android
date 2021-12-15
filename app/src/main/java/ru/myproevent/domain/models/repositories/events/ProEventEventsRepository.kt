@@ -1,5 +1,6 @@
 package ru.myproevent.domain.models.repositories.events
 
+import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -54,7 +55,12 @@ class ProEventEventsRepository @Inject constructor(
     }
 
     override fun getEvents(): Single<List<Event>> {
-        return api.getEventsForUser(loginRepository.getLocalId()!!).map { it.map { it.toEvent() } }
+        Log.d("[BUG]", "loginRepository.getLocalId(): ${loginRepository.getLocalId()}")
+        val v = api
+            .getEventsForUser(
+                loginRepository.getLocalId()!!
+            )
+        return v.map { it.map { it.toEvent() } }
             .subscribeOn(Schedulers.io())
     }
 }

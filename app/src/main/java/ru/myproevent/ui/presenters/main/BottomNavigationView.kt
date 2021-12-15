@@ -5,8 +5,6 @@ import moxy.viewstate.strategy.alias.AddToEndSingle
 
 @AddToEndSingle
 interface BottomNavigationView : MvpView {
-    fun hideBottomNavigation()
-    fun showBottomNavigation()
     fun openTab(tab: Tab)
-    fun checkTab(tab: Tab)
+    fun resetState()
 }

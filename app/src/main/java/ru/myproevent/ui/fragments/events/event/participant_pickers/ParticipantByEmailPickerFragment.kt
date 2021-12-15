@@ -27,10 +27,6 @@ class ParticipantByEmailPickerFragment : BaseMvpFragment<FragmentContactAddBindi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(requireActivity() as BottomNavigationView){
-            showBottomNavigation()
-            checkTab(Tab.HOME)
-        }
         binding.contactAddExplanation.text = getString(R.string.participant_add_by_email_explanation)
         binding.titleButton.setOnClickListener { presenter.onBackPressed() }
     }

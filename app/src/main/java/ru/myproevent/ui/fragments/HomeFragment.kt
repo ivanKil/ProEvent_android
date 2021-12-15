@@ -26,12 +26,6 @@ class HomeFragment : BaseMvpFragment<FragmentHomeBinding>(FragmentHomeBinding::i
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
-
-        with(requireActivity() as BottomNavigationView) {
-            showBottomNavigation()
-            checkTab(Tab.HOME)
-        }
-
         Log.d("[MYLOG]", "token: ${presenter.getToken()}")
         id.text = "ID: ${presenter.getId()}"
         token.text = "token:\n${presenter.getToken()}"

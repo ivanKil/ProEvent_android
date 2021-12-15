@@ -39,7 +39,6 @@ class EventsFragment : BaseMvpFragment<FragmentEventsBinding>(FragmentEventsBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireActivity() as BottomNavigationView).checkTab(Tab.EVENTS)
         initFilter()
     }
 

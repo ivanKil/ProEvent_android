@@ -36,8 +36,6 @@ class AuthorizationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        (requireActivity() as BottomNavigationView).hideBottomNavigation()
         with(binding) {
             authorizationConfirm.setOnClickListener {
                 presenter.authorize(

@@ -19,6 +19,6 @@ class SettingsPresenter(localRouter: Router) : BaseMvpPresenter<SettingsView>(lo
 
     fun logout() {
         loginRepository.logoutFromThisDevice()
-        localRouter.newRootScreen(screens.authorization())
+        viewState.logout()
     }
 }

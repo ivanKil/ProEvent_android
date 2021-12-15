@@ -38,7 +38,7 @@ class LoginPresenter(localRouter: Router) : BaseMvpPresenter<LoginView>(localRou
 
     private inner class LoginSaveObserver : DisposableCompletableObserver() {
         override fun onComplete() {
-            localRouter.newRootScreen(screens.home())
+            viewState.finishAuthorization()
         }
 
         override fun onError(error: Throwable) {

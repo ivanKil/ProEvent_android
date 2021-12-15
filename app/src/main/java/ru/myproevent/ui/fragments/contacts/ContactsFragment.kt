@@ -127,8 +127,6 @@ class ContactsFragment : BaseMvpFragment<FragmentContactsBinding>(FragmentContac
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
-
-        (requireActivity() as BottomNavigationView).checkTab(Tab.CONTACTS)
         allContacts.setOnTouchListener(filterOptionTouchListener)
         allContacts.setOnClickListener {
             selectFilterOption(allContacts)

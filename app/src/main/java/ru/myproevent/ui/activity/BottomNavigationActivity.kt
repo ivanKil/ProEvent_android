@@ -21,6 +21,9 @@ import ru.myproevent.ui.presenters.main.BottomNavigationPresenter
 import ru.myproevent.ui.presenters.main.BottomNavigationView
 import ru.myproevent.ui.presenters.main.Tab
 import javax.inject.Inject
+import android.content.Intent
+import ru.myproevent.domain.models.LocalCiceroneHolder
+
 
 class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
     private val navigator: Navigator = AppNavigator(this, R.id.container)
@@ -33,6 +36,9 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
 
     @Inject
     lateinit var router: Router
+
+    @Inject
+    lateinit var ciceroneHolder: LocalCiceroneHolder
 
     @InjectPresenter
     lateinit var presenter: BottomNavigationPresenter
@@ -54,7 +60,7 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
         initViews()
     }
 
-    override fun checkTab(tab: Tab) {
+    private fun checkTab(tab: Tab) {
         when (tab) {
             Tab.HOME -> R.id.home_tab
             Tab.CONTACTS -> R.id.contacts_tab
@@ -62,17 +68,20 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
             Tab.EVENTS -> R.id.events_tab
             Tab.SETTINGS -> R.id.settings_tab
             else -> null
-        }?.let { binding.bottomNavigationBar.menu.findItem(it).isChecked = true }
+        }?.let {
+            binding.bottomNavigationBar.menu.findItem(it).isChecked = true
+            showBottomNavigation()
+        } ?: hideBottomNavigation()
     }
 
-    override fun hideBottomNavigation() {
+    private fun hideBottomNavigation() {
         if (binding.bottomNavigationBar.visibility == View.GONE) {
             return
         }
         binding.bottomNavigationBar.visibility = View.GONE
     }
 
-    override fun showBottomNavigation() {
+    private fun showBottomNavigation() {
         if (binding.bottomNavigationBar.visibility == View.VISIBLE) {
             return
         }
@@ -133,7 +142,22 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
         if (newFragment != null) {
             transaction.show(newFragment)
         }
+        checkTab(tab)
         transaction.commitNow()
+    }
+
+    override fun resetState() {
+        ciceroneHolder.clear()
+
+        val fm = supportFragmentManager
+        val fragments = fm.fragments
+        val transaction = fm.beginTransaction()
+        for (f in fragments) {
+            transaction.remove(f)
+        }
+        transaction.commitNow()
+
+        openTab(Tab.AUTHORIZATION)
     }
 
     override fun onResumeFragments() {

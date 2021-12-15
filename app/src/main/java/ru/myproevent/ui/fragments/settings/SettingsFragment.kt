@@ -27,13 +27,15 @@ class SettingsFragment : BaseMvpFragment<FragmentSettingsBinding>(FragmentSettin
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
-
-        (requireActivity() as BottomNavigationView).checkTab(Tab.SETTINGS)
         account.setOnClickListener { presenter.account() }
         security.setOnClickListener { presenter.security() }
         subscriptions.setOnClickListener { }
         help.setOnClickListener { }
         about.setOnClickListener { }
         logout.setOnClickListener { presenter.logout() }
+    }
+
+    override fun logout() {
+        (requireActivity() as BottomNavigationView).resetState()
     }
 }

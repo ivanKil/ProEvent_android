@@ -91,6 +91,17 @@ class TabContainerFragment : Fragment(), RouterProvider, BackButtonListener {
     private val cicerone: Cicerone<Router>
         get() = ciceroneHolder.getCicerone(containerType.name)
 
+    companion object {
+        private const val CONTAINER_TYPE_KEY = "CONTAINER_TYPE"
+
+        fun newInstance(tab: Tab) =
+            TabContainerFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(CONTAINER_TYPE_KEY, tab)
+                }
+            }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -131,7 +142,7 @@ class TabContainerFragment : Fragment(), RouterProvider, BackButtonListener {
 
     override val router: Router
         get() = cicerone.router
-
+    
     override fun onBackPressed(): Boolean {
         val fragment = childFragmentManager.findFragmentById(R.id.ftc_container)
         return if (fragment != null && fragment is BackButtonListener
@@ -142,16 +153,5 @@ class TabContainerFragment : Fragment(), RouterProvider, BackButtonListener {
             (activity as RouterProvider?)!!.router.exit()
             true
         }
-    }
-
-    companion object {
-        private const val CONTAINER_TYPE_KEY = "CONTAINER_TYPE"
-
-        fun newInstance(tab: Tab) =
-            TabContainerFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(CONTAINER_TYPE_KEY, tab)
-                }
-            }
     }
 }

@@ -148,7 +148,6 @@ class ParticipantFromContactsPickerFragment :
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireActivity() as BottomNavigationView).checkTab(Tab.EVENTS)
         with(binding) {
             allContacts.setOnTouchListener(filterOptionTouchListener)
             allContacts.setOnClickListener {
