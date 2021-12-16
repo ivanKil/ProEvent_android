@@ -142,20 +142,17 @@ class EventsFragment : BaseMvpFragment<FragmentEventsBinding>(FragmentEventsBind
 
         when (option) {
             Event.Status.ALL -> {
-                title.textSize = 20F
                 title.text = getString(R.string.events_title)
                 allEvents.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_600))
                 allEvents.setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
             }
             Event.Status.ACTUAL -> {
                 title.text = getString(R.string.actual_events)
-                title.textSize = 14F
                 actualEvents.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_600))
                 actualEvents.setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
             }
             Event.Status.COMPLETED -> {
                 title.text = getString(R.string.completed_events)
-                title.textSize = 14F
                 completedEvents.setBackgroundColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_600))
                 completedEvents.setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
             }

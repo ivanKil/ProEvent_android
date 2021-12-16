@@ -379,9 +379,6 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
     override fun onViewCreated(view: View, saved: Bundle?) {
         Log.d("[EventFragment]", "onViewCreated")
         super.onViewCreated(view, saved)
-        with(requireActivity() as BottomNavigationView) {
-            checkTab(Tab.EVENTS)
-        }
         statusBarHeight = extractStatusBarHeight()
 
         with(binding) {
