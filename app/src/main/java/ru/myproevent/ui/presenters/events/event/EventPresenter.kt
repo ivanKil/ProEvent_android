@@ -3,6 +3,7 @@ package ru.myproevent.ui.presenters.events.event
 import android.util.Log
 import com.github.terrakok.cicerone.Router
 import ru.myproevent.domain.models.ProfileDto
+import ru.myproevent.domain.models.entities.Address
 import ru.myproevent.domain.models.entities.Event
 import ru.myproevent.domain.models.repositories.events.IProEventEventsRepository
 import ru.myproevent.domain.models.repositories.proevent_login.IProEventLoginRepository
@@ -27,7 +28,7 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
         name: String,
         startDate: Date,
         endDate: Date,
-        location: String,
+        address: Address?,
         description: String,
         participantsIds: LongArray,
         callback: ((Event?) -> Unit)? = null
@@ -44,7 +45,7 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
                     description = description,
                     participantsUserIds = participantsIds,
                     city = null,
-                    address = location,
+                    address = address,
                     mapsFileIds = null,
                     pointsPointIds = null,
                     imageFile = null
@@ -129,5 +130,9 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
     fun clearParticipants() {
         viewState.clearParticipants()
         isParticipantsProfilesInitialized = false
+    }
+
+    fun addEventPlace(address: Address?){
+        localRouter.navigateTo(screens.addEventPlace(address))
     }
 }

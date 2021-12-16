@@ -15,7 +15,7 @@ data class Event(
     var description: String?,
     var participantsUserIds: LongArray?,
     var city: String?,
-    var address: String?,
+    var address: Address?,
     var mapsFileIds: LongArray?,
     var pointsPointIds: LongArray?,
     var imageFile: String?,

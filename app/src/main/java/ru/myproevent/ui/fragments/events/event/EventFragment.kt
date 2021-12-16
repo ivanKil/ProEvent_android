@@ -1,52 +1,54 @@
 package ru.myproevent.ui.fragments.events.event
 
 import android.graphics.Rect
-import android.os.Bundle
-import android.view.*
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import moxy.ktx.moxyPresenter
-import ru.myproevent.ProEventApp
-import ru.myproevent.R
-import ru.myproevent.databinding.FragmentEventBinding
-import ru.myproevent.ui.BackButtonListener
-import ru.myproevent.ui.fragments.BaseMvpFragment
-import ru.myproevent.ui.presenters.events.event.EventPresenter
-import ru.myproevent.ui.presenters.events.event.EventView
-import ru.myproevent.ui.presenters.main.BottomNavigationView
-import ru.myproevent.ui.presenters.main.RouterProvider
-import ru.myproevent.ui.presenters.main.Tab
-import kotlin.properties.Delegates
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.method.KeyListener
 import android.util.Log
+import android.view.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
-import com.google.android.material.textfield.TextInputLayout
-import ru.myproevent.domain.models.entities.Event
-import ru.myproevent.ui.views.KeyboardAwareTextInputEditText
-import java.util.*
-import android.text.Spannable
-import android.text.SpannableString
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.textfield.TextInputLayout
+import moxy.ktx.moxyPresenter
+import ru.myproevent.ProEventApp
+import ru.myproevent.R
+import ru.myproevent.databinding.FragmentEventBinding
 import ru.myproevent.databinding.ItemContactBinding
 import ru.myproevent.domain.models.ProfileDto
+import ru.myproevent.domain.models.entities.Address
 import ru.myproevent.domain.models.entities.Contact
-import ru.myproevent.domain.utils.PARTICIPANTS_PICKER_RESULT_KEY
+import ru.myproevent.domain.models.entities.Event
 import ru.myproevent.domain.utils.CONTACTS_KEY
+import ru.myproevent.domain.utils.PARTICIPANTS_PICKER_RESULT_KEY
+import ru.myproevent.domain.utils.toProfileDto
+import ru.myproevent.ui.BackButtonListener
+import ru.myproevent.ui.fragments.BaseMvpFragment
 import ru.myproevent.ui.fragments.ProEventMessageDialog
+import ru.myproevent.ui.presenters.events.event.EventPresenter
+import ru.myproevent.ui.presenters.events.event.EventView
+import ru.myproevent.ui.presenters.main.BottomNavigationView
+import ru.myproevent.ui.presenters.main.RouterProvider
+import ru.myproevent.ui.presenters.main.Tab
 import ru.myproevent.ui.views.CenteredImageSpan
+import ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+import java.util.*
+import kotlin.properties.Delegates
 
 // TODO: отрефакторить - разбить этот класс на кастомные вьющки и утилиты
 class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding::inflate),
@@ -54,6 +56,7 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
     private var isFilterOptionsExpanded = false
 
     private var event: Event? = null
+    private var address: Address? = null
 
     // TODO: копирует поле licenceTouchListener из RegistrationFragment
     private val filterOptionTouchListener = View.OnTouchListener { v, event ->
@@ -263,7 +266,10 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
         with(event) {
             nameEdit.text = SpannableStringBuilder(name)
             dateEdit.text = SpannableStringBuilder(startDate.toString())
-            address?.let { locationEdit.text = SpannableStringBuilder(it) }
+            address?.let { locationEdit.text = SpannableStringBuilder(it.addressLine) }
+                ?: this@EventFragment.address?.let {
+                    locationEdit.text = SpannableStringBuilder(it.addressLine)
+                }
             if (!description.isNullOrBlank()) {
                 descriptionText.text = SpannableStringBuilder(description)
                 noDescription.visibility = GONE
@@ -293,26 +299,27 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
         parentFragmentManager.setFragmentResultListener(
             PARTICIPANTS_PICKER_RESULT_KEY,
             this
-        ) { key, bundle ->
+        ) { _, bundle ->
             binding.noParticipants.isVisible = false
             showEditOptions()
             binding.participantsContainer.isVisible = true
             val participantsContacts = bundle.getParcelableArray(CONTACTS_KEY)!! as Array<Contact>
-            presenter.loadParticipantsProfiles(Array(participantsContacts.size) { index ->
-                return@Array with(participantsContacts[index]) {
-                    ProfileDto(
-                        userId = userId,
-                        fullName = fullName,
-                        nickName = nickName,
-                        msisdn = msisdn,
-                        position = position,
-                        birthdate = birthdate,
-                        imgUri = imgUri,
-                        description = description
-                    )
-                }
-            })
+            presenter.loadParticipantsProfiles(participantsContacts.map { it.toProfileDto() }
+                .toTypedArray())
         }
+
+        parentFragmentManager.setFragmentResultListener(
+            AddEventPlaceFragment.ADD_EVENT_PLACE_REQUEST_KEY,
+            this
+        ) { _, bundle ->
+            val address =
+                bundle.getParcelable<Address>(AddEventPlaceFragment.ADD_EVENT_PLACE_RESULT)
+            event?.let { it.address = address } ?: run { this.address = address }
+            if (address != null) binding.locationEdit.setText(address.addressLine)
+            showEditOptions()
+        }
+
+
         arguments?.getParcelable<Event>(EVENT_ARG)?.let { event = it }
     }
 
@@ -558,7 +565,6 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                     it.startDate = Calendar.getInstance().time
                     it.endDate = Calendar.getInstance().time
                     it.description = descriptionText.text.toString()
-                    it.address = locationEdit.text.toString()
                     it.participantsUserIds = participantsIds.toLongArray()
                     presenter.editEvent(it, ::saveCallback)
                 } ?: run {
@@ -566,7 +572,7 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                         nameEdit.text.toString(),
                         Calendar.getInstance().time,
                         Calendar.getInstance().time,
-                        locationEdit.text.toString(),
+                        address,
                         descriptionText.text.toString(),
                         participantsIds.toLongArray(),
                         ::saveCallback
@@ -586,12 +592,17 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                     dateEdit,
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_calendar)!!
                 )
-                lockEdit(locationInput, locationEdit)
                 lockDescriptionEdit()
                 showActionOptions()
             } else {
                 showEditOptions()
             }
+
+            lockEdit(locationInput, locationEdit)
+            locationInput.setEndIconOnClickListener {
+                presenter.addEventPlace(event?.address ?: address)
+            }
+
             back.setOnClickListener { presenter.onBackPressed() }
             backHitArea.setOnClickListener { back.performClick() }
             cancel.setOnClickListener {
