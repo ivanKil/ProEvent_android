@@ -2,6 +2,7 @@ package ru.myproevent.ui.screens
 
 import com.github.terrakok.cicerone.Screen
 import com.github.terrakok.cicerone.androidx.FragmentScreen
+import ru.myproevent.domain.models.entities.Address
 import ru.myproevent.domain.models.entities.Contact
 import ru.myproevent.domain.models.entities.Event
 import ru.myproevent.ui.fragments.*
@@ -10,6 +11,7 @@ import ru.myproevent.ui.fragments.chat.ChatFragment
 import ru.myproevent.ui.fragments.contacts.ContactAddFragment
 import ru.myproevent.ui.fragments.contacts.ContactFragment
 import ru.myproevent.ui.fragments.contacts.ContactsFragment
+import ru.myproevent.ui.fragments.events.event.AddEventPlaceFragment
 import ru.myproevent.ui.fragments.events.event.EventActionConfirmationFragment
 import ru.myproevent.ui.fragments.events.EventsFragment
 import ru.myproevent.ui.fragments.events.event.EventFragment
@@ -42,4 +44,5 @@ class Screens : IScreens {
     override fun participantPickerTypeSelection() = FragmentScreen { ParticipantPickerTypeSelectionFragment.newInstance() }
     override fun participantFromContactsPicker() = FragmentScreen { ParticipantFromContactsPickerFragment.newInstance() }
     override fun participantByEmailPicker() = FragmentScreen { ParticipantByEmailPickerFragment.newInstance() }
+    override fun addEventPlace(address: Address?): Screen = FragmentScreen { AddEventPlaceFragment.newInstance(address)}
 }

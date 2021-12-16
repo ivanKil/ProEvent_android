@@ -11,8 +11,7 @@ import ru.myproevent.ui.presenters.BaseMvpPresenter
 import ru.myproevent.ui.presenters.BaseMvpView
 
 abstract class BaseMvpFragment<Binding : ViewBinding>(
-    private val bindingFactory:
-        (inflater: LayoutInflater, parent: ViewGroup?, attachToParent: Boolean) -> Binding
+    private val bindingFactory: (inflater: LayoutInflater, parent: ViewGroup?, attachToParent: Boolean) -> Binding
 ) : MvpAppCompatFragment(), BaseMvpView, BackButtonListener {
 
     private var _binding: Binding? = null
