@@ -7,7 +7,9 @@ import ru.myproevent.domain.models.entities.Contact
 import ru.myproevent.domain.models.entities.Event
 import ru.myproevent.ui.fragments.*
 import ru.myproevent.ui.fragments.authorization.*
+import ru.myproevent.ui.fragments.chat.Chat1Fragment
 import ru.myproevent.ui.fragments.chat.ChatFragment
+import ru.myproevent.ui.fragments.chat.ChatsFragment
 import ru.myproevent.ui.fragments.contacts.ContactAddFragment
 import ru.myproevent.ui.fragments.contacts.ContactFragment
 import ru.myproevent.ui.fragments.contacts.ContactsFragment
@@ -36,6 +38,8 @@ class Screens : IScreens {
     override fun contact(contact: Contact): Screen = FragmentScreen { ContactFragment.newInstance(contact) }
     override fun contactAdd(): Screen = FragmentScreen { ContactAddFragment.newInstance() }
     override fun chat() = FragmentScreen { ChatFragment.newInstance() }
+    override fun chat1() = FragmentScreen { Chat1Fragment.newInstance() }
+    override fun chats() = FragmentScreen { ChatsFragment.newInstance() }
     override fun events() = FragmentScreen { EventsFragment.newInstance() }
     override fun event() = FragmentScreen("EVENT") { EventFragment.newInstance() }
     override fun event(event: Event) = FragmentScreen("EVENT") { EventFragment.newInstance(event) }

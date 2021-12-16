@@ -17,7 +17,7 @@ import ru.myproevent.ui.presenters.chat.ChatPresenter
 import ru.myproevent.ui.presenters.chat.ChatView
 import ru.myproevent.ui.presenters.main.RouterProvider
 
-class ChatFragment : BaseMvpFragment<FragmentChatBinding>(FragmentChatBinding::inflate), ChatView {
+class Chat1Fragment : BaseMvpFragment<FragmentChat1Binding>(FragmentChat1Binding::inflate), ChatView {
 
     // TODO: копирует поле licenceTouchListener из RegistrationFragment
     private val attachOptionTouchListener = View.OnTouchListener { v, event ->
@@ -57,7 +57,7 @@ class ChatFragment : BaseMvpFragment<FragmentChatBinding>(FragmentChatBinding::i
     val router by lazy {(parentFragment as RouterProvider).router}
 
     companion object {
-        fun newInstance() = ChatFragment()
+        fun newInstance() = Chat1Fragment()
     }
 
     @SuppressLint("ClickableViewAccessibility")
