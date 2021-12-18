@@ -100,7 +100,7 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
     }
 
     fun initParticipantsProfiles(participantsIds: LongArray) {
-        if(isParticipantsProfilesInitialized){
+        if (isParticipantsProfilesInitialized) {
             return
         }
         isParticipantsProfilesInitialized = true
@@ -122,7 +122,7 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
     }
 
     fun loadParticipantsProfiles(participants: Array<ProfileDto>) {
-        for(participant in participants){
+        for (participant in participants) {
             viewState.addParticipantItemView(participant)
         }
     }
@@ -132,7 +132,77 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
         isParticipantsProfilesInitialized = false
     }
 
-    fun addEventPlace(address: Address?){
+    fun addEventPlace(address: Address?) {
         localRouter.navigateTo(screens.addEventPlace(address))
+    }
+
+    fun enableDescriptionEdit() {
+        viewState.enableDescriptionEdit()
+    }
+
+    fun expandDescription() {
+        viewState.expandDescription()
+    }
+
+    fun expandMaps() {
+        viewState.expandMaps()
+    }
+
+    fun expandPoints() {
+        viewState.expandPoints()
+    }
+
+    fun expandParticipants() {
+        viewState.expandParticipants()
+    }
+
+    fun cancelEdit() {
+        viewState.cancelEdit()
+    }
+
+    fun hideEditOptions() {
+        viewState.hideEditOptions()
+    }
+
+    fun lockEdit() {
+        viewState.lockEdit()
+    }
+
+    fun showMessage(message: String) {
+        viewState.showMessage(message)
+    }
+
+    fun showAbsoluteBar(
+        title: String,
+        iconResource: Int?,
+        iconTintResource: Int?,
+        onCollapseScroll: Int,
+        onCollapse: () -> Unit,
+        onEdit: () -> Unit
+    ) {
+        viewState.showAbsoluteBar(
+            title,
+            iconResource,
+            iconTintResource,
+            onCollapseScroll,
+            onCollapse,
+            onEdit
+        )
+    }
+
+    fun hideAbsoluteBar() {
+        viewState.hideAbsoluteBar()
+    }
+
+    fun unlockNameEdit() {
+        viewState.unlockNameEdit()
+    }
+
+    fun unlockDateEdit() {
+        viewState.unlockDateEdit()
+    }
+
+    fun unlockLocationEdit() {
+        viewState.unlockLocationEdit()
     }
 }

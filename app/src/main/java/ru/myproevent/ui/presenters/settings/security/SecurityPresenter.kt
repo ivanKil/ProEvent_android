@@ -1,8 +1,10 @@
 package ru.myproevent.ui.presenters.settings.security
 
+import android.widget.Toast
 import com.github.terrakok.cicerone.Router
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
+import ru.myproevent.ProEventApp
 import ru.myproevent.domain.models.ProfileDto
 import ru.myproevent.domain.models.repositories.internet_access_info.IInternetAccessInfoRepository
 import ru.myproevent.domain.models.repositories.proevent_login.IProEventLoginRepository
@@ -28,8 +30,11 @@ class SecurityPresenter(localRouter: Router) : BaseMvpPresenter<SecurityView>(lo
         }
     }
 
+    private var userProfile: ProfileDto? = null
+
     private inner class ProfileGetObserver : DisposableSingleObserver<ProfileDto>() {
         override fun onSuccess(profileDto: ProfileDto) {
+            userProfile = profileDto
             viewState.showProfile(profileDto)
         }
 
@@ -58,14 +63,18 @@ class SecurityPresenter(localRouter: Router) : BaseMvpPresenter<SecurityView>(lo
     @Inject
     lateinit var interAccessInfoRepository: IInternetAccessInfoRepository
 
-    fun saveProfile(email: String, login: String, password: String) {
+    fun saveProfile(email: String, login: String) {
+        // TODO:
+        if(userProfile == null){
+            Toast.makeText(ProEventApp.instance, "Операция сохранения в данный момент не доступна, так как профиль ещё не загрузился", Toast.LENGTH_LONG).show()
+            return
+        }
+        userProfile!!.apply {
+            this.email = email
+            this.nickName = login
+        }
         profilesRepository
-            .saveProfile(
-                ProfileDto(
-                    userId = loginRepository.getLocalId()!!,
-                    nickName = login
-                )
-            )
+            .saveProfile(userProfile!!)
             .observeOn(uiScheduler)
             .subscribeWith(ProfileEditObserver())
             .disposeOnDestroy()

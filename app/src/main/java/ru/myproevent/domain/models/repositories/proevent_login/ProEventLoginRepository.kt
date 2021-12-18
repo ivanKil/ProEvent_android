@@ -1,6 +1,7 @@
 package ru.myproevent.domain.models.repositories.proevent_login
 
 import android.util.Base64
+import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import ru.myproevent.domain.models.IProEventDataSource
@@ -41,7 +42,26 @@ class ProEventLoginRepository @Inject constructor(private val api: IProEventData
         return localToken
     }
 
-    override fun getLocalEmail() = localEmail
+    private fun decodeEmailFromLocalToken(): String? {
+        val token = getLocalToken() ?: return null
+
+        var start = token.indexOf('.') + 1
+        var end = token.indexOf('.', start)
+        val jSonStr = decodeJWT(token.substring(start, end))
+
+        start = jSonStr.indexOf("sub\":\"") + 6
+        end = jSonStr.indexOf(',', start) - 1
+
+        return jSonStr.substring(start, end)
+    }
+
+    override fun getLocalEmail() =
+        if (localEmail != null) {
+            localEmail
+        } else {
+            localEmail = decodeEmailFromLocalToken()
+            localEmail
+        }
 
     override fun getLocalPassword() = localPassword
 

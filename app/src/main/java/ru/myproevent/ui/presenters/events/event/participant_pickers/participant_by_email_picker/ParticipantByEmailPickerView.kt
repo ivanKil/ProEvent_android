@@ -1,7 +1,7 @@
 package ru.myproevent.ui.presenters.events.event.participant_pickers.participant_by_email_picker
 
-import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
+import ru.myproevent.ui.presenters.events.event.participant_pickers.ParticipantsPickerView
 
 @AddToEndSingle
-interface ParticipantByEmailPickerView : MvpView
+interface ParticipantByEmailPickerView : ParticipantsPickerView

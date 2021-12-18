@@ -65,7 +65,7 @@
     <string name="add_contact">Добавить контакт</string>
     <string name="no_contacts">Здесь пока ничего нет</string>
     <string name="contact_add_explanation">Введите email пользователя, которого хотите добавить в свой список контактов.</string>
-    <string name="participant_add_by_email_explanation">Введите e-mail пользователя, которого хотите пригласить в качестве участника.</string>
+    <string name="participant_add_by_profile_value_explanation">Введите e-mail и имя пользователя, которого хотите пригласить в качестве участника.</string>
     <string name="search_contact">Поиск</string>
     <string name="contact_search_hint">Введите e-mail пользователя</string>
     <string name="contact_invite_explanation">Пользователя с таким email в системе нет. Чтобы пригласить пользователя, укажите имя.</string>

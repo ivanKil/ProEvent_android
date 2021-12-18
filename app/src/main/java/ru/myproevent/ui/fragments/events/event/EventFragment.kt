@@ -4,6 +4,8 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -47,6 +49,12 @@ import ru.myproevent.ui.views.CenteredImageSpan
 import ru.myproevent.ui.views.KeyboardAwareTextInputEditText
 import java.util.*
 import kotlin.properties.Delegates
+import android.view.MotionEvent
+
+import android.os.SystemClock
+
+import android.widget.EditText
+
 
 // TODO: отрефакторить - разбить этот класс на кастомные вьющки и утилиты
 class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding::inflate),
@@ -138,7 +146,7 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
         )
     }
 
-    private fun showAbsoluteBar(
+    override fun showAbsoluteBar(
         title: String,
         iconResource: Int?,
         iconTintResource: Int?,
@@ -147,6 +155,8 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
         onEdit: () -> Unit
     ) =
         with(binding) {
+            Log.d("[bar]", "showAbsoluteBar")
+
             absoluteBar.visibility = VISIBLE
             absoluteBarHitArea.visibility = VISIBLE
             absoluteBarEdit.visibility = VISIBLE
@@ -176,17 +186,24 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                 binding.scroll.fling(0)
                 isAbsoluteBarBarHidden = true
                 onCollapse()
-                hideAbsoluteBar()
+                presenter.hideAbsoluteBar()
             }
             absoluteBar.text = title
+
+            isAbsoluteBarBarHidden = false
         }
 
     private var isAbsoluteBarBarHidden = true
-    private fun hideAbsoluteBar() = with(binding) {
+
+    override fun hideAbsoluteBar() = with(binding) {
+        Log.d("[bar]", "hideAbsoluteBar")
+
         absoluteBar.visibility = GONE
         absoluteBarHitArea.visibility = GONE
         absoluteBarEdit.visibility = GONE
         absoluteBarExpand.visibility = GONE
+
+        isAbsoluteBarBarHidden = true
     }
 
     private fun showEditOptions() = with(binding) {
@@ -196,11 +213,48 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
         cancelHitArea.visibility = VISIBLE
     }
 
-    private fun hideEditOptions() = with(binding) {
+    override fun hideEditOptions() = with(binding) {
         save.visibility = GONE
         saveHitArea.visibility = GONE
         cancel.visibility = GONE
         cancelHitArea.visibility = GONE
+    }
+
+    override fun lockEdit() = with(binding) {
+        lockEdit(nameInput, nameEdit)
+        lockEdit(
+            dateInput,
+            dateEdit,
+//                        AppCompatResources.getDrawable(
+//                            requireContext(),
+//                            R.drawable.ic_calendar
+//                        )!!
+        )
+        lockEdit(
+            locationInput, locationEdit,
+            AppCompatResources.getDrawable(
+                requireContext(),
+                R.drawable.outline_place_24
+            )!!
+        ) {
+            presenter.addEventPlace(event?.address ?: address)
+        }
+
+        nameInput.setEndIconOnClickListener {
+            presenter.unlockNameEdit()
+            nameEdit.requestFocus()
+            showKeyBoard(nameEdit)
+        }
+        dateInput.setEndIconOnClickListener {
+            presenter.unlockDateEdit()
+            dateEdit.requestFocus()
+            showKeyBoard(dateEdit)
+        }
+        locationInput.setEndIconOnClickListener {
+            presenter.unlockLocationEdit()
+            locationEdit.requestFocus()
+            showKeyBoard(locationEdit)
+        }
     }
 
     private fun showActionOptions() = with(binding) {
@@ -216,32 +270,195 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
         imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
     }
 
+    private val uiHandler = Handler(Looper.getMainLooper())
+
+    // https://stackoverflow.com/a/7784904/11883985
+    private fun showKeyBoardByDelayedTouch(editText: EditText) {
+        uiHandler.postDelayed({
+            val x = editText.width.toFloat()
+            val y = editText.height.toFloat()
+
+            editText.dispatchTouchEvent(
+                MotionEvent.obtain(
+                    SystemClock.uptimeMillis(),
+                    SystemClock.uptimeMillis(),
+                    MotionEvent.ACTION_DOWN,
+                    x,
+                    y,
+                    0
+                )
+            )
+            editText.dispatchTouchEvent(
+                MotionEvent.obtain(
+                    SystemClock.uptimeMillis(),
+                    SystemClock.uptimeMillis(),
+                    MotionEvent.ACTION_UP,
+                    x,
+                    y,
+                    0
+                )
+            )
+        }, 200)
+    }
+
     // TODO: отрефакторить - эта функция копирует функцию из AccountFragment. Вынести это в кастомную вьюху ProEventEditText
     private fun setEditListeners(
         textInput: TextInputLayout,
-        textEdit: KeyboardAwareTextInputEditText
+        textEdit: KeyboardAwareTextInputEditText,
+        pickerIcon: Drawable? = null,
+        pickerAction: (() -> Unit)? = null
     ) {
         textEdit.keyListener = null
-        textInput.setEndIconOnClickListener {
-            textEdit.keyListener = defaultKeyListener
-            textEdit.requestFocus()
-            showKeyBoard(textEdit)
-            textEdit.text?.let { it1 -> textEdit.setSelection(it1.length) }
+    }
+
+    private fun unlockEdit(
+        textInput: TextInputLayout,
+        textEdit: KeyboardAwareTextInputEditText,
+        pickerIcon: Drawable? = null,
+        pickerAction: (() -> Unit)? = null
+    ) {
+        textEdit.keyListener = defaultKeyListener
+        textEdit.text?.let { it1 -> textEdit.setSelection(it1.length) }
+        pickerIcon?.let {
+            textInput.endIconMode = TextInputLayout.END_ICON_CUSTOM
+            textInput.endIconDrawable = it
+        } ?: run {
             textInput.endIconMode = TextInputLayout.END_ICON_NONE
-            showEditOptions()
+        }
+        pickerAction?.let { textInput.setEndIconOnClickListener { pickerAction() } }
+        showEditOptions()
+    }
+
+    override fun unlockNameEdit() = with(binding) {
+        unlockEdit(nameInput, nameEdit)
+    }
+
+    override fun unlockDateEdit() = with(binding) {
+        unlockEdit(dateInput, dateEdit)
+    }
+
+    override fun unlockLocationEdit() = with(binding) {
+        unlockEdit(
+            locationInput, locationEdit,
+            AppCompatResources.getDrawable(
+                requireContext(),
+                R.drawable.outline_place_24
+            )!!
+        ) {
+            presenter.addEventPlace(event?.address ?: address)
+        }
+    }
+
+    override fun cancelEdit(): Unit = with(binding) {
+        if (event == null) {
+            back.performClick()
+        } else {
+            noParticipants.isVisible = true
+            presenter.clearParticipants()
+            setViewValues(event!!, layoutInflater)
+            lockDescriptionEdit()
         }
     }
 
     private fun lockEdit(
         textInput: TextInputLayout,
         textEdit: KeyboardAwareTextInputEditText,
-        icon: Drawable = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_edit)!!
+        pickerIcon: Drawable? = null,
+        pickerAction: (() -> Unit)? = null
     ) {
         textEdit.clearFocus()
         textEdit.hideKeyBoard()
         textInput.endIconMode = TextInputLayout.END_ICON_CUSTOM
-        textInput.endIconDrawable = icon
-        setEditListeners(textInput, textEdit)
+        textInput.endIconDrawable =
+            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_edit)!!
+        setEditListeners(textInput, textEdit, pickerIcon, pickerAction)
+    }
+
+    override fun enableDescriptionEdit(): Unit = with(binding) {
+        showEditOptions()
+        editDescription.visibility = GONE
+        absoluteBarEdit.visibility = GONE
+        descriptionText.keyListener = defaultKeyListener
+        noDescription.visibility = GONE
+        descriptionText.visibility = VISIBLE
+        descriptionText.text?.let { text -> descriptionText.setSelection(text.length) }
+    }
+
+    override fun expandDescription(): Unit = with(binding) {
+        if (!isDescriptionExpanded()) {
+            expandDescriptionContent()
+        } else {
+            expandDescription.setColorFilter(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.ProEvent_blue_800
+                ), android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            descriptionContainer.visibility = GONE
+        }
+    }
+
+    override fun expandMaps() = with(binding) {
+        fun isMapsExpanded() = mapsContainer.visibility == VISIBLE
+        if (!isMapsExpanded()) {
+            expandMaps.setColorFilter(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.ProEvent_bright_orange_300
+                ), android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            mapsContainer.visibility = VISIBLE
+        } else {
+            expandMaps.setColorFilter(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.ProEvent_blue_800
+                ), android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            mapsContainer.visibility = GONE
+        }
+    }
+
+    override fun expandPoints() = with(binding) {
+        fun isPointsExpanded() = pointsContainer.visibility == VISIBLE
+        if (!isPointsExpanded()) {
+            expandPoints.setColorFilter(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.ProEvent_bright_orange_300
+                ), android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            pointsContainer.visibility = VISIBLE
+        } else {
+            expandPoints.setColorFilter(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.ProEvent_blue_800
+                ), android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            pointsContainer.visibility = GONE
+        }
+    }
+
+    override fun expandParticipants() = with(binding) {
+        fun isParticipantsExpanded() = participantsContainer.visibility == VISIBLE
+        if (!isParticipantsExpanded()) {
+            expandParticipants.setColorFilter(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.ProEvent_bright_orange_300
+                ), android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            participantsContainer.visibility = VISIBLE
+        } else {
+            expandParticipants.setColorFilter(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.ProEvent_blue_800
+                ), android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            participantsContainer.visibility = GONE
+        }
     }
 
     private fun lockDescriptionEdit() = with(binding) {
@@ -337,6 +554,7 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
         }
         view.tvDescription.text = profileDto.description
         binding.participantsContainer.addView(view.root)
+        binding.noParticipants.isVisible = false
         participantsIds.add(profileDto.userId)
     }
 
@@ -369,9 +587,6 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
             ), android.graphics.PorterDuff.Mode.SRC_IN
         )
         descriptionContainer.visibility = VISIBLE
-        scroll.post {
-            scroll.smoothScrollTo(0, descriptionBarDistance)
-        }
     }
 
     override fun onViewCreated(view: View, saved: Bundle?) {
@@ -408,82 +623,41 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
             }
             shadow.setOnClickListener { hideFilterOptions() }
             expandDescription.setOnClickListener {
-                if (!isDescriptionExpanded()) {
-                    expandDescriptionContent()
-                } else {
-                    expandDescription.setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.ProEvent_blue_800
-                        ), android.graphics.PorterDuff.Mode.SRC_IN
-                    )
-                    descriptionContainer.visibility = GONE
+                presenter.expandDescription()
+                if (isDescriptionExpanded()) {
+                    scroll.post {
+                        scroll.smoothScrollTo(0, descriptionBarDistance)
+                    }
                 }
             }
             descriptionBar.setOnClickListener { expandDescription.performClick() }
             descriptionBarHitArea.setOnClickListener { descriptionBar.performClick() }
             expandMaps.setOnClickListener {
-                fun isMapsExpanded() = mapsContainer.visibility == VISIBLE
-                if (!isMapsExpanded()) {
-                    expandMaps.setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.ProEvent_bright_orange_300
-                        ), android.graphics.PorterDuff.Mode.SRC_IN
-                    )
-                    mapsContainer.visibility = VISIBLE
-                } else {
-                    expandMaps.setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.ProEvent_blue_800
-                        ), android.graphics.PorterDuff.Mode.SRC_IN
-                    )
-                    mapsContainer.visibility = GONE
+                presenter.expandMaps()
+                if (mapsContainer.isVisible) {
+                    scroll.post {
+                        scroll.smoothScrollTo(0, mapsBarDistance)
+                    }
                 }
             }
             mapsBar.setOnClickListener { expandMaps.performClick() }
             mapBarHitArea.setOnClickListener { mapsBar.performClick() }
             expandPoints.setOnClickListener {
-                fun isPointsExpanded() = pointsContainer.visibility == VISIBLE
-                if (!isPointsExpanded()) {
-                    expandPoints.setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.ProEvent_bright_orange_300
-                        ), android.graphics.PorterDuff.Mode.SRC_IN
-                    )
-                    pointsContainer.visibility = VISIBLE
-                } else {
-                    expandPoints.setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.ProEvent_blue_800
-                        ), android.graphics.PorterDuff.Mode.SRC_IN
-                    )
-                    pointsContainer.visibility = GONE
+                presenter.expandPoints()
+                if (pointsContainer.isVisible) {
+                    scroll.post {
+                        scroll.smoothScrollTo(0, pointsBarDistance)
+                    }
                 }
             }
             pointsBar.setOnClickListener { expandPoints.performClick() }
             pointsBarHitArea.setOnClickListener { pointsBar.performClick() }
             expandParticipants.setOnClickListener {
-                fun isParticipantsExpanded() = participantsContainer.visibility == VISIBLE
-                if (!isParticipantsExpanded()) {
-                    expandParticipants.setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.ProEvent_bright_orange_300
-                        ), android.graphics.PorterDuff.Mode.SRC_IN
-                    )
-                    participantsContainer.visibility = VISIBLE
-                } else {
-                    expandParticipants.setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.ProEvent_blue_800
-                        ), android.graphics.PorterDuff.Mode.SRC_IN
-                    )
-                    participantsContainer.visibility = GONE
+                presenter.expandParticipants()
+                if (participantsContainer.isVisible) {
+                    scroll.post {
+                        scroll.smoothScrollTo(0, participantsBarDistance)
+                    }
                 }
             }
             participantsBar.setOnClickListener { expandParticipants.performClick() }
@@ -493,7 +667,7 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                 Log.d("[MYLOG]", "setOnScrollChangeListener")
                 if (descriptionContainer.visibility == VISIBLE && scrollY in descriptionBarDistance..(descriptionBarDistance + descriptionContainer.height)) {
                     if (isAbsoluteBarBarHidden) {
-                        showAbsoluteBar(
+                        presenter.showAbsoluteBar(
                             "Описание",
                             if (editDescription.visibility == VISIBLE) {
                                 R.drawable.ic_edit
@@ -505,11 +679,10 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                             { expandDescription.performClick() },
                             { editDescription.performClick() }
                         )
-                        isAbsoluteBarBarHidden = false
                     }
                 } else if (mapsContainer.visibility == VISIBLE && scrollY in mapsBarDistance..(mapsBarDistance + mapsContainer.height)) {
                     if (isAbsoluteBarBarHidden) {
-                        showAbsoluteBar(
+                        presenter.showAbsoluteBar(
                             "Карта мероприятия",
                             R.drawable.ic_add,
                             null,
@@ -517,11 +690,10 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                             { expandMaps.performClick() },
                             { addMap.performClick() }
                         )
-                        isAbsoluteBarBarHidden = false
                     }
                 } else if (pointsContainer.visibility == VISIBLE && scrollY in pointsBarDistance..(pointsBarDistance + pointsContainer.height)) {
                     if (isAbsoluteBarBarHidden) {
-                        showAbsoluteBar(
+                        presenter.showAbsoluteBar(
                             "Точки",
                             R.drawable.ic_add,
                             null,
@@ -529,11 +701,10 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                             { expandPoints.performClick() },
                             { addPoint.performClick() }
                         )
-                        isAbsoluteBarBarHidden = false
                     }
                 } else if (participantsContainer.visibility == VISIBLE && scrollY in participantsBarDistance..(participantsBarDistance + participantsContainer.height)) {
                     if (isAbsoluteBarBarHidden) {
-                        showAbsoluteBar(
+                        presenter.showAbsoluteBar(
                             "Участники",
                             R.drawable.ic_add,
                             null,
@@ -541,11 +712,9 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                             { expandParticipants.performClick() },
                             { addParticipant.performClick() }
                         )
-                        isAbsoluteBarBarHidden = false
                     }
                 } else if (!isAbsoluteBarBarHidden) {
-                    hideAbsoluteBar()
-                    isAbsoluteBarBarHidden = true
+                    presenter.hideAbsoluteBar()
                 }
             }
             save.setOnClickListener {
@@ -579,47 +748,53 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
             if (event != null) {
                 setViewValues(event!!, layoutInflater)
                 lockEdit(nameInput, nameEdit)
+                nameInput.setEndIconOnClickListener {
+                    presenter.unlockNameEdit()
+                    nameEdit.requestFocus()
+                    showKeyBoard(nameEdit)
+                }
                 nameEdit.addTextChangedListener {
                     title.text = it
                 }
                 lockEdit(
                     dateInput,
                     dateEdit,
-                    AppCompatResources.getDrawable(requireContext(), R.drawable.ic_calendar)!!
+                    // AppCompatResources.getDrawable(requireContext(), R.drawable.ic_calendar)!!
                 )
+                dateInput.setEndIconOnClickListener {
+                    presenter.unlockDateEdit()
+                    dateEdit.requestFocus()
+                    showKeyBoard(dateEdit)
+                }
                 lockDescriptionEdit()
                 showActionOptions()
             } else {
                 showEditOptions()
             }
 
-            lockEdit(locationInput, locationEdit)
-            locationInput.setEndIconOnClickListener {
+            lockEdit(
+                locationInput, locationEdit,
+                AppCompatResources.getDrawable(
+                    requireContext(),
+                    R.drawable.outline_place_24
+                )!!
+            ) {
                 presenter.addEventPlace(event?.address ?: address)
+            }
+            locationInput.setEndIconOnClickListener {
+                presenter.unlockLocationEdit()
+                locationEdit.requestFocus()
+                showKeyBoard(locationEdit)
             }
 
             back.setOnClickListener { presenter.onBackPressed() }
             backHitArea.setOnClickListener { back.performClick() }
             cancel.setOnClickListener {
-                if (event == null) {
-                    back.performClick()
-                } else {
-                    showMessage("Изменения отменены")
-                    hideEditOptions()
-                    noParticipants.isVisible = true
-                    presenter.clearParticipants()
-                    setViewValues(event!!, layoutInflater)
-                    lockEdit(nameInput, nameEdit)
-                    lockEdit(
-                        dateInput,
-                        dateEdit,
-                        AppCompatResources.getDrawable(
-                            requireContext(),
-                            R.drawable.ic_calendar
-                        )!!
-                    )
-                    lockEdit(locationInput, locationEdit)
-                    lockDescriptionEdit()
+                presenter.cancelEdit()
+                if (event != null) {
+                    presenter.lockEdit()
+                    presenter.showMessage("Изменения отменены")
+                    presenter.hideEditOptions()
                 }
             }
             cancelHitArea.setOnClickListener { cancel.performClick() }
@@ -666,22 +841,16 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                 R.drawable.ic_add
             )
             editDescription.setOnClickListener {
-                showEditOptions()
                 if (!isDescriptionExpanded()) {
-                    expandDescriptionContent()
+                    expandDescription.performClick()
                 }
-                editDescription.visibility = GONE
-                absoluteBarEdit.visibility = GONE
-                descriptionText.keyListener = defaultKeyListener
-                noDescription.visibility = GONE
-                descriptionText.visibility = VISIBLE
+                presenter.enableDescriptionEdit()
                 descriptionText.requestFocus()
-                descriptionText.text?.let { text -> descriptionText.setSelection(text.length) }
-                showKeyBoard(descriptionText)
-                editDescription.post {
-                    // TODO: разобраться как заставить это работать при первом нажатии
-                    scroll.scrollTo(0, descriptionBarDistance)
-                }
+                //  TODO: почему-то если использовать функцию showKeyBoard вместо showKeyBoardByDelayedTouch, то
+                //               при нажатии на editDescription не станет отображаться absoluteBar(но если после убрать клавиатуру, то absoluteBar появится)
+                //               Я не понял почему это происходит, но хочу потом разобраться
+                //showKeyBoard(descriptionText)
+                showKeyBoardByDelayedTouch(descriptionText)
             }
             addMap.setOnClickListener { showMessage("addMap\nДанная возможность пока не доступна") }
             addPoint.setOnClickListener { showMessage("addPoint\nДанная возможность пока не доступна") }

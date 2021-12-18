@@ -76,9 +76,8 @@ class SecurityFragment : BaseMvpFragment<FragmentSecurityBinding>(FragmentSecuri
                 return@setOnClickListener
             }
             presenter.saveProfile(
-                emailEdit.text.toString(),
-                loginEdit.text.toString(),
-                newPasswordEdit.text.toString(),
+                email = emailEdit.text.toString(),
+                login = loginEdit.text.toString()
             )
         }
         titleButton.setOnClickListener { presenter.onBackPressed() }
@@ -89,6 +88,7 @@ class SecurityFragment : BaseMvpFragment<FragmentSecurityBinding>(FragmentSecuri
     override fun showProfile(profileDto: ProfileDto) {
         with(binding) {
             with(profileDto) {
+                email?.let { emailEdit.text = SpannableStringBuilder(it) }
                 nickName?.let { loginEdit.text = SpannableStringBuilder(it) }
             }
         }

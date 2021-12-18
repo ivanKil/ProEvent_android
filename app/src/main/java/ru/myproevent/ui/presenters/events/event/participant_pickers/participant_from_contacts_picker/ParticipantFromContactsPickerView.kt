@@ -1,12 +1,11 @@
 package ru.myproevent.ui.presenters.events.event.participant_pickers.participant_from_contacts_picker
 
-import android.os.Bundle
 import moxy.viewstate.strategy.alias.AddToEndSingle
 import ru.myproevent.ui.presenters.contacts.contacts_list.ContactsView
+import ru.myproevent.ui.presenters.events.event.participant_pickers.ParticipantsPickerView
 
 @AddToEndSingle
-interface ParticipantFromContactsPickerView : ContactsView{
-    fun setResult(requestKey: String, result: Bundle)
+interface ParticipantFromContactsPickerView : ContactsView, ParticipantsPickerView {
     fun updatePickedContactsList()
     fun showPickedParticipants()
     fun hidePickedParticipants()

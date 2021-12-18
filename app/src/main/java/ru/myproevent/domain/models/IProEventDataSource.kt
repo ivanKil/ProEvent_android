@@ -74,7 +74,8 @@ data class SignupResponse(val agreement: Boolean, val email: String, val passwor
 data class VerificationBody(val code: Int, val email: String)
 
 data class ProfileDto(
-    val userId: Long,
+    var userId: Long,
+    var email: String? = null,
     var fullName: String? = null,
     var nickName: String? = null,
     var msisdn: String? = null,

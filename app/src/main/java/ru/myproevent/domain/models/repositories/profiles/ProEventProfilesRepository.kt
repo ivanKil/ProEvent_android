@@ -29,6 +29,9 @@ class ProEventProfilesRepository @Inject constructor(private val api: IProEventD
         val oldProfileResponse = api.getProfile(profile.userId).execute()
         val newProfileResponse = if (oldProfileResponse.isSuccessful) {
             val oldProfile = oldProfileResponse.body()!!
+            if (profile.email == null) {
+                profile.email = oldProfile.email
+            }
             if (profile.fullName == null) {
                 profile.fullName = oldProfile.fullName
             }
