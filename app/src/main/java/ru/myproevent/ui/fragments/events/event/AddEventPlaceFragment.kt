@@ -1,7 +1,6 @@
 package ru.myproevent.ui.fragments.events.event
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -43,11 +42,15 @@ class AddEventPlaceFragment :
 
     private lateinit var currentPlace: ProEventAddress
 
+    private val checkPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
+
     private val onMapReadyCallback = OnMapReadyCallback { googleMap ->
         map = googleMap
         initMyLocationButton()
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(initialPlace, 15f))
         setMarker(initialPlace)
+        getAddressAsync(initialPlace)
         map.setOnMapClickListener { latLng ->
             getAddressAsync(latLng)
             setMarker(latLng)
@@ -62,14 +65,9 @@ class AddEventPlaceFragment :
         }
     }
 
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        checkLocationPermission()
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //checkLocationPermission()
+        checkLocationPermission()
         setInitialPlace()
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(onMapReadyCallback)
@@ -139,6 +137,11 @@ class AddEventPlaceFragment :
             getMyLocation { it?.let { initialPlace = it } }
             return
         }
+
+        currentPlace =
+            ProEventAddress(initialPlace.latitude, initialPlace.longitude, "Красная площадь")
+        getAddressAsync(initialPlace)
+        binding.buttonConfirm.visibility = View.VISIBLE
     }
 
     private fun goToAddress(address: Address) {
@@ -191,7 +194,7 @@ class AddEventPlaceFragment :
         when {
             locationPermissionGranted -> Unit
             shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                requestPermission()
+                showRationaleDialog()
             }
             else -> requestPermission()
         }
@@ -202,17 +205,21 @@ class AddEventPlaceFragment :
             AlertDialog.Builder(it)
                 .setTitle("Доступ к геолокации")
                 .setMessage("Для опредления местоположения нужен доступ к геолокации")
-                .setPositiveButton("Предоставить доступ") { _, _ -> binding.root.post {   requestPermission() }}
+                .setPositiveButton("Предоставить доступ") { dialog, _ ->
+                    binding.root.post {
+                        dialog.dismiss()
+                        requestPermission()
+                    }
+                }
                 .setNegativeButton("Нет") { dialog, _ -> dialog.dismiss() }
                 .create()
                 .show()
         }
     }
 
-    private fun requestPermission() {
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
-            .launch(Manifest.permission.ACCESS_FINE_LOCATION)
-    }
+    private fun requestPermission() =
+        checkPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+
 
     companion object {
         private const val BUNDLE_ADDRESS = "ADDRESS"

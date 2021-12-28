@@ -42,9 +42,7 @@ import ru.myproevent.ui.fragments.BaseMvpFragment
 import ru.myproevent.ui.fragments.ProEventMessageDialog
 import ru.myproevent.ui.presenters.events.event.EventPresenter
 import ru.myproevent.ui.presenters.events.event.EventView
-import ru.myproevent.ui.presenters.main.BottomNavigationView
 import ru.myproevent.ui.presenters.main.RouterProvider
-import ru.myproevent.ui.presenters.main.Tab
 import ru.myproevent.ui.views.CenteredImageSpan
 import ru.myproevent.ui.views.KeyboardAwareTextInputEditText
 import java.util.*
