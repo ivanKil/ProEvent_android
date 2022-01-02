@@ -45,8 +45,8 @@ class Screens : IScreens {
     override fun event(event: Event) = FragmentScreen("EVENT") { EventFragment.newInstance(event) }
     override fun currentlyOpenEventScreen() = FragmentScreen("EVENT") { throw RuntimeException("В текущем стеке нет экрана Screens.event") }
     override fun eventActionConfirmation(event: Event, status: Event.Status?) = FragmentScreen { EventActionConfirmationFragment.newInstance(event, status) }
-    override fun participantPickerTypeSelection() = FragmentScreen { ParticipantPickerTypeSelectionFragment.newInstance() }
-    override fun participantFromContactsPicker() = FragmentScreen { ParticipantFromContactsPickerFragment.newInstance() }
+    override fun participantPickerTypeSelection(participantsIds: List<Long>) = FragmentScreen { ParticipantPickerTypeSelectionFragment.newInstance(participantsIds) }
+    override fun participantFromContactsPicker(participantsIds: List<Long>) = FragmentScreen { ParticipantFromContactsPickerFragment.newInstance(participantsIds) }
     override fun participantByEmailPicker() = FragmentScreen { ParticipantByEmailPickerFragment.newInstance() }
     override fun addEventPlace(address: Address?): Screen = FragmentScreen { AddEventPlaceFragment.newInstance(address)}
 }

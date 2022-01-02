@@ -4,10 +4,8 @@ import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -16,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.R
-import ru.myproevent.databinding.FragmentContactAddBinding
 import ru.myproevent.databinding.FragmentParticipantPickerFromContactsBinding
 import ru.myproevent.domain.models.entities.Contact
 import ru.myproevent.ui.fragments.BaseMvpFragment
@@ -24,9 +21,7 @@ import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_
 import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_from_contacts_picker.ParticipantFromContactsPickerView
 import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_from_contacts_picker.adapters.ContactsPickerRVAdapter
 import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_from_contacts_picker.adapters.PickedContactsRVAdapter
-import ru.myproevent.ui.presenters.main.BottomNavigationView
 import ru.myproevent.ui.presenters.main.RouterProvider
-import ru.myproevent.ui.presenters.main.Tab
 
 
 // TODO: отрефаторить: этот фрагмент во многом копирует ContactsFragment
@@ -36,7 +31,16 @@ class ParticipantFromContactsPickerFragment :
     ), ParticipantFromContactsPickerView {
 
     companion object {
-        fun newInstance() = ParticipantFromContactsPickerFragment()
+        const val PARTICIPANTS_IDS_ARG = "PARTICIPANTS_IDS"
+        fun newInstance(participantsIds: List<Long>) =
+            ParticipantFromContactsPickerFragment().apply {
+                arguments = Bundle().apply {
+                    putLongArray(
+                        PARTICIPANTS_IDS_ARG,
+                        participantsIds.toLongArray()
+                    )
+                }
+            }
     }
 
     private var isFilterOptionsExpanded = false
@@ -89,7 +93,12 @@ class ParticipantFromContactsPickerFragment :
     }
 
     override val presenter by moxyPresenter {
-        ParticipantFromContactsPickerPresenter((parentFragment as RouterProvider).router).apply {
+        ParticipantFromContactsPickerPresenter(
+            localRouter = (parentFragment as RouterProvider).router,
+            eventParticipantsIds = requireArguments().getLongArray(
+                ParticipantPickerTypeSelectionFragment.PARTICIPANTS_IDS_ARG
+            )!!.toList()
+        ).apply {
             ProEventApp.instance.appComponent.inject(this)
         }
     }

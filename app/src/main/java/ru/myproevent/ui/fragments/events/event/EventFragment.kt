@@ -519,7 +519,7 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
             showEditOptions()
             binding.participantsContainer.isVisible = true
             val participantsContacts = bundle.getParcelableArray(CONTACTS_KEY)!! as Array<Contact>
-            presenter.loadParticipantsProfiles(participantsContacts.map { it.toProfileDto() }
+            presenter.addParticipantsProfiles(participantsContacts.map { it.toProfileDto() }
                 .toTypedArray())
         }
 

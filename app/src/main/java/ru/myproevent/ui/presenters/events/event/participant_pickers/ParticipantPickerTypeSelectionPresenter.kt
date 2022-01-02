@@ -5,8 +5,8 @@ import ru.myproevent.ui.presenters.BaseMvpPresenter
 
 class ParticipantPickerTypeSelectionPresenter(localRouter: Router) :
     BaseMvpPresenter<ParticipantPickerTypeSelectionView>(localRouter) {
-    fun pickFromContacts() {
-        localRouter.navigateTo(screens.participantFromContactsPicker())
+    fun pickFromContacts(pickedParticipantsIds: List<Long>) {
+        localRouter.navigateTo(screens.participantFromContactsPicker(pickedParticipantsIds))
     }
 
     fun pickByEmail() {

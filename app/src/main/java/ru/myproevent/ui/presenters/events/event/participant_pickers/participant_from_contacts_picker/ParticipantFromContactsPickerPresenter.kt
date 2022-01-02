@@ -19,7 +19,10 @@ import javax.inject.Inject
 // TODO: отрефаторить: этот презентер практически копирует ContactsPresenter. Как делегировать ContactsPresenter, то есть как сделать композицию?
 //             Проблема в том что яне разобрался как передать viewState
 //             Сделать общий презентер для ContactsFragment и ParticipantFromContactsPickerFragment?
-class ParticipantFromContactsPickerPresenter(localRouter: Router) :
+class ParticipantFromContactsPickerPresenter(
+    localRouter: Router,
+    private val eventParticipantsIds: List<Long>
+) :
     BaseMvpPresenter<ParticipantFromContactsPickerView>(localRouter) {
 
     private val pickedParticipants = arrayListOf<Contact>()
@@ -79,7 +82,9 @@ class ParticipantFromContactsPickerPresenter(localRouter: Router) :
                 } else {
                     view.setName(userId.toString())
                 }
-                if (!description.isNullOrEmpty()) {
+                if (eventParticipantsIds.contains(contact.userId)) {
+                    view.setDescription("Уже добавлен как участник")
+                } else if (!description.isNullOrEmpty()) {
                     view.setDescription(description!!)
                 } else if (!nickName.isNullOrEmpty()) {
                     view.setDescription(nickName!!)
@@ -88,12 +93,19 @@ class ParticipantFromContactsPickerPresenter(localRouter: Router) :
                 }
                 //imgUri?.let { view.loadImg(it) }
                 status?.let { view.setStatus(it) }
+
                 view.setSelection(pickedParticipants.contains(contact))
             }
         }
 
         override fun onItemClick(view: IContactPickerItemView) {
-            contacts[view.pos]?.let { itemClickListener?.invoke(view, it) }
+            contacts[view.pos]?.let {
+                if (eventParticipantsIds.contains(it.userId)) {
+                    viewState.showMessage("Данный пользователь уже добавлен как участник")
+                    return
+                }
+                itemClickListener?.invoke(view, it)
+            }
         }
 
         override fun onStatusClick(view: IContactPickerItemView) {
@@ -206,6 +218,10 @@ class ParticipantFromContactsPickerPresenter(localRouter: Router) :
 
     fun confirmPick() {
         Log.d("[MYLOG]", "presenter confirmPick")
+        if(pickedParticipants.isEmpty()){
+            viewState.showMessage("Должен быть выбран минимум 1 контакт")
+            return
+        }
         viewState.setResult(
             PARTICIPANTS_PICKER_RESULT_KEY,
             Bundle().apply {

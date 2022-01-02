@@ -13,6 +13,8 @@ import java.util.*
 import javax.inject.Inject
 
 class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRouter) {
+    private val pickedParticipantsIds = mutableListOf<Long>()
+
     @Inject
     lateinit var eventsRepository: IProEventEventsRepository
 
@@ -96,7 +98,12 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
     }
 
     fun pickParticipants() {
-        localRouter.navigateTo(screens.participantPickerTypeSelection())
+        localRouter.navigateTo(screens.participantPickerTypeSelection(pickedParticipantsIds))
+    }
+
+    private fun addParticipantItemView(profileDto: ProfileDto){
+        pickedParticipantsIds.add(profileDto.userId)
+        viewState.addParticipantItemView(profileDto)
     }
 
     fun initParticipantsProfiles(participantsIds: LongArray) {
@@ -108,7 +115,7 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
             profilesRepository.getProfile(id)
                 .observeOn(uiScheduler)
                 .subscribe({ profileDto ->
-                    viewState.addParticipantItemView(profileDto!!)
+                    addParticipantItemView(profileDto!!)
                 }, {
                     Log.d("[FUCK]", "error: $it")
                     val profileDto = ProfileDto(
@@ -116,19 +123,20 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
                         fullName = "Заглушка",
                         description = "Профиля нет, или не загрузился",
                     )
-                    viewState.addParticipantItemView(profileDto)
+                    addParticipantItemView(profileDto)
                 }).disposeOnDestroy()
         }
     }
 
-    fun loadParticipantsProfiles(participants: Array<ProfileDto>) {
+    fun addParticipantsProfiles(participants: Array<ProfileDto>) {
         for (participant in participants) {
-            viewState.addParticipantItemView(participant)
+            addParticipantItemView(participant)
         }
     }
 
     fun clearParticipants() {
         viewState.clearParticipants()
+        pickedParticipantsIds.clear()
         isParticipantsProfilesInitialized = false
     }
 
