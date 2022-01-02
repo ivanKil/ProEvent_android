@@ -21,9 +21,7 @@ import ru.myproevent.ui.presenters.main.BottomNavigationPresenter
 import ru.myproevent.ui.presenters.main.BottomNavigationView
 import ru.myproevent.ui.presenters.main.Tab
 import javax.inject.Inject
-import android.content.Intent
 import ru.myproevent.domain.models.LocalCiceroneHolder
-
 
 class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
     private val navigator: Navigator = AppNavigator(this, R.id.container)
@@ -74,14 +72,14 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
         } ?: hideBottomNavigation()
     }
 
-    private fun hideBottomNavigation() {
+    override fun hideBottomNavigation() {
         if (binding.bottomNavigationBar.visibility == View.GONE) {
             return
         }
         binding.bottomNavigationBar.visibility = View.GONE
     }
 
-    private fun showBottomNavigation() {
+    override fun showBottomNavigation() {
         if (binding.bottomNavigationBar.visibility == View.VISIBLE) {
             return
         }

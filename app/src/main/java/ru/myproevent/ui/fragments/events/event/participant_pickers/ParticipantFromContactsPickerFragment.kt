@@ -21,6 +21,7 @@ import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_
 import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_from_contacts_picker.ParticipantFromContactsPickerView
 import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_from_contacts_picker.adapters.ContactsPickerRVAdapter
 import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_from_contacts_picker.adapters.PickedContactsRVAdapter
+import ru.myproevent.ui.presenters.main.BottomNavigationView
 import ru.myproevent.ui.presenters.main.RouterProvider
 
 
@@ -157,6 +158,10 @@ class ParticipantFromContactsPickerFragment :
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // BottomNavigation скрывается, чтобы пользователь не мог перейти на вкладку контактов и изменить свой спискок контактов,
+        // так как это привод к тому что список контактов пользователя в открытом ParticipantFromContactsPickerFragment будет отличаться,
+        // так как он не обновляется
+        (requireActivity() as BottomNavigationView).hideBottomNavigation()
         with(binding) {
             allContacts.setOnTouchListener(filterOptionTouchListener)
             allContacts.setOnClickListener {
@@ -300,5 +305,11 @@ class ParticipantFromContactsPickerFragment :
 
     override fun setResult(requestKey: String, result: Bundle) {
         parentFragmentManager.setFragmentResult(requestKey, result)
+    }
+
+    override fun onBackPressed(): Boolean {
+        val returnValue = presenter.onBackPressed()
+        (requireActivity()  as BottomNavigationView).showBottomNavigation()
+        return returnValue
     }
 }
