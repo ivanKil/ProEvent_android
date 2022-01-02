@@ -14,6 +14,7 @@ import javax.inject.Inject
 
 class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRouter) {
     private val pickedParticipantsIds = mutableListOf<Long>()
+    private var isParticipantsProfilesInitialized = false
 
     @Inject
     lateinit var eventsRepository: IProEventEventsRepository
@@ -24,15 +25,12 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
     @Inject
     lateinit var profilesRepository: IProEventProfilesRepository
 
-    private var isParticipantsProfilesInitialized = false
-
     fun addEvent(
         name: String,
         startDate: Date,
         endDate: Date,
         address: Address?,
         description: String,
-        participantsIds: LongArray,
         callback: ((Event?) -> Unit)? = null
     ) {
         eventsRepository
@@ -45,7 +43,7 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
                     startDate = startDate,
                     endDate = endDate,
                     description = description,
-                    participantsUserIds = participantsIds,
+                    participantsUserIds = pickedParticipantsIds.toLongArray(),
                     city = null,
                     address = address,
                     mapsFileIds = null,
@@ -64,6 +62,8 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
     }
 
     fun editEvent(event: Event, callback: ((Event?) -> Unit)? = null) {
+        event.participantsUserIds = pickedParticipantsIds.toLongArray()
+        Log.d("[REMOVE]", "presenter.editEvent(): $event")
         eventsRepository
             .editEvent(event)
             .observeOn(uiScheduler)
@@ -101,9 +101,13 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
         localRouter.navigateTo(screens.participantPickerTypeSelection(pickedParticipantsIds))
     }
 
-    private fun addParticipantItemView(profileDto: ProfileDto){
-        pickedParticipantsIds.add(profileDto.userId)
+    fun openParticipant(profileDto: ProfileDto) {
+        localRouter.navigateTo(screens.eventParticipant(profileDto))
+    }
+
+    private fun addParticipantItemView(profileDto: ProfileDto) {
         viewState.addParticipantItemView(profileDto)
+        pickedParticipantsIds.add(profileDto.userId)
     }
 
     fun initParticipantsProfiles(participantsIds: LongArray) {
@@ -212,5 +216,15 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
 
     fun unlockLocationEdit() {
         viewState.unlockLocationEdit()
+    }
+
+    fun removeParticipant(id: Long) {
+        // .toList() используется чтобы передать именно копию pickedParticipantsIds, а не ссылку
+        viewState.removeParticipant(id, pickedParticipantsIds.toList())
+        pickedParticipantsIds.remove(id)
+    }
+
+    fun showEditOptions(){
+        viewState.showEditOptions()
     }
 }

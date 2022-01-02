@@ -8,9 +8,7 @@ import ru.myproevent.ProEventApp
 import ru.myproevent.databinding.FragmentHomeBinding
 import ru.myproevent.ui.presenters.home.HomePresenter
 import ru.myproevent.ui.presenters.home.HomeView
-import ru.myproevent.ui.presenters.main.BottomNavigationView
 import ru.myproevent.ui.presenters.main.RouterProvider
-import ru.myproevent.ui.presenters.main.Tab
 
 class HomeFragment : BaseMvpFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), HomeView {
 

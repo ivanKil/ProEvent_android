@@ -36,9 +36,6 @@ import ru.myproevent.domain.models.ProfileDto
 import ru.myproevent.domain.models.entities.Address
 import ru.myproevent.domain.models.entities.Contact
 import ru.myproevent.domain.models.entities.Event
-import ru.myproevent.domain.utils.CONTACTS_KEY
-import ru.myproevent.domain.utils.PARTICIPANTS_PICKER_RESULT_KEY
-import ru.myproevent.domain.utils.toProfileDto
 import ru.myproevent.ui.BackButtonListener
 import ru.myproevent.ui.fragments.BaseMvpFragment
 import ru.myproevent.ui.fragments.ProEventMessageDialog
@@ -54,6 +51,7 @@ import android.view.MotionEvent
 import android.os.SystemClock
 
 import android.widget.EditText
+import ru.myproevent.domain.utils.*
 
 
 // TODO: отрефакторить - разбить этот класс на кастомные вьющки и утилиты
@@ -206,7 +204,8 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
         isAbsoluteBarBarHidden = true
     }
 
-    private fun showEditOptions() = with(binding) {
+    // TODO: отрефакторить так чтобы showEditOptions вызывался только из presenter-a
+    override fun showEditOptions() = with(binding) {
         save.visibility = VISIBLE
         saveHitArea.visibility = VISIBLE
         cancel.visibility = VISIBLE
@@ -254,6 +253,16 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
             presenter.unlockLocationEdit()
             locationEdit.requestFocus()
             showKeyBoard(locationEdit)
+        }
+    }
+
+    override fun removeParticipant(id: Long, pickedParticipantsIds: List<Long>) = with(binding) {
+        Log.d("[REMOVE]", "removeParticipant id($id) pickedParticipantsIds($pickedParticipantsIds)")
+        pickedParticipantsIds.indexOf(id).let {
+            if (it == -1) {
+                return@with
+            }
+            participantsContainer.removeViewAt(it + 1)
         }
     }
 
@@ -503,7 +512,7 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
     }
 
     override fun clearParticipants() = with(binding) {
-        Log.d("[VIEWSTATE]", "clearParticipants")
+        Log.d("[REMOVE]", "clearParticipants")
         if (participantsContainer.childCount > 1) {
             participantsContainer.removeViews(1, participantsContainer.childCount - 1)
         }
@@ -516,11 +525,19 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
             this
         ) { _, bundle ->
             binding.noParticipants.isVisible = false
-            showEditOptions()
+            presenter.showEditOptions()
             binding.participantsContainer.isVisible = true
             val participantsContacts = bundle.getParcelableArray(CONTACTS_KEY)!! as Array<Contact>
             presenter.addParticipantsProfiles(participantsContacts.map { it.toProfileDto() }
                 .toTypedArray())
+        }
+
+        parentFragmentManager.setFragmentResultListener(
+            PARTICIPANT_TO_REMOVE_ID_RESULT_KEY,
+            this
+        ) { _, bundle ->
+            presenter.showEditOptions()
+            presenter.removeParticipant(bundle.getLong(PARTICIPANT_ID_KEY))
         }
 
         parentFragmentManager.setFragmentResultListener(
@@ -531,7 +548,7 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                 bundle.getParcelable<Address>(AddEventPlaceFragment.ADD_EVENT_PLACE_RESULT)
             event?.let { it.address = address } ?: run { this.address = address }
             if (address != null) binding.locationEdit.setText(address.addressLine)
-            showEditOptions()
+            presenter.showEditOptions()
         }
 
 
@@ -540,10 +557,8 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
 
     private var isSaveAvailable = true
 
-    private val participantsIds = arrayListOf<Long>()
-
     override fun addParticipantItemView(profileDto: ProfileDto) {
-        Log.d("[VIEWSTATE]", "addParticipantItemView")
+        Log.d("[REMOVE]", "addParticipantItemView profileDto id(${profileDto.userId})")
         val view = ItemContactBinding.inflate(layoutInflater)
         profileDto.fullName?.let {
             view.tvName.text = "#${profileDto.userId} $it"
@@ -553,9 +568,11 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
             view.tvName.text = "#${profileDto.userId}"
         }
         view.tvDescription.text = profileDto.description
+        view.root.setOnClickListener {
+            presenter.openParticipant(profileDto)
+        }
         binding.participantsContainer.addView(view.root)
         binding.noParticipants.isVisible = false
-        participantsIds.add(profileDto.userId)
     }
 
     private fun setImageSpan(view: TextView, text: String, iconRes: Int) {
@@ -729,7 +746,6 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                     it.startDate = Calendar.getInstance().time
                     it.endDate = Calendar.getInstance().time
                     it.description = descriptionText.text.toString()
-                    it.participantsUserIds = participantsIds.toLongArray()
                     presenter.editEvent(it, ::saveCallback)
                 } ?: run {
                     presenter.addEvent(
@@ -738,7 +754,6 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                         Calendar.getInstance().time,
                         address,
                         descriptionText.text.toString(),
-                        participantsIds.toLongArray(),
                         ::saveCallback
                     )
                 }

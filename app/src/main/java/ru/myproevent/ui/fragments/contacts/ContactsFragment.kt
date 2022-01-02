@@ -19,9 +19,7 @@ import ru.myproevent.ui.fragments.BaseMvpFragment
 import ru.myproevent.ui.presenters.contacts.contacts_list.ContactsPresenter
 import ru.myproevent.ui.presenters.contacts.contacts_list.ContactsView
 import ru.myproevent.ui.presenters.contacts.contacts_list.adapters.ContactsRVAdapter
-import ru.myproevent.ui.presenters.main.BottomNavigationView
 import ru.myproevent.ui.presenters.main.RouterProvider
-import ru.myproevent.ui.presenters.main.Tab
 
 class ContactsFragment : BaseMvpFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate),
     ContactsView {

@@ -108,4 +108,5 @@
     <string name="attach_file">Файл</string>
     <string name="attach_location">Место</string>
     <string name="message_edit_hint">Написать сообщение</string>
+    <string name="point_input_title">Точка участника</string>
 </resources>

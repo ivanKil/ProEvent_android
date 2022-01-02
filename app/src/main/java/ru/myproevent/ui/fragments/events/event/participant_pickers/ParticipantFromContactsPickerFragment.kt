@@ -21,7 +21,7 @@ import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_
 import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_from_contacts_picker.ParticipantFromContactsPickerView
 import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_from_contacts_picker.adapters.ContactsPickerRVAdapter
 import ru.myproevent.ui.presenters.events.event.participant_pickers.participant_from_contacts_picker.adapters.PickedContactsRVAdapter
-import ru.myproevent.ui.presenters.main.BottomNavigationView
+import ru.myproevent.ui.presenters.main.BottomNavigation
 import ru.myproevent.ui.presenters.main.RouterProvider
 
 
@@ -161,7 +161,7 @@ class ParticipantFromContactsPickerFragment :
         // BottomNavigation скрывается, чтобы пользователь не мог перейти на вкладку контактов и изменить свой спискок контактов,
         // так как это привод к тому что список контактов пользователя в открытом ParticipantFromContactsPickerFragment будет отличаться,
         // так как он не обновляется
-        (requireActivity() as BottomNavigationView).hideBottomNavigation()
+        (requireActivity() as BottomNavigation).hideBottomNavigation()
         with(binding) {
             allContacts.setOnTouchListener(filterOptionTouchListener)
             allContacts.setOnClickListener {
@@ -309,7 +309,7 @@ class ParticipantFromContactsPickerFragment :
 
     override fun onBackPressed(): Boolean {
         val returnValue = presenter.onBackPressed()
-        (requireActivity()  as BottomNavigationView).showBottomNavigation()
+        (requireActivity()  as BottomNavigation).showBottomNavigation()
         return returnValue
     }
 }

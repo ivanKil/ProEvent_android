@@ -1,7 +1,9 @@
 package ru.myproevent.domain.models
 
+import android.os.Parcelable
 import io.reactivex.Completable
 import io.reactivex.Single
+import kotlinx.android.parcel.Parcelize
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -73,6 +75,7 @@ data class SignupResponse(val agreement: Boolean, val email: String, val passwor
 
 data class VerificationBody(val code: Int, val email: String)
 
+@Parcelize
 data class ProfileDto(
     var userId: Long,
     var email: String? = null,
@@ -83,7 +86,7 @@ data class ProfileDto(
     var birthdate: String? = null,
     var imgUri: String? = null,
     var description: String? = null
-)
+) : Parcelable
 
 data class ContactDto(val id: Long, val status: String)
 

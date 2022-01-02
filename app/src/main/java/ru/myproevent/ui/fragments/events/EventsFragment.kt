@@ -17,9 +17,7 @@ import ru.myproevent.ui.fragments.BaseMvpFragment
 import ru.myproevent.ui.presenters.events.EventsPresenter
 import ru.myproevent.ui.presenters.events.EventsView
 import ru.myproevent.ui.presenters.events.adapter.EventsRVAdapter
-import ru.myproevent.ui.presenters.main.BottomNavigationView
 import ru.myproevent.ui.presenters.main.RouterProvider
-import ru.myproevent.ui.presenters.main.Tab
 
 
 class EventsFragment : BaseMvpFragment<FragmentEventsBinding>(FragmentEventsBinding::inflate),

@@ -1,17 +1,19 @@
 package ru.myproevent.ui.presenters.main
 
 import moxy.MvpView
-import moxy.viewstate.strategy.alias.AddToEndSingle
+import moxy.viewstate.strategy.alias.AddToEnd
 
-@AddToEndSingle
+/**
+ * Функции этого интерфейса должны вызываться исключительно из методов BottomNavigationPresenter.
+ * Для реализации этой инкапсуляции в качесве параметра передаётся BottomNavigationPresenterFriendAccess,
+ * экземпляр которого может иметь только BottomNavigationPresenter
+ */
+@AddToEnd
 interface BottomNavigationView : MvpView {
-    fun openTab(tab: Tab)
-    fun resetState()
-    // Экран, который вызывает эту функцию, должен вызывать showBottomNavigation после того как он закроется.
-    // При этом showBottomNavigation желательно вызывать после localRouter.exit().
-    // Иначе BottomNavigation может стать для пользователя недоступным
-    fun hideBottomNavigation()
-    // Если эту функцию вызывает экран, то вызов желательно производить сразу после super.onCreateView.
-    // Иначе анимации переходов между экранами могут работать некорректно
-    fun showBottomNavigation()
+    fun showTab(
+        tab: Tab,
+        friendAccess: BottomNavigationPresenter.BottomNavigationPresenterFriendAccess
+    )
+
+    fun resetState(friendAccess: BottomNavigationPresenter.BottomNavigationPresenterFriendAccess)
 }

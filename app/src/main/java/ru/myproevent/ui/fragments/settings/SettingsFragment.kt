@@ -6,9 +6,8 @@ import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.databinding.FragmentSettingsBinding
 import ru.myproevent.ui.fragments.BaseMvpFragment
-import ru.myproevent.ui.presenters.main.BottomNavigationView
+import ru.myproevent.ui.presenters.main.BottomNavigation
 import ru.myproevent.ui.presenters.main.RouterProvider
-import ru.myproevent.ui.presenters.main.Tab
 import ru.myproevent.ui.presenters.settings.settings_list.SettingsPresenter
 import ru.myproevent.ui.presenters.settings.settings_list.SettingsView
 
@@ -36,6 +35,6 @@ class SettingsFragment : BaseMvpFragment<FragmentSettingsBinding>(FragmentSettin
     }
 
     override fun logout() {
-        (requireActivity() as BottomNavigationView).resetState()
+        (requireActivity() as BottomNavigation).exit()
     }
 }

@@ -13,7 +13,7 @@ import ru.myproevent.databinding.FragmentAuthorizationBinding
 import ru.myproevent.ui.fragments.BaseMvpFragment
 import ru.myproevent.ui.presenters.authorization.authorization.AuthorizationPresenter
 import ru.myproevent.ui.presenters.authorization.authorization.AuthorizationView
-import ru.myproevent.ui.presenters.main.BottomNavigationView
+import ru.myproevent.ui.presenters.main.BottomNavigation
 import ru.myproevent.ui.presenters.main.RouterProvider
 import ru.myproevent.ui.presenters.main.Tab
 
@@ -139,7 +139,7 @@ class AuthorizationFragment :
     }
 
     override fun finishAuthorization() {
-        (requireActivity() as BottomNavigationView).openTab(Tab.HOME)
+        (requireActivity() as BottomNavigation).openTab(Tab.HOME)
         Log.d(
             "[MYLOG]",
             "AuthorizationFragment (requireActivity() as BottomNavigationView).openTab(Tab.HOME)"

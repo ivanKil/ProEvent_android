@@ -18,12 +18,13 @@ import ru.myproevent.databinding.ActivityMainBinding
 import ru.myproevent.ui.BackButtonListener
 import ru.myproevent.ui.fragments.TabContainerFragment
 import ru.myproevent.ui.presenters.main.BottomNavigationPresenter
-import ru.myproevent.ui.presenters.main.BottomNavigationView
+import ru.myproevent.ui.presenters.main.BottomNavigation
 import ru.myproevent.ui.presenters.main.Tab
 import javax.inject.Inject
 import ru.myproevent.domain.models.LocalCiceroneHolder
+import ru.myproevent.ui.presenters.main.BottomNavigationView
 
-class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
+class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigation, BottomNavigationView {
     private val navigator: Navigator = AppNavigator(this, R.id.container)
 
     @Inject
@@ -102,11 +103,19 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
     }
 
     override fun openTab(tab: Tab) {
+        presenter.openTab(tab)
+    }
+
+    override fun showTab(
+        tab: Tab,
+        friendAccess: BottomNavigationPresenter.BottomNavigationPresenterFriendAccess
+    ) {
+        checkTab(tab)
         val fm = supportFragmentManager
         var currentFragment: Fragment? = null
         val fragments = fm.fragments
         for (f in fragments) {
-            if (f.isVisible) {
+            if (f.tag == presenter.currFragmentTag) {
                 currentFragment = f
                 break
             }
@@ -133,18 +142,19 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
                 R.id.container,
                 tabContainer, tab.name
             )
+            presenter.currFragmentTag = tab.name
         }
         if (currentFragment != null) {
             transaction.hide(currentFragment)
         }
         if (newFragment != null) {
             transaction.show(newFragment)
+            presenter.currFragmentTag = tab.name
         }
-        checkTab(tab)
         transaction.commitNow()
     }
 
-    override fun resetState() {
+    override fun resetState(friendAccess: BottomNavigationPresenter.BottomNavigationPresenterFriendAccess) {
         ciceroneHolder.clear()
 
         val fm = supportFragmentManager
@@ -156,6 +166,10 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView {
         transaction.commitNow()
 
         openTab(Tab.AUTHORIZATION)
+    }
+
+    override fun exit() {
+        presenter.exit()
     }
 
     override fun onResumeFragments() {

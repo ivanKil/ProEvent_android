@@ -28,6 +28,8 @@ interface EventView : BaseMvpView {
     fun unlockLocationEdit()
     @OneExecution
     fun cancelEdit()
+    fun showEditOptions()
     fun hideEditOptions()
     fun lockEdit()
+    fun removeParticipant(id: Long, pickedParticipantsIds: List<Long>)
 }

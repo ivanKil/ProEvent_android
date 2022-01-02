@@ -2,6 +2,7 @@ package ru.myproevent.ui.screens
 
 import com.github.terrakok.cicerone.Screen
 import com.github.terrakok.cicerone.androidx.FragmentScreen
+import ru.myproevent.domain.models.ProfileDto
 import ru.myproevent.domain.models.entities.Address
 import ru.myproevent.domain.models.entities.Contact
 import ru.myproevent.domain.models.entities.Event
@@ -17,6 +18,7 @@ import ru.myproevent.ui.fragments.events.event.AddEventPlaceFragment
 import ru.myproevent.ui.fragments.events.event.EventActionConfirmationFragment
 import ru.myproevent.ui.fragments.events.EventsFragment
 import ru.myproevent.ui.fragments.events.event.EventFragment
+import ru.myproevent.ui.fragments.events.event.EventParticipantFragment
 import ru.myproevent.ui.fragments.events.event.participant_pickers.ParticipantByEmailPickerFragment
 import ru.myproevent.ui.fragments.events.event.participant_pickers.ParticipantFromContactsPickerFragment
 import ru.myproevent.ui.fragments.events.event.participant_pickers.ParticipantPickerTypeSelectionFragment
@@ -49,4 +51,5 @@ class Screens : IScreens {
     override fun participantFromContactsPicker(participantsIds: List<Long>) = FragmentScreen { ParticipantFromContactsPickerFragment.newInstance(participantsIds) }
     override fun participantByEmailPicker() = FragmentScreen { ParticipantByEmailPickerFragment.newInstance() }
     override fun addEventPlace(address: Address?): Screen = FragmentScreen { AddEventPlaceFragment.newInstance(address)}
+    override fun eventParticipant(profileDto: ProfileDto) = FragmentScreen { EventParticipantFragment.newInstance(profileDto) }
 }
