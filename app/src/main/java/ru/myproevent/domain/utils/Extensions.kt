@@ -1,5 +1,7 @@
 package ru.myproevent.domain.utils
 
+import android.content.res.Resources
+import android.util.TypedValue
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import ru.myproevent.domain.models.EventDto
@@ -84,3 +86,9 @@ fun Address.Companion.fromString(str: String): Address? {
 fun Address.formatToString(): String {
     return "$addressLine || $latitude || $longitude"
 }
+
+fun pxValue(dp: Float) = TypedValue.applyDimension(
+    TypedValue.COMPLEX_UNIT_DIP,
+    dp,
+    Resources.getSystem().displayMetrics
+)

@@ -16,6 +16,10 @@ import ru.myproevent.ui.presenters.authorization.authorization.AuthorizationView
 import ru.myproevent.ui.presenters.main.BottomNavigation
 import ru.myproevent.ui.presenters.main.RouterProvider
 import ru.myproevent.ui.presenters.main.Tab
+import android.view.WindowManager
+import android.widget.LinearLayout
+import androidx.core.view.isVisible
+import ru.myproevent.domain.utils.pxValue
 
 class AuthorizationFragment :
     BaseMvpFragment<FragmentAuthorizationBinding>(FragmentAuthorizationBinding::inflate),
@@ -23,6 +27,50 @@ class AuthorizationFragment :
 
     private var emailInvalidError = false
     private var passwordInvalidError = false
+
+    private fun getStatusBarHeight(): Int {
+        var result = 0
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            result = resources.getDimensionPixelSize(resourceId)
+        }
+        return result
+    }
+
+    private fun setLayoutParams() = with(binding) {
+        // https://stackoverflow.com/a/24035591/11883985
+        body.post {
+            val availableHeight = root.height
+
+            Log.d("[MYLOG]", "passwordRecovery.lineCount: ${passwordRecovery.lineCount}; registration.lineCount: ${registration.lineCount}")
+            if(passwordRecovery.lineCount > 1|| registration.lineCount > 1){
+                bottomOptionsContainer.orientation = LinearLayout.VERTICAL
+                bottomOptionsHorizontalSeparatorSpace.visibility = GONE
+            }
+
+            space.layoutParams = space.layoutParams.apply { height = availableHeight }
+            body.post {
+                val diffrence = body.height - availableHeight
+                authorizationConfirmMarginTop.layoutParams =
+                    authorizationConfirmMarginTop.layoutParams.apply {
+                        height -= if (diffrence <= pxValue(40f)) {
+                            diffrence
+                        } else {
+                            pxValue(40f)
+                        }.toInt()
+                    }
+                Log.d("[MYLOG]", "diffrence: $diffrence; pxValue(80f + 48f): ${pxValue(80f + 48f)}; pxValue(80f + 48f + 24f + 28f): ${pxValue(80f + 48f + 24f + 28f)}")
+                if(diffrence > pxValue(40f)){
+                    logo.isVisible = false
+                    Log.d("[MYLOG]", "logo.isVisible: ${logo.isVisible}")
+                }
+                if(diffrence > pxValue(80f + 48f)){
+                    formTitle.isVisible = false
+                    Log.d("[MYLOG]", "logo.isVisible: ${formTitle.isVisible}")
+                }
+            }
+        }
+    }
 
     override val presenter by moxyPresenter {
         AuthorizationPresenter((parentFragment as RouterProvider).router).apply {
@@ -36,6 +84,7 @@ class AuthorizationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setLayoutParams()
         with(binding) {
             authorizationConfirm.setOnClickListener {
                 presenter.authorize(

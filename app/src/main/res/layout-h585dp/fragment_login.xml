@@ -40,7 +40,7 @@
         android:layout_marginTop="17.17dp"
         android:layout_marginRight="6.87dp"
         android:layout_marginBottom="36.69dp"
-        android:src="@drawable/ic_logo"
+        android:src="@drawable/ic_logo_background"
         app:layout_constraintBottom_toBottomOf="@id/logo_background"
         app:layout_constraintLeft_toLeftOf="@id/logo_background"
         app:layout_constraintRight_toRightOf="@id/logo_background"
