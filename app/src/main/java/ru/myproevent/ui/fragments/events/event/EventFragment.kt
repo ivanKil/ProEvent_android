@@ -54,7 +54,7 @@ import android.widget.EditText
 import ru.myproevent.domain.utils.*
 
 
-// TODO: отрефакторить - разбить этот класс на кастомные вьющки и утилиты
+// TODO: отрефакторить - разбить этот божественный класс на кастомные вьющки и утилиты
 class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding::inflate),
     EventView, BackButtonListener {
     private var isFilterOptionsExpanded = false
@@ -85,12 +85,14 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
             //searchEdit.hideKeyBoard() // TODO: нужно вынести это в вызов предществующий данному, чтобы тень при скрытии клавиатуры отображалась корректно
             shadow.visibility = VISIBLE
             copyEvent.visibility = VISIBLE
-            if (event!!.eventStatus != Event.Status.CANCELLED && event!!.eventStatus != Event.Status.COMPLETED) {
-                // TODO: появляется только если прошла последняя дата проведения, данные об этом получать с сервера
-                // finishEvent.visibility = VISIBLE
-                cancelEvent.visibility = VISIBLE
-            } else {
-                deleteEvent.visibility = VISIBLE
+            if (event!!.ownerUserId == presenter.loginRepository.getLocalId()) {
+                if (event!!.eventStatus != Event.Status.CANCELLED && event!!.eventStatus != Event.Status.COMPLETED) {
+                    // TODO: появляется только если прошла последняя дата проведения, данные об этом получать с сервера
+                    // finishEvent.visibility = VISIBLE
+                    cancelEvent.visibility = VISIBLE
+                } else {
+                    deleteEvent.visibility = VISIBLE
+                }
             }
         }
     }
@@ -263,10 +265,13 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                 return@with
             }
             participantsContainer.removeViewAt(it + 1)
+            if (pickedParticipantsIds.size == 1) {
+                noParticipants.isVisible = true
+            }
         }
     }
 
-    private fun showActionOptions() = with(binding) {
+    override fun showActionOptions() = with(binding) {
         actionMenu.visibility = VISIBLE
     }
 
@@ -592,6 +597,9 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
             event = it
             binding.title.text = it.name
         }
+        presenter.cancelEdit()
+        presenter.lockEdit()
+        presenter.hideEditOptions()
     }
 
     private fun isDescriptionExpanded() = binding.descriptionContainer.visibility == VISIBLE
@@ -781,27 +789,26 @@ class EventFragment : BaseMvpFragment<FragmentEventBinding>(FragmentEventBinding
                     dateEdit.requestFocus()
                     showKeyBoard(dateEdit)
                 }
+                lockEdit(
+                    locationInput, locationEdit,
+                    AppCompatResources.getDrawable(
+                        requireContext(),
+                        R.drawable.outline_place_24
+                    )!!
+                ) {
+                    presenter.addEventPlace(event?.address ?: address)
+                }
+                locationInput.setEndIconOnClickListener {
+                    presenter.unlockLocationEdit()
+                    locationEdit.requestFocus()
+                    showKeyBoard(locationEdit)
+                }
                 lockDescriptionEdit()
                 showActionOptions()
             } else {
                 showEditOptions()
+                unlockLocationEdit()
             }
-
-            lockEdit(
-                locationInput, locationEdit,
-                AppCompatResources.getDrawable(
-                    requireContext(),
-                    R.drawable.outline_place_24
-                )!!
-            ) {
-                presenter.addEventPlace(event?.address ?: address)
-            }
-            locationInput.setEndIconOnClickListener {
-                presenter.unlockLocationEdit()
-                locationEdit.requestFocus()
-                showKeyBoard(locationEdit)
-            }
-
             back.setOnClickListener { presenter.onBackPressed() }
             backHitArea.setOnClickListener { back.performClick() }
             cancel.setOnClickListener {

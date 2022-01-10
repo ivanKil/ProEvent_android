@@ -55,6 +55,8 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
             .subscribe({
                 callback?.invoke(it)
                 viewState.showMessage("Мероприятие создано")
+                viewState.hideEditOptions()
+                viewState.showActionOptions()
             }, {
                 callback?.invoke(null)
                 viewState.showMessage("ПРОИЗОШЛА ОШИБКА: ${it.message}")
@@ -87,6 +89,8 @@ class EventPresenter(localRouter: Router) : BaseMvpPresenter<EventView>(localRou
         localRouter.navigateTo(screens.eventActionConfirmation(event, null))
 
     fun copyEvent(event: Event) {
+        event.ownerUserId = loginRepository.getLocalId()!!
+        event.eventStatus = Event.Status.ACTUAL
         eventsRepository
             .saveEvent(event)
             .observeOn(uiScheduler)
