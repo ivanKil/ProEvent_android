@@ -7,9 +7,14 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.LinearLayout
+import android.widget.Space
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import moxy.ktx.moxyPresenter
@@ -17,6 +22,7 @@ import ru.myproevent.ProEventApp
 import ru.myproevent.R
 import ru.myproevent.databinding.DialogLicenseBinding
 import ru.myproevent.databinding.FragmentRegistrationBinding
+import ru.myproevent.domain.utils.pxValue
 import ru.myproevent.ui.fragments.BaseMvpFragment
 import ru.myproevent.ui.presenters.authorization.registration.RegistrationPresenter
 import ru.myproevent.ui.presenters.authorization.registration.RegistrationView
@@ -43,6 +49,29 @@ class RegistrationFragment :
         true
     }
 
+    // TODO: отрефакторить, эта функция во многом копирует setLayoutParams в AuthorizationFragment
+    private fun setLayoutParams() = with(binding) {
+        body.post {
+            val availableHeight = root.height
+
+            if (ohNowIRemember.lineCount > 1 || authorize.lineCount > 1) {
+                bottomOptionsContainer.orientation = LinearLayout.VERTICAL
+                bottomOptionsHorizontalSeparator.visibility = GONE
+            }
+
+            bodySpace.layoutParams = bodySpace.layoutParams.apply { height = availableHeight }
+            body.post {
+                val difference = body.height - availableHeight
+                if (difference > 0) {
+                    logo.isVisible = false
+                }
+                if (difference > pxValue(80f + 48f)) {
+                    formTitle.isVisible = false
+                }
+            }
+        }
+    }
+
     override val presenter by moxyPresenter {
         RegistrationPresenter((parentFragment as RouterProvider).router).apply {
             ProEventApp.instance.appComponent.inject(this)
@@ -56,6 +85,17 @@ class RegistrationFragment :
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
+        setLayoutParams()
+
+        emailEdit.doAfterTextChanged {
+            presenter.emailEdited()
+        }
+        passwordEdit.doAfterTextChanged {
+            presenter.passwordEdited()
+        }
+        passwordConfirmEdit.doAfterTextChanged {
+            presenter.passwordConfirmEdited()
+        }
 
         licenseText.setOnClickListener {
             val bottomSheetDialog = BottomSheetDialog(requireContext())
@@ -93,26 +133,14 @@ class RegistrationFragment :
         }
         licenseCheckboxHitArea.setOnClickListener { licenseCheckbox.touch() }
         continueRegistration.setOnClickListener {
-            if (passwordEdit.text.toString() != passwordConfirmEdit.text.toString()) {
-                Toast.makeText(ProEventApp.instance, "Пароли не совпадают", Toast.LENGTH_LONG)
-                    .show()
-                return@setOnClickListener
-            }
-            if (emailEdit.text.toString().isEmpty()) {
-                Toast.makeText(
-                    ProEventApp.instance,
-                    "Поле с email не может быть пустым",
-                    Toast.LENGTH_LONG
-                ).show()
-                return@setOnClickListener
-            }
             presenter.continueRegistration(
                 licenseCheckbox.isChecked,
                 emailEdit.text.toString(),
-                passwordEdit.text.toString()
+                passwordEdit.text.toString(),
+                passwordConfirmEdit.text.toString()
             )
         }
-        ohNowIRememberHitArea.setOnClickListener { presenter.signup() }
+        bottomOptionsContainer.setOnClickListener { presenter.signup() }
 
         val licenseTextIAgree: Spannable =
             SpannableString(getString(R.string.license_i_agree_with))
@@ -157,4 +185,36 @@ class RegistrationFragment :
         // https://stackoverflow.com/a/33816251
         ViewCompat.setTranslationZ(requireView(), 100f)
     }
+
+    private fun showErrorMessage(message: String?, errorView: TextView, space: Space) {
+        if (message.isNullOrBlank()) {
+            errorView.visibility = GONE
+            space.visibility = VISIBLE
+            return
+        }
+        errorView.text = message
+        errorView.visibility = VISIBLE
+        space.visibility = GONE
+    }
+
+    override fun showEmailErrorMessage(message: String?) =
+        showErrorMessage(
+            message,
+            binding.emailErrorMessage,
+            binding.passwordInputContainerTopSeparator
+        )
+
+    override fun showPasswordErrorMessage(message: String?) =
+        showErrorMessage(
+            message,
+            binding.passwordInputErrorMessage,
+            binding.passwordConfirmInputContainerTopSeparator
+        )
+
+    override fun showPasswordConfirmErrorMessage(message: String?) =
+        showErrorMessage(
+            message,
+            binding.passwordConfirmErrorMessage,
+            binding.passwordConfirmInputContainerBottomSeparator
+        )
 }

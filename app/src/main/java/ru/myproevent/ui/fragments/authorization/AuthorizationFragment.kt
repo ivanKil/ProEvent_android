@@ -2,7 +2,6 @@ package ru.myproevent.ui.fragments.authorization
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -16,7 +15,6 @@ import ru.myproevent.ui.presenters.authorization.authorization.AuthorizationView
 import ru.myproevent.ui.presenters.main.BottomNavigation
 import ru.myproevent.ui.presenters.main.RouterProvider
 import ru.myproevent.ui.presenters.main.Tab
-import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import ru.myproevent.domain.utils.pxValue
@@ -42,31 +40,27 @@ class AuthorizationFragment :
         body.post {
             val availableHeight = root.height
 
-            Log.d("[MYLOG]", "passwordRecovery.lineCount: ${passwordRecovery.lineCount}; registration.lineCount: ${registration.lineCount}")
             if(passwordRecovery.lineCount > 1|| registration.lineCount > 1){
                 bottomOptionsContainer.orientation = LinearLayout.VERTICAL
-                bottomOptionsHorizontalSeparatorSpace.visibility = GONE
+                bottomOptionsHorizontalSeparator.visibility = GONE
             }
 
             space.layoutParams = space.layoutParams.apply { height = availableHeight }
             body.post {
-                val diffrence = body.height - availableHeight
+                val difference = body.height - availableHeight
                 authorizationConfirmMarginTop.layoutParams =
                     authorizationConfirmMarginTop.layoutParams.apply {
-                        height -= if (diffrence <= pxValue(40f)) {
-                            diffrence
+                        height -= if (difference <= pxValue(40f)) {
+                            difference
                         } else {
                             pxValue(40f)
                         }.toInt()
                     }
-                Log.d("[MYLOG]", "diffrence: $diffrence; pxValue(80f + 48f): ${pxValue(80f + 48f)}; pxValue(80f + 48f + 24f + 28f): ${pxValue(80f + 48f + 24f + 28f)}")
-                if(diffrence > pxValue(40f)){
+                if(difference > pxValue(40f)){
                     logo.isVisible = false
-                    Log.d("[MYLOG]", "logo.isVisible: ${logo.isVisible}")
                 }
-                if(diffrence > pxValue(80f + 48f)){
+                if(difference > pxValue(80f + 48f)){
                     formTitle.isVisible = false
-                    Log.d("[MYLOG]", "logo.isVisible: ${formTitle.isVisible}")
                 }
             }
         }
@@ -189,9 +183,5 @@ class AuthorizationFragment :
 
     override fun finishAuthorization() {
         (requireActivity() as BottomNavigation).openTab(Tab.HOME)
-        Log.d(
-            "[MYLOG]",
-            "AuthorizationFragment (requireActivity() as BottomNavigationView).openTab(Tab.HOME)"
-        )
     }
 }

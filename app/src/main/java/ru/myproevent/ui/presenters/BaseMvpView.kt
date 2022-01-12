@@ -5,5 +5,5 @@ import moxy.viewstate.strategy.alias.OneExecution
 
 interface BaseMvpView : MvpView {
     @OneExecution
-    fun showMessage(text: String)
+    fun showMessage(message: String)
 }

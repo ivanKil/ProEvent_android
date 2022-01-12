@@ -1,9 +1,7 @@
 package ru.myproevent.ui.presenters.authorization.registration
 
-import android.widget.Toast
 import com.github.terrakok.cicerone.Router
 import io.reactivex.observers.DisposableCompletableObserver
-import ru.myproevent.ProEventApp
 import ru.myproevent.domain.models.repositories.internet_access_info.IInternetAccessInfoRepository
 import ru.myproevent.domain.models.repositories.proevent_login.IProEventLoginRepository
 import ru.myproevent.ui.presenters.BaseMvpPresenter
@@ -19,11 +17,8 @@ class RegistrationPresenter(localRouter: Router) : BaseMvpPresenter<Registration
             error.printStackTrace()
             if (error is retrofit2.adapter.rxjava2.HttpException) {
                 if (error.code() == 409) {
-                    Toast.makeText(
-                        ProEventApp.instance,
-                        "Для введённого email уже есть аккаунт",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    viewState.showMessage("Для введённого email уже есть аккаунт")
+                    viewState.showEmailErrorMessage("Для введённого email уже есть аккаунт")
                     return
                 }
                 return
@@ -46,11 +41,36 @@ class RegistrationPresenter(localRouter: Router) : BaseMvpPresenter<Registration
         localRouter.navigateTo(screens.authorization())
     }
 
-    fun continueRegistration(agreement: Boolean, email: String, password: String) {
+    fun continueRegistration(agreement: Boolean, email: String, password: String, confirmedPassword: String) {
         // TODO: спросить у дизайнера нужен ли progress bar
+        var errorMessage: String? = ""
+        if (password != confirmedPassword) {
+            errorMessage += "Пароли не совпадают.\n"
+            viewState.showPasswordConfirmErrorMessage("Пароли не совпадают.\n")
+        }
+        if (email.isEmpty()) {
+            errorMessage += "Поле с email не может быть пустым."
+            viewState.showEmailErrorMessage("Поле с email не может быть пустым.")
+        }
+        if(!errorMessage.isNullOrBlank()){
+            viewState.showMessage(errorMessage)
+            return
+        }
         loginRepository
             .signup(agreement, email, password)
             .observeOn(uiScheduler)
             .subscribeWith(SignupObserver()).disposeOnDestroy()
+    }
+
+    fun emailEdited() {
+        viewState.showEmailErrorMessage(null)
+    }
+
+    fun passwordEdited() {
+        viewState.showPasswordErrorMessage(null)
+    }
+
+    fun passwordConfirmEdited(){
+        viewState.showPasswordConfirmErrorMessage(null)
     }
 }

@@ -10,6 +10,7 @@ import ru.myproevent.databinding.FragmentContactBinding
 import ru.myproevent.domain.models.entities.Contact
 import ru.myproevent.ui.fragments.BaseMvpFragment
 import ru.myproevent.ui.presenters.BaseMvpPresenter
+import ru.myproevent.ui.presenters.BaseMvpView
 import ru.myproevent.ui.presenters.main.RouterProvider
 
 class ContactFragment : BaseMvpFragment<FragmentContactBinding>(FragmentContactBinding::inflate) {
@@ -24,7 +25,7 @@ class ContactFragment : BaseMvpFragment<FragmentContactBinding>(FragmentContactB
     }
 
     override val presenter by moxyPresenter {
-        BaseMvpPresenter<MvpView>((parentFragment as RouterProvider).router).apply {
+        BaseMvpPresenter<BaseMvpView>((parentFragment as RouterProvider).router).apply {
             ProEventApp.instance.appComponent.inject(this)
         }
     }

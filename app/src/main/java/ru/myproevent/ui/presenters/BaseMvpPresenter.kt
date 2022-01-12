@@ -12,7 +12,7 @@ import ru.myproevent.ProEventApp
 import ru.myproevent.ui.screens.IScreens
 import javax.inject.Inject
 
-open class BaseMvpPresenter<V : MvpView>(protected open var localRouter: Router) : MvpPresenter<V>() {
+open class BaseMvpPresenter<V : BaseMvpView>(protected open var localRouter: Router) : MvpPresenter<V>() {
 
     @Inject
     lateinit var uiScheduler: Scheduler
@@ -29,17 +29,9 @@ open class BaseMvpPresenter<V : MvpView>(protected open var localRouter: Router)
         DisposableSingleObserver<Boolean>() {
         override fun onSuccess(hasInternetAccess: Boolean) {
             if (!hasInternetAccess) {
-                Toast.makeText(
-                    ProEventApp.instance,
-                    "У устройства нет выхода в Интернет.\n(От Google Public DNS нет ответа)",
-                    Toast.LENGTH_LONG
-                ).show()
+                viewState.showMessage("У устройства нет выхода в Интернет.\n(От Google Public DNS нет ответа)")
             } else {
-                Toast.makeText(
-                    ProEventApp.instance,
-                    "ERROR_MESSAGE: $onAccessErrorMessage",
-                    Toast.LENGTH_LONG
-                ).show()
+                viewState.showMessage("Вас нашёл баг: $onAccessErrorMessage")
             }
         }
 

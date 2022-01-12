@@ -5,7 +5,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@drawable/background_rounded">
+    android:background="@drawable/background_rounded"
+    android:fadeScrollbars="false"
+    android:scrollbarThumbVertical="@color/PE_bright_red">
 
     <Space
         android:layout_width="320dp"
@@ -30,6 +32,8 @@
         android:layout_height="0dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="50dp"
+        android:fadeScrollbars="false"
+        android:scrollbarThumbVertical="@color/PE_bright_red"
         app:layout_constraintBottom_toTopOf="@+id/ok"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/close"
@@ -46,14 +50,15 @@
     </ScrollView>
 
 
-    <ru.myproevent.ui.views.ProEventConfirmButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/ok"
         style="@style/ProEventConfirmButton"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="20dp"
-        android:text="Ок"
+        android:text="ок"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

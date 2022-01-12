@@ -168,6 +168,10 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigation, Botto
         openTab(Tab.AUTHORIZATION)
     }
 
+    override fun showMessage(message: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun exit() {
         presenter.exit()
     }

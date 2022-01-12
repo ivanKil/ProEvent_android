@@ -2,6 +2,7 @@ package ru.myproevent.ui.presenters.main
 
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEnd
+import ru.myproevent.ui.presenters.BaseMvpView
 
 /**
  * Функции этого интерфейса должны вызываться исключительно из методов BottomNavigationPresenter.
@@ -9,7 +10,7 @@ import moxy.viewstate.strategy.alias.AddToEnd
  * экземпляр которого может иметь только BottomNavigationPresenter
  */
 @AddToEnd
-interface BottomNavigationView : MvpView {
+interface BottomNavigationView : BaseMvpView {
     fun showTab(
         tab: Tab,
         friendAccess: BottomNavigationPresenter.BottomNavigationPresenterFriendAccess

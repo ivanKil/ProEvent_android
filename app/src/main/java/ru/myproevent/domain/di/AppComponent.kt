@@ -5,6 +5,7 @@ import moxy.MvpView
 import ru.myproevent.ui.activity.BottomNavigationActivity
 import ru.myproevent.ui.fragments.TabContainerFragment
 import ru.myproevent.ui.presenters.BaseMvpPresenter
+import ru.myproevent.ui.presenters.BaseMvpView
 import ru.myproevent.ui.presenters.settings.account.AccountPresenter
 import ru.myproevent.ui.presenters.authorization.authorization.AuthorizationPresenter
 import ru.myproevent.ui.presenters.authorization.code.CodePresenter
@@ -43,7 +44,7 @@ interface AppComponent {
 
     fun inject(tabContainerFragment: TabContainerFragment)
 
-    fun inject(baseMvpPresenter: BaseMvpPresenter<MvpView>)
+    fun inject(baseMvpPresenter: BaseMvpPresenter<BaseMvpView>)
     fun inject(bottomNavigationPresenter: BottomNavigationPresenter)
     fun inject(authorizationPresenter: AuthorizationPresenter)
     fun inject(codePresenter: CodePresenter)

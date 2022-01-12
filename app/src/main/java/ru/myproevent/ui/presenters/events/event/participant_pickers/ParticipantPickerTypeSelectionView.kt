@@ -1,9 +1,7 @@
 package ru.myproevent.ui.presenters.events.event.participant_pickers
 
-import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
+import ru.myproevent.ui.presenters.BaseMvpView
 
 @AddToEndSingle
-interface ParticipantPickerTypeSelectionView : MvpView {
-    fun showMessage(message: String)
-}
+interface ParticipantPickerTypeSelectionView : BaseMvpView
