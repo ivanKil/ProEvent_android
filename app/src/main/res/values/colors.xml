@@ -19,6 +19,7 @@
     <color name="ProEvent_blue_900">#121233</color>
     <color name="ProEvent_blue_800">#2D2D59</color>
     <color name="ProEvent_blue_700">#46468C</color>
+    <color name="ProEvent_blue_500">#7D7DB2</color>
     <color name="ProEvent_blue_600">#5C5C99</color>
     <color name="ProEvent_blue_300">#C3C3E5</color>
     <color name="button_text_color">@color/ProEvent_blue_800</color>

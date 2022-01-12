@@ -11,5 +11,5 @@ interface IProEventLoginRepository {
     fun logoutFromThisDevice()
     fun signup(agreement: Boolean, email: String, password: String): Completable
     fun verificate(email: String, code: Int): Completable
-    fun refreshCheckCode(): Completable
+    fun refreshCheckCode(email: String): Completable
 }

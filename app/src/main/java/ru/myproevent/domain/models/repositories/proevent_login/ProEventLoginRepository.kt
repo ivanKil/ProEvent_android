@@ -4,10 +4,7 @@ import android.util.Base64
 import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import ru.myproevent.domain.models.IProEventDataSource
-import ru.myproevent.domain.models.LoginBody
-import ru.myproevent.domain.models.SignupBody
-import ru.myproevent.domain.models.VerificationBody
+import ru.myproevent.domain.models.*
 import ru.myproevent.domain.models.repositories.local_proevent_user_token.ITokenLocalRepository
 import ru.myproevent.domain.models.repositories.local_proevent_user_token.TokenLocalRepository
 import javax.inject.Inject
@@ -110,9 +107,9 @@ class ProEventLoginRepository @Inject constructor(private val api: IProEventData
         api.verificate(VerificationBody(code, email.toLowerCase()))
             .subscribeOn(Schedulers.io())
 
-    override fun refreshCheckCode(): Completable {
-        TODO("Not yet implemented")
-    }
+    // TODO: убрать toLowerCase() для email, когда на сервере пофиксят баг с email чувствительным к регистру
+    override fun refreshCheckCode(email: String) = api.refreshCheckCode(RefreshBody(email.toLowerCase()))
+        .subscribeOn(Schedulers.io())
 
     private fun decodeJWT(str: String): String {
         val decodedBytes: ByteArray = Base64.decode(str, Base64.URL_SAFE)

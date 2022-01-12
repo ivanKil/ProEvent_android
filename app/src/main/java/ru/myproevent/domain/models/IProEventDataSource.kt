@@ -17,6 +17,9 @@ interface IProEventDataSource {
     @POST("auth/verificationCheckCode")
     fun verificate(@Body verificationBody: VerificationBody): Completable
 
+    @POST("auth/refreshCheckCode")
+    fun refreshCheckCode(@Body refreshBody: RefreshBody): Completable
+
     @POST("profiles")
     fun createProfile(@Body profile: ProfileDto): Call<ProfileDto>
 
@@ -74,6 +77,8 @@ data class SignupBody(val agreement: Boolean, val email: String, val password: S
 data class SignupResponse(val agreement: Boolean, val email: String, val password: String)
 
 data class VerificationBody(val code: Int, val email: String)
+
+data class RefreshBody(val email: String)
 
 @Parcelize
 data class ProfileDto(

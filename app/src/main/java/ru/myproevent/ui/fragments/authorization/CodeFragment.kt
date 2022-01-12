@@ -1,18 +1,22 @@
 package ru.myproevent.ui.fragments.authorization
 
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.view.*
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.button.MaterialButton
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.R
 import ru.myproevent.databinding.FragmentCodeBinding
+import ru.myproevent.domain.utils.pxValue
 import ru.myproevent.ui.fragments.BaseMvpFragment
 import ru.myproevent.ui.presenters.authorization.code.CodePresenter
 import ru.myproevent.ui.presenters.authorization.code.CodeView
@@ -76,6 +80,8 @@ class CodeFragment : BaseMvpFragment<FragmentCodeBinding>(FragmentCodeBinding::i
                 nextViewInRow?.requestFocus()
                 nextViewInRow?.text = SpannableStringBuilder(newValue)
             }
+
+            presenter.codeEdit()
         }
     }
 
@@ -87,8 +93,32 @@ class CodeFragment : BaseMvpFragment<FragmentCodeBinding>(FragmentCodeBinding::i
         numberStringBuilder.append(digit2Edit.text)
         numberStringBuilder.append(digit3Edit.text)
         numberStringBuilder.append(digit4Edit.text)
-        return@with numberStringBuilder.toString().toIntOrNull()
+        return@with numberStringBuilder.toString()
     }
+
+    // TODO: отрефакторить, эта функция во многом копирует setLayoutParams в AuthorizationFragment
+    private fun setLayoutParams() = with(binding) {
+        body.post {
+            val availableHeight = root.height
+
+            if (ohNowIRemember.lineCount > 1 || authorize.lineCount > 1) {
+                bottomOptionsContainer.orientation = LinearLayout.VERTICAL
+                bottomOptionsHorizontalSeparator.visibility = View.GONE
+            }
+
+            bodySpace.layoutParams = bodySpace.layoutParams.apply { height = availableHeight }
+            body.post {
+                val difference = body.height - availableHeight
+                if (difference > 0) {
+                    logo.isVisible = false
+                }
+                if (difference > pxValue(80f + 48f)) {
+                    formTitle.isVisible = false
+                }
+            }
+        }
+    }
+
 
     override val presenter by moxyPresenter {
         CodePresenter((parentFragment as RouterProvider).router).apply {
@@ -102,7 +132,7 @@ class CodeFragment : BaseMvpFragment<FragmentCodeBinding>(FragmentCodeBinding::i
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
-
+        setLayoutParams()
         codeExplanation.text =
             String.format(getString(R.string.code_explanation_text), presenter.getEmail())
         continueRegistration.setOnClickListener {
@@ -114,9 +144,10 @@ class CodeFragment : BaseMvpFragment<FragmentCodeBinding>(FragmentCodeBinding::i
                 ).show()
             }
         }
+        refreshCode.setOnClickListener{presenter.refreshCode()}
         authorize.setOnClickListener { presenter.authorize() }
         ohNowIRemember.setOnClickListener { authorize.performClick() }
-        ohNowIRememberHitArea.setOnClickListener { authorize.performClick() }
+        bottomOptionsContainer.setOnClickListener { authorize.performClick() }
         back.setOnClickListener { presenter.onBackPressed() }
         // TODO: отрефакторить - вынести это в кастомные вьюхи
         digit1Edit.selectionChangedListener =
@@ -179,5 +210,56 @@ class CodeFragment : BaseMvpFragment<FragmentCodeBinding>(FragmentCodeBinding::i
         // а потом с помощью кнопки back вернуться на этот экран,
         // то digit4Edit получает фокус
         binding.digit4Edit.clearFocus()
+    }
+
+    override fun showCodeErrorMessage(message: String?) = with(binding) {
+        val colorStates = arrayOf(
+            intArrayOf(android.R.attr.state_enabled),
+            intArrayOf(-android.R.attr.state_enabled),
+            intArrayOf(android.R.attr.state_checked),
+            intArrayOf(-android.R.attr.state_checked),
+            intArrayOf(android.R.attr.state_pressed),
+            intArrayOf(-android.R.attr.state_pressed),
+            intArrayOf(android.R.attr.state_focused),
+            intArrayOf(-android.R.attr.state_focused),
+        )
+
+        val defaultColors = intArrayOf(
+            resources.getColor(R.color.ProEvent_blue_300),
+            resources.getColor(R.color.ProEvent_blue_300),
+            resources.getColor(R.color.ProEvent_blue_300),
+            resources.getColor(R.color.ProEvent_blue_300),
+            resources.getColor(R.color.ProEvent_blue_300),
+            resources.getColor(R.color.ProEvent_blue_300),
+            resources.getColor(R.color.ProEvent_blue_300),
+            resources.getColor(R.color.ProEvent_blue_300)
+        )
+
+        if (message.isNullOrBlank()) {
+            errorMessage.isVisible = false
+            digit1.setBoxStrokeColorStateList(ColorStateList(colorStates, defaultColors))
+            digit2.setBoxStrokeColorStateList(ColorStateList(colorStates, defaultColors))
+            digit3.setBoxStrokeColorStateList(ColorStateList(colorStates, defaultColors))
+            digit4.setBoxStrokeColorStateList(ColorStateList(colorStates, defaultColors))
+            return@with
+        }
+        errorMessage.text = message
+        errorMessage.isVisible = true
+
+        val errorColors = intArrayOf(
+            Color.parseColor("#FF6A4D"),
+            Color.parseColor("#FF6A4D"),
+            Color.parseColor("#FF6A4D"),
+            Color.parseColor("#FF6A4D"),
+            Color.parseColor("#FF6A4D"),
+            Color.parseColor("#FF6A4D"),
+            Color.parseColor("#FF6A4D"),
+            Color.parseColor("#FF6A4D")
+        )
+
+        digit1.setBoxStrokeColorStateList(ColorStateList(colorStates, errorColors))
+        digit2.setBoxStrokeColorStateList(ColorStateList(colorStates, errorColors))
+        digit3.setBoxStrokeColorStateList(ColorStateList(colorStates, errorColors))
+        digit4.setBoxStrokeColorStateList(ColorStateList(colorStates, errorColors))
     }
 }
