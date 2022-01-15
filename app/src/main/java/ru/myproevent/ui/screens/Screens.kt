@@ -25,6 +25,7 @@ import ru.myproevent.ui.fragments.events.event.participant_pickers.ParticipantPi
 import ru.myproevent.ui.fragments.settings.AccountFragment
 import ru.myproevent.ui.fragments.settings.SecurityFragment
 import ru.myproevent.ui.fragments.settings.SettingsFragment
+import ru.myproevent.ui.fragments.settings.imagecropper.ImageFragment
 
 class Screens : IScreens {
     override fun authorization() = FragmentScreen { AuthorizationFragment.newInstance() }
@@ -52,5 +53,6 @@ class Screens : IScreens {
     override fun participantByEmailPicker() = FragmentScreen { ParticipantByEmailPickerFragment.newInstance() }
     override fun addEventPlace(address: Address?): Screen = FragmentScreen { AddEventPlaceFragment.newInstance(address)}
     override fun eventParticipant(profileDto: ProfileDto) = FragmentScreen { EventParticipantFragment.newInstance(profileDto) }
+    override fun userImage(): Screen = FragmentScreen { ImageFragment.newInstance() }
     override fun newPassword(email: String) = FragmentScreen { NewPasswordFragment.newInstance(email) }
 }

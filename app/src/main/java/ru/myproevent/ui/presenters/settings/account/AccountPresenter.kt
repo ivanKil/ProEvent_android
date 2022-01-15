@@ -79,6 +79,10 @@ class AccountPresenter(localRouter: Router) : BaseMvpPresenter<AccountView>(loca
             .disposeOnDestroy()
     }
 
+    fun loadImageFragment() {
+        localRouter.navigateTo(screens.userImage())
+    }
+
     fun getProfile() {
         profilesRepository
             .getProfile(loginRepository.getLocalId()!!)

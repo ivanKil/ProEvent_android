@@ -40,18 +40,6 @@ class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountB
     var currYear: Int = calendar.get(Calendar.YEAR)
     var currMonth: Int = calendar.get(Calendar.MONTH)
     var currDay: Int = calendar.get(Calendar.DAY_OF_MONTH)
-    private lateinit var cropActivityResultLauncher: ActivityResultLauncher<Any?>
-    private val cropActivityResultContract = object : ActivityResultContract<Any?, Uri?>() {
-        override fun createIntent(context: Context, input: Any?): Intent {
-            return CropImage.activity()
-                .setAspectRatio(1, 1)
-                .getIntent(requireActivity())
-        }
-
-        override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
-            return CropImage.getActivityResult(intent)?.uri
-        }
-    }
 
     private val DateEditClickListener = View.OnClickListener {
         // TODO: отрефакторить
@@ -146,7 +134,6 @@ class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountB
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
-        initCropImage()
         defaultKeyListener = nameEdit.keyListener
         setEditListeners(nameInput, nameEdit)
         phoneKeyListener = phoneEdit.keyListener
@@ -177,6 +164,7 @@ class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountB
         }
         titleButton.setOnClickListener { presenter.onBackPressed() }
         phoneEdit.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+        runImageCropper.setOnClickListener { presenter.loadImageFragment() }
         phoneEdit.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 if (phoneEdit.text.isNullOrEmpty()) {
@@ -186,13 +174,6 @@ class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountB
         }
 
         presenter.getProfile()
-    }
-
-    private fun initCropImage() {
-        cropActivityResultLauncher = registerForActivityResult(cropActivityResultContract) {
-            it?.let { uri -> binding.userImage.setImageURI(uri) }
-        }
-        binding.runImageCropper.setOnClickListener { cropActivityResultLauncher.launch(null) }
     }
 
     override fun showProfile(profileDto: ProfileDto) {
