@@ -2,7 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
 
-    <item android:drawable="@drawable/splash_screen_background" />
+    <item android:gravity="right" >
+        <bitmap
+            android:src="@drawable/splash_screen_background"
+            android:tileModeY="mirror"
+            android:tileModeX="clamp"/>
+    </item>
 
     <item
         android:drawable="@drawable/splash_screen_foreground"
