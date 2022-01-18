@@ -15,9 +15,9 @@ import javax.inject.Inject
 class ImagesRepository @Inject constructor(private val api: IProEventDataSource) :
     IImagesRepository {
     override fun saveImage(file: File): Call<ResponseBody> {
-        val filePart = file.asRequestBody("image".toMediaTypeOrNull())
-        val multipartBody = MultipartBody.Part.createFormData("file", "image", filePart)
-        return api.saveImage("file", multipartBody)
+        val filePart = file.asRequestBody("form-data".toMediaType())
+        val multipartBody = MultipartBody.Part.createFormData("pic", "image", filePart)
+        return api.saveImage("null", multipartBody)
     }
 
     override fun getImage(uuid: String): Single<File> {

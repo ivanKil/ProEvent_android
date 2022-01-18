@@ -106,8 +106,8 @@ class AccountPresenter(localRouter: Router) : BaseMvpPresenter<AccountView>(loca
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e(TAG, t.printStackTrace().toString())
-            }
 
+            }
         })
     }
 
