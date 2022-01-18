@@ -108,8 +108,19 @@ class ProEventLoginRepository @Inject constructor(private val api: IProEventData
             .subscribeOn(Schedulers.io())
 
     // TODO: убрать toLowerCase() для email, когда на сервере пофиксят баг с email чувствительным к регистру
-    override fun refreshCheckCode(email: String) = api.refreshCheckCode(RefreshBody(email.toLowerCase()))
-        .subscribeOn(Schedulers.io())
+    override fun refreshCheckCode(email: String) =
+        api.refreshCheckCode(RefreshBody(email.toLowerCase()))
+            .subscribeOn(Schedulers.io())
+
+    // TODO: убрать toLowerCase() для email, когда на сервере пофиксят баг с email чувствительным к регистру
+    override fun resetPassword(email: String): Completable =
+        api.resetPassword(ResetPasswordBody(email.toLowerCase()))
+            .subscribeOn(Schedulers.io())
+
+    // TODO: убрать toLowerCase() для email, когда на сервере пофиксят баг с email чувствительным к регистру
+    override fun setNewPassword(code: Int, email: String, password: String) =
+        api.setNewPassword(NewPasswordBody(code, email.toLowerCase(), password))
+            .subscribeOn(Schedulers.io())
 
     private fun decodeJWT(str: String): String {
         val decodedBytes: ByteArray = Base64.decode(str, Base64.URL_SAFE)

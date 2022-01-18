@@ -13,6 +13,7 @@ import ru.myproevent.ui.presenters.contacts.contact_add.ContactAddPresenter
 import ru.myproevent.ui.presenters.contacts.contacts_list.ContactsPresenter
 import ru.myproevent.ui.presenters.home.HomePresenter
 import ru.myproevent.ui.presenters.authorization.login.LoginPresenter
+import ru.myproevent.ui.presenters.authorization.new_password.NewPasswordPresenter
 import ru.myproevent.ui.presenters.main.BottomNavigationPresenter
 import ru.myproevent.ui.presenters.authorization.recovery.RecoveryPresenter
 import ru.myproevent.ui.presenters.authorization.registration.RegistrationPresenter
@@ -66,4 +67,5 @@ interface AppComponent {
     fun inject(chatPresenter: ChatPresenter)
     fun inject(addEventPlacePresenter: AddEventPlacePresenter)
     fun inject(eventParticipantPresenter: EventParticipantPresenter)
+    fun inject(newPasswordPresenter: NewPasswordPresenter)
 }

@@ -68,6 +68,12 @@ interface IProEventDataSource {
 
     @GET("events/user/{userId}")
     fun getEventsForUser(@Path("userId") userId: Long): Single<List<EventDto>>
+
+    @POST("auth/resetPassword")
+    fun resetPassword(@Body resetPasswordBody: ResetPasswordBody): Completable
+
+    @POST("auth/newPassword")
+    fun setNewPassword(@Body newPasswordBody: NewPasswordBody): Completable
 }
 
 data class LoginBody(val email: String, val password: String)
@@ -79,6 +85,10 @@ data class SignupResponse(val agreement: Boolean, val email: String, val passwor
 data class VerificationBody(val code: Int, val email: String)
 
 data class RefreshBody(val email: String)
+
+data class ResetPasswordBody(val email: String)
+
+data class NewPasswordBody(val code: Int, val email: String, val password: String)
 
 @Parcelize
 data class ProfileDto(

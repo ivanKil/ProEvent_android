@@ -32,4 +32,5 @@ interface IScreens {
     fun participantByEmailPicker(): Screen
     fun addEventPlace(address: Address? = null): Screen
     fun eventParticipant(profileDto: ProfileDto): Screen
+    fun newPassword(email: String): Screen
 }
