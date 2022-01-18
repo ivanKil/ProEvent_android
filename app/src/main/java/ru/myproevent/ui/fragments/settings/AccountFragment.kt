@@ -197,6 +197,7 @@ class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountB
             it?.let { uri ->
                 Glide.with(this)
                     .load(uri)
+                    .circleCrop()
                     .into(binding.userImageView)
                 presenter.saveImage(File(uri.path.orEmpty()))
             }

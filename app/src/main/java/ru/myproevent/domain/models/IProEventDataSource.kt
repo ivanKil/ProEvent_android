@@ -4,6 +4,8 @@ import android.os.Parcelable
 import io.reactivex.Completable
 import io.reactivex.Single
 import kotlinx.android.parcel.Parcelize
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 import java.io.File
@@ -77,8 +79,12 @@ interface IProEventDataSource {
     fun setNewPassword(@Body newPasswordBody: NewPasswordBody): Completable
 
     // Images posts
+    @Multipart
     @POST("storage")
-    fun saveImage(file: File): Single<String>
+    fun saveImage(
+        @Part("description") description: String,
+        @Part image: MultipartBody.Part
+    ): Call<ResponseBody>
 
     @GET("storage/{uuid}")
     fun getImage(@Path("uuid") uuid: String): Single<File>

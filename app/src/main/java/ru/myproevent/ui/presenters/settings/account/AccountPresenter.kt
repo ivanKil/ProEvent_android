@@ -4,6 +4,10 @@ import android.util.Log
 import com.github.terrakok.cicerone.Router
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.myproevent.domain.models.ProfileDto
 import ru.myproevent.domain.models.repositories.images.IImagesRepository
 import ru.myproevent.domain.models.repositories.internet_access_info.IInternetAccessInfoRepository
@@ -94,12 +98,17 @@ class AccountPresenter(localRouter: Router) : BaseMvpPresenter<AccountView>(loca
     }
 
     fun saveImage(file: File) {
-        imagesRepository
-            .saveImage(file)
-            .observeOn(uiScheduler)
-            .subscribe({ Log.d(TAG, "Ссылка на изображение: $it") }, {
-                Log.e(TAG, "Изображение не загружено на сервер, ${it.printStackTrace()}")
-            }).disposeOnDestroy()
+        val call = imagesRepository.saveImage(file)
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                Log.d(TAG, response.body().toString())
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e(TAG, t.printStackTrace().toString())
+            }
+
+        })
     }
 
     fun handleImage(uuid: String) {
