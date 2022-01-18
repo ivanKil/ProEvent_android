@@ -1,5 +1,8 @@
 package ru.myproevent.ui.fragments.settings
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
@@ -8,12 +11,17 @@ import android.text.method.KeyListener
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textfield.TextInputLayout.END_ICON_NONE
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import moxy.ktx.moxyPresenter
 import ru.myproevent.ProEventApp
 import ru.myproevent.R
@@ -24,6 +32,7 @@ import ru.myproevent.ui.presenters.main.RouterProvider
 import ru.myproevent.ui.presenters.settings.account.AccountPresenter
 import ru.myproevent.ui.presenters.settings.account.AccountView
 import ru.myproevent.ui.views.KeyboardAwareTextInputEditText
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,6 +48,7 @@ class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountB
         override fun createIntent(context: Context, input: Any?): Intent {
             return CropImage.activity()
                 .setAspectRatio(1, 1)
+                .setCropShape(CropImageView.CropShape.OVAL)
                 .getIntent(requireActivity())
         }
 
@@ -140,7 +150,7 @@ class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountB
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
-
+        initCropImage()
         defaultKeyListener = nameEdit.keyListener
         setEditListeners(nameInput, nameEdit)
         phoneKeyListener = phoneEdit.keyListener
@@ -184,9 +194,14 @@ class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountB
 
     private fun initCropImage() {
         cropActivityResultLauncher = registerForActivityResult(cropActivityResultContract) {
-            it?.let { uri -> binding.userImage.setImageURI(uri) }
+            it?.let { uri ->
+                Glide.with(this)
+                    .load(uri)
+                    .into(binding.userImageView)
+                presenter.saveImage(File(uri.path.orEmpty()))
+            }
         }
-        binding.runImageCropper.setOnClickListener { cropActivityResultLauncher.launch(null) }
+        binding.editUserImage.setOnClickListener { cropActivityResultLauncher.launch(null) }
     }
 
     override fun showProfile(profileDto: ProfileDto) {
@@ -197,6 +212,7 @@ class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountB
                 birthdate?.let { dateOfBirthEdit.text = SpannableStringBuilder(it) }
                 position?.let { positionEdit.text = SpannableStringBuilder(it) }
                 description?.let { roleEdit.text = SpannableStringBuilder(it) }
+                imgUri?.let { presenter.handleImage(it) }
             }
         }
     }

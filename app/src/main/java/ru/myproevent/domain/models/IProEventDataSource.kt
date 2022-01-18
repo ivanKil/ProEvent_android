@@ -6,6 +6,7 @@ import io.reactivex.Single
 import kotlinx.android.parcel.Parcelize
 import retrofit2.Call
 import retrofit2.http.*
+import java.io.File
 
 interface IProEventDataSource {
     @POST("auth/login")
@@ -74,6 +75,16 @@ interface IProEventDataSource {
 
     @POST("auth/newPassword")
     fun setNewPassword(@Body newPasswordBody: NewPasswordBody): Completable
+
+    // Images posts
+    @POST("storage")
+    fun saveImage(file: File): Single<String>
+
+    @GET("storage/{uuid}")
+    fun getImage(@Path("uuid") uuid: String): Single<File>
+
+    @DELETE("storage/{uuid}")
+    fun deleteImage(@Path("uuid") uuid: String): Completable
 }
 
 data class LoginBody(val email: String, val password: String)

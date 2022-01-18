@@ -6,6 +6,8 @@ import ru.myproevent.domain.models.repositories.contacts.IProEventContactsReposi
 import ru.myproevent.domain.models.repositories.contacts.ProEventContactsRepository
 import ru.myproevent.domain.models.repositories.events.IProEventEventsRepository
 import ru.myproevent.domain.models.repositories.events.ProEventEventsRepository
+import ru.myproevent.domain.models.repositories.images.IImagesRepository
+import ru.myproevent.domain.models.repositories.images.ImagesRepository
 import ru.myproevent.domain.models.repositories.internet_access_info.IInternetAccessInfoRepository
 import ru.myproevent.domain.models.repositories.internet_access_info.InternetAccessInfoRepository
 import ru.myproevent.domain.models.repositories.local_proevent_user_token.ITokenLocalRepository
@@ -41,4 +43,8 @@ interface ProEventRepositoriesModule {
     @Singleton
     @Binds
     fun bindEventsRepository(eventsRepository: ProEventEventsRepository): IProEventEventsRepository
+
+    @Singleton
+    @Binds
+    fun bindImagesRepository(imagesRepository: ImagesRepository): IImagesRepository
 }

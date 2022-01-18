@@ -25,7 +25,6 @@ import ru.myproevent.ui.fragments.events.event.participant_pickers.ParticipantPi
 import ru.myproevent.ui.fragments.settings.AccountFragment
 import ru.myproevent.ui.fragments.settings.SecurityFragment
 import ru.myproevent.ui.fragments.settings.SettingsFragment
-import ru.myproevent.ui.fragments.settings.imagecropper.ImageFragment
 
 class Screens : IScreens {
     override fun authorization() = FragmentScreen { AuthorizationFragment.newInstance() }
