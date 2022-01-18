@@ -110,4 +110,8 @@
     <string name="message_edit_hint">Написать сообщение</string>
     <string name="point_input_title">Точка участника</string>
     <string name="code_error_message">4-значный код введен неверно</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="new_password_hint">Введите новый пароль</string>
+    <string name="new_password_confirm_title">Подтверждение нового пароля</string>
+    <string name="new_password_confirm_hint">Подтвердите новый пароль</string>
 </resources>
