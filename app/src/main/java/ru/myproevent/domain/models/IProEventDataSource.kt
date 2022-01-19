@@ -82,7 +82,7 @@ interface IProEventDataSource {
     @Multipart
     @POST("storage")
     fun saveImage(
-        @Part("description") description: String,
+        @Part("file") name: String,
         @Part image: MultipartBody.Part
     ): Call<ResponseBody>
 

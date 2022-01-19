@@ -101,12 +101,11 @@ class AccountPresenter(localRouter: Router) : BaseMvpPresenter<AccountView>(loca
         val call = imagesRepository.saveImage(file)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                Log.d(TAG, response.body().toString())
+                Log.d(TAG, response.body()?.string() ?: "")
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e(TAG, t.printStackTrace().toString())
-
             }
         })
     }
