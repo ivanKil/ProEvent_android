@@ -155,13 +155,17 @@ class ParticipantFromContactsPickerFragment :
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onStart() {
+        super.onStart()
         // BottomNavigation скрывается, чтобы пользователь не мог перейти на вкладку контактов и изменить свой спискок контактов,
         // так как это привод к тому что список контактов пользователя в открытом ParticipantFromContactsPickerFragment будет отличаться,
         // так как он не обновляется
         (requireActivity() as BottomNavigation).hideBottomNavigation()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         with(binding) {
             allContacts.setOnTouchListener(filterOptionTouchListener)
             allContacts.setOnClickListener {
@@ -307,9 +311,10 @@ class ParticipantFromContactsPickerFragment :
         parentFragmentManager.setFragmentResult(requestKey, result)
     }
 
-    override fun onBackPressed(): Boolean {
-        val returnValue = presenter.onBackPressed()
+    override fun onStop() {
+        super.onStop()
         (requireActivity()  as BottomNavigation).showBottomNavigation()
-        return returnValue
     }
+
+    override fun onBackPressed() = presenter.onBackPressed()
 }
