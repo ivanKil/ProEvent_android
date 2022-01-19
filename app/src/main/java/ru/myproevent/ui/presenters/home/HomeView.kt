@@ -1,7 +1,7 @@
 package ru.myproevent.ui.presenters.home
 
-import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
+import ru.myproevent.ui.presenters.BaseMvpView
 
 @AddToEndSingle
-interface HomeView : MvpView
+interface HomeView : BaseMvpView

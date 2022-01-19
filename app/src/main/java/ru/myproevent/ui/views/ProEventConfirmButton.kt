@@ -20,9 +20,9 @@ class ProEventConfirmButton : MaterialButton {
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN ->
-                setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_900))
+                setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_bright_orange_500))
             MotionEvent.ACTION_UP ->
-                setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_blue_800))
+                setTextColor(ProEventApp.instance.getColor(R.color.ProEvent_white))
         }
 
         return super.dispatchTouchEvent(event)

@@ -2,17 +2,20 @@ package ru.myproevent.domain.di
 
 import dagger.Binds
 import dagger.Module
-import ru.myproevent.domain.model.repositories.contacts.IProEventContactsRepository
-import ru.myproevent.domain.model.repositories.contacts.ProEventContactsRepository
-import ru.myproevent.domain.model.repositories.internet_access_info.IInternetAccessInfoRepository
-import ru.myproevent.domain.model.repositories.proevent_login.IProEventLoginRepository
-import ru.myproevent.domain.model.repositories.internet_access_info.InternetAccessInfoRepository
-import ru.myproevent.domain.model.repositories.local_proevent_user_token.ITokenLocalRepository
-import ru.myproevent.domain.model.repositories.local_proevent_user_token.TokenLocalRepository
-import ru.myproevent.domain.model.repositories.proevent_login.ProEventLoginRepository
-import ru.myproevent.domain.model.repositories.profiles.IProEventProfilesRepository
-import ru.myproevent.domain.model.repositories.profiles.ProEventProfilesRepository
-
+import ru.myproevent.domain.models.repositories.contacts.IProEventContactsRepository
+import ru.myproevent.domain.models.repositories.contacts.ProEventContactsRepository
+import ru.myproevent.domain.models.repositories.events.IProEventEventsRepository
+import ru.myproevent.domain.models.repositories.events.ProEventEventsRepository
+import ru.myproevent.domain.models.repositories.images.IImagesRepository
+import ru.myproevent.domain.models.repositories.images.ImagesRepository
+import ru.myproevent.domain.models.repositories.internet_access_info.IInternetAccessInfoRepository
+import ru.myproevent.domain.models.repositories.internet_access_info.InternetAccessInfoRepository
+import ru.myproevent.domain.models.repositories.local_proevent_user_token.ITokenLocalRepository
+import ru.myproevent.domain.models.repositories.local_proevent_user_token.TokenLocalRepository
+import ru.myproevent.domain.models.repositories.proevent_login.IProEventLoginRepository
+import ru.myproevent.domain.models.repositories.proevent_login.ProEventLoginRepository
+import ru.myproevent.domain.models.repositories.profiles.IProEventProfilesRepository
+import ru.myproevent.domain.models.repositories.profiles.ProEventProfilesRepository
 import javax.inject.Singleton
 
 @Module
@@ -36,4 +39,12 @@ interface ProEventRepositoriesModule {
     @Singleton
     @Binds
     fun bindContactsRepository(contactsRepository: ProEventContactsRepository): IProEventContactsRepository
+
+    @Singleton
+    @Binds
+    fun bindEventsRepository(eventsRepository: ProEventEventsRepository): IProEventEventsRepository
+
+    @Singleton
+    @Binds
+    fun bindImagesRepository(imagesRepository: ImagesRepository): IImagesRepository
 }

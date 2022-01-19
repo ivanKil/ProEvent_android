@@ -2,14 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/ProEvent_white"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/license_1"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingHorizontal="20dp"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
         android:gravity="center_vertical"
+        android:paddingHorizontal="20dp"
         android:text="@string/license_1_title"
         android:textColor="@color/ProEvent_blue_800"
         android:textSize="16sp" />
@@ -17,9 +19,10 @@
     <TextView
         android:id="@+id/license_2"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingHorizontal="20dp"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
         android:gravity="center_vertical"
+        android:paddingHorizontal="20dp"
         android:text="@string/license_2_title"
         android:textColor="@color/ProEvent_blue_800"
         android:textSize="16sp" />

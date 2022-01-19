@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profileContainer"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingHorizontal="@dimen/padding_horizontal"
+    android:paddingVertical="8dp"
+    tools:background="@color/ProEvent_white">
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_img"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center_vertical"
+        app:srcCompat="@drawable/ic_events_small" />
+
+    <TextView
+        android:id="@+id/tv_event_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:singleLine="true"
+        android:textColor="@color/ProEvent_blue_800"
+        android:textSize="16sp"
+        tools:text="День молодежи" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="84dp"
+        android:singleLine="true"
+        android:textColor="@color/ProEvent_blue_600"
+        android:textSize="16sp"
+        tools:text="13.08.2021 с 16.00 до 21.00" />
+
+    <ImageView
+        android:id="@+id/iv_edit_event"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="end"
+        android:src="@drawable/ic_edit" />
+</FrameLayout>

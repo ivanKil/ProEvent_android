@@ -2,7 +2,26 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
 
-    <item android:drawable="@drawable/splash_screen_background" />
+    <!--    <item android:gravity="right" >-->
+    <!--        <bitmap-->
+    <!--            android:src="@drawable/splash_screen_background"-->
+    <!--            android:tileModeY="mirror"-->
+    <!--            android:tileModeX="clamp"/>-->
+    <!--    </item>-->
+
+    <item>
+        <shape>
+            <solid android:color="@color/ProEvent_blue_800" />
+        </shape>
+    </item>
+
+<!--    <item>-->
+<!--        <inset android:drawable="@drawable/splash_screen_background" />-->
+<!--    </item>-->
+
+    <!--    <item-->
+    <!--        android:drawable="@drawable/splash_screen_background"-->
+    <!--        android:gravity="right" />-->
 
     <item
         android:drawable="@drawable/splash_screen_foreground"
