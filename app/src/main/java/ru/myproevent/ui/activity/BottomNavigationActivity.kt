@@ -2,6 +2,7 @@ package ru.myproevent.ui.activity
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Navigator
@@ -152,6 +153,7 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigation, Botto
             presenter.currFragmentTag = tab.name
         }
         transaction.commitNow()
+        Log.d("[VIEWSTATE]", "showTab($tab)")
     }
 
     override fun resetState(friendAccess: BottomNavigationPresenter.BottomNavigationPresenterFriendAccess) {
@@ -172,6 +174,7 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigation, Botto
         TODO("Not yet implemented")
     }
 
+    //
     override fun exit() {
         presenter.exit()
     }
