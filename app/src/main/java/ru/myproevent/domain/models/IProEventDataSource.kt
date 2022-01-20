@@ -78,19 +78,15 @@ interface IProEventDataSource {
     @POST("auth/newPassword")
     fun setNewPassword(@Body newPasswordBody: NewPasswordBody): Completable
 
-    // Images posts
     @Multipart
     @POST("storage")
     fun saveImage(
         @Part("file") name: String,
         @Part image: MultipartBody.Part
-    ): Call<ResponseBody>
-
-    @GET("storage/{uuid}")
-    fun getImage(@Path("uuid") uuid: String): Single<File>
+    ): Call<UUIDBody>
 
     @DELETE("storage/{uuid}")
-    fun deleteImage(@Path("uuid") uuid: String): Completable
+    fun deleteImage(@Path("uuid") uuid: String): Call<ResponseBody>
 }
 
 data class LoginBody(val email: String, val password: String)
@@ -106,6 +102,8 @@ data class RefreshBody(val email: String)
 data class ResetPasswordBody(val email: String)
 
 data class NewPasswordBody(val code: Int, val email: String, val password: String)
+
+data class UUIDBody(val uuid: String)
 
 @Parcelize
 data class ProfileDto(

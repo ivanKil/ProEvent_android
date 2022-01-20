@@ -1,13 +1,8 @@
 package ru.myproevent.ui.presenters.settings.account
 
-import android.util.Log
 import com.github.terrakok.cicerone.Router
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import ru.myproevent.domain.models.ProfileDto
 import ru.myproevent.domain.models.repositories.images.IImagesRepository
 import ru.myproevent.domain.models.repositories.internet_access_info.IInternetAccessInfoRepository
@@ -16,6 +11,12 @@ import ru.myproevent.domain.models.repositories.profiles.IProEventProfilesReposi
 import ru.myproevent.ui.presenters.BaseMvpPresenter
 import java.io.File
 import javax.inject.Inject
+
+import android.net.Uri
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
+import ru.myproevent.domain.models.UUIDBody
+
 
 class AccountPresenter(localRouter: Router) : BaseMvpPresenter<AccountView>(localRouter) {
     private inner class ProfileEditObserver : DisposableCompletableObserver() {
@@ -71,7 +72,8 @@ class AccountPresenter(localRouter: Router) : BaseMvpPresenter<AccountView>(loca
         phone: String,
         dateOfBirth: String,
         position: String,
-        role: String
+        role: String,
+        newProfilePictureUri: Uri?
     ) {
         profilesRepository
             .saveProfile(
@@ -82,7 +84,8 @@ class AccountPresenter(localRouter: Router) : BaseMvpPresenter<AccountView>(loca
                     position = position,
                     birthdate = dateOfBirth,
                     description = role
-                )
+                ),
+                newProfilePictureUri
             )
             .observeOn(uiScheduler)
             .subscribeWith(ProfileEditObserver())
@@ -97,24 +100,11 @@ class AccountPresenter(localRouter: Router) : BaseMvpPresenter<AccountView>(loca
             .disposeOnDestroy()
     }
 
-    fun saveImage(file: File) {
-        val call = imagesRepository.saveImage(file)
-        call.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                Log.d(TAG, response.body()?.string() ?: "")
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Log.e(TAG, t.printStackTrace().toString())
-            }
-        })
-    }
-
-    fun handleImage(uuid: String) {
-
-    }
-
-    companion object {
-        const val TAG = "AccountPresenter"
-    }
+    // TODO: вынести URL в ресурсы или константы
+    fun getGlideUrl(uuid: String) = GlideUrl(
+        "http://178.249.69.107:8762/api/v1/storage/$uuid",
+        LazyHeaders.Builder()
+            .addHeader("Authorization", "Bearer ${loginRepository.getLocalToken()}")
+            .build()
+    )
 }

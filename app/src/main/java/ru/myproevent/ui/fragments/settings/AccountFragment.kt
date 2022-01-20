@@ -2,9 +2,11 @@ package ru.myproevent.ui.fragments.settings
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.SpannableStringBuilder
 import android.text.method.KeyListener
@@ -35,6 +37,7 @@ import ru.myproevent.ui.views.KeyboardAwareTextInputEditText
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountBinding::inflate),
     AccountView {
@@ -176,7 +179,8 @@ class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountB
                 phoneEdit.text.toString(),
                 dateOfBirthEdit.text.toString(),
                 positionEdit.text.toString(),
-                roleEdit.text.toString()
+                roleEdit.text.toString(),
+                newPictureUri
             )
         }
         titleButton.setOnClickListener { presenter.onBackPressed() }
@@ -199,11 +203,13 @@ class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountB
                     .load(uri)
                     .circleCrop()
                     .into(binding.userImageView)
-                presenter.saveImage(File(uri.path.orEmpty()))
+                newPictureUri = uri
             }
         }
         binding.editUserImage.setOnClickListener { cropActivityResultLauncher.launch(null) }
     }
+
+    private var newPictureUri: Uri? = null
 
     override fun showProfile(profileDto: ProfileDto) {
         with(binding) {
@@ -213,7 +219,10 @@ class AccountFragment : BaseMvpFragment<FragmentAccountBinding>(FragmentAccountB
                 birthdate?.let { dateOfBirthEdit.text = SpannableStringBuilder(it) }
                 position?.let { positionEdit.text = SpannableStringBuilder(it) }
                 description?.let { roleEdit.text = SpannableStringBuilder(it) }
-                imgUri?.let { presenter.handleImage(it) }
+                imgUri?.let {
+                    Glide.with(this@AccountFragment).load(presenter.getGlideUrl(it)).circleCrop()
+                        .into(binding.userImageView)
+                }
             }
         }
     }

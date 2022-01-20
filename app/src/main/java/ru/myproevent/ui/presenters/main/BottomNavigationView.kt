@@ -1,7 +1,7 @@
 package ru.myproevent.ui.presenters.main
 
-import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEnd
+import moxy.viewstate.strategy.alias.OneExecution
 import ru.myproevent.ui.presenters.BaseMvpView
 
 /**
@@ -16,5 +16,6 @@ interface BottomNavigationView : BaseMvpView {
         friendAccess: BottomNavigationPresenter.BottomNavigationPresenterFriendAccess
     )
 
+    @OneExecution
     fun resetState(friendAccess: BottomNavigationPresenter.BottomNavigationPresenterFriendAccess)
 }

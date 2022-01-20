@@ -172,6 +172,7 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigation, Botto
         TODO("Not yet implemented")
     }
 
+    //
     override fun exit() {
         presenter.exit()
     }
