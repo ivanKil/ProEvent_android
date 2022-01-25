@@ -5,7 +5,11 @@ import io.reactivex.observers.DisposableCompletableObserver
 import ru.myproevent.domain.models.repositories.internet_access_info.IInternetAccessInfoRepository
 import ru.myproevent.domain.models.repositories.proevent_login.IProEventLoginRepository
 import ru.myproevent.ui.presenters.BaseMvpPresenter
+import java.util.regex.Pattern
 import javax.inject.Inject
+
+val VALID_EMAIL_ADDRESS_REGEX: Pattern =
+    Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE)
 
 class RegistrationPresenter(localRouter: Router) : BaseMvpPresenter<RegistrationView>(localRouter) {
     private inner class SignupObserver : DisposableCompletableObserver() {
@@ -48,11 +52,16 @@ class RegistrationPresenter(localRouter: Router) : BaseMvpPresenter<Registration
             errorMessage += "Пароли не совпадают.\n"
             viewState.showPasswordConfirmErrorMessage("Пароли не совпадают.\n")
         }
+
         if (email.isEmpty()) {
             errorMessage += "Поле с email не может быть пустым."
             viewState.showEmailErrorMessage("Поле с email не может быть пустым.")
+        } else if (!VALID_EMAIL_ADDRESS_REGEX.matcher(email).find()) {
+            errorMessage += "Неправильно заполнен email."
+            viewState.showEmailErrorMessage("Неправильно заполнен email.")
         }
-        if(!errorMessage.isNullOrBlank()){
+
+        if (!errorMessage.isNullOrBlank()) {
             viewState.showMessage(errorMessage)
             return
         }
