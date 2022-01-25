@@ -55,7 +55,7 @@ class RegistrationPresenter(localRouter: Router) : BaseMvpPresenter<Registration
                     "минимум одну кириллическую букву, " +
                     "одну цифру, " +
                     "иметь длину не менее 6 символов.\n"
-            viewState.showEmailErrorMessage(
+            viewState.showPasswordErrorMessage(
                 "Пароль должен содержать:\n" +
                         "• минимум одну кириллическую букву\n" +
                         "• одну цифру\n" +
