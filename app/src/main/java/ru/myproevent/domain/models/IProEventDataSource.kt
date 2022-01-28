@@ -8,6 +8,7 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
+import ru.myproevent.BuildConfig
 import java.io.File
 
 interface IProEventDataSource {
@@ -87,6 +88,17 @@ interface IProEventDataSource {
 
     @DELETE("storage/{uuid}")
     fun deleteImage(@Path("uuid") uuid: String): Call<ResponseBody>
+
+    @POST
+    @Headers(
+        "Authorization: Token ${BuildConfig.EMAIL_HINT_API_TOKEN}",
+        "Accept: application/json",
+        "Content-Type: application/json"
+    )
+    fun getEmailHint(
+        @Body hintRequest: HintRequest,
+        @Url fullUrl: String = BuildConfig.EMAIL_HINT_API_URL
+    ): Single<HintResponse>
 }
 
 data class LoginBody(val email: String, val password: String)
@@ -160,3 +172,7 @@ data class EventDto(
     val pointsPointIds: LongArray?,
     val imageFile: String?,
 )
+
+data class HintRequest(val query: String)
+data class HintResponse(val suggestions: List<Suggestion>)
+data class Suggestion(val value: String)

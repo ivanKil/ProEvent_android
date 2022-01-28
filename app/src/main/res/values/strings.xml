@@ -114,4 +114,5 @@
     <string name="new_password_hint">Введите новый пароль</string>
     <string name="new_password_confirm_title">Подтверждение нового пароля</string>
     <string name="new_password_confirm_hint">Подтвердите новый пароль</string>
+    <string name="e_mail_hint">Введите ваш e-mail</string>
 </resources>

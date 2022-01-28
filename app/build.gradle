@@ -40,6 +40,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
+        def emailHintApiKey = properties.getProperty("EMAIL_HINT_API_TOKEN", "")
+        it.buildConfigField "String", "EMAIL_HINT_API_TOKEN", emailHintApiKey
+        def emailHintApiUrl = properties.getProperty("EMAIL_HINT_API_URL", "")
+        it.buildConfigField "String", "EMAIL_HINT_API_URL", emailHintApiUrl
+    }
 }
 
 dependencies {
@@ -94,4 +102,6 @@ dependencies {
 
     // Android image cropper
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
 }
